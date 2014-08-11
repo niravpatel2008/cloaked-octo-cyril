@@ -43,12 +43,21 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 define('ADMIN', 'admin');
 define('DOC_ROOT',  $_SERVER["DOCUMENT_ROOT"]."/stamp/");
 
+define('TICKET_ALBUM', 'ticket_album');
+define('TICKET_COLLECTION', 'ticket_collection');
+define('TICKET_COMMENTS', 'ticket_comments');
+define('TICKET_LINKS', 'ticket_links');
+define('TICKET_TAG', 'ticket_tag');
+define('TICKET_TAG_MAPPING', 'ticket_tag_mapping');
+define('USERS', 'users');
 
 /**
 * Email constants
 */
 define('FROM_EMAIL', 'noreply@stamp.com');
 define('FROM_NAME', 'stamp');
+define('SUBJECT_LOGIN_INFO', 'Login info');
+define('SUBJECT_DEAL_INFO', 'Deal info');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
