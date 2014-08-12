@@ -144,4 +144,123 @@ footer a {
 		width: 266px;
 	}
 }
+.input {
+  background: #8a8a8a;
+  font-size: 0.875em;
+  border: 0;
+  display: block;
 
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.input:hover {
+  background: #6d6d6d;
+}
+li.input {
+  display: inline-block;
+  width: 100%;
+  cursor: pointer;
+}
+.input.button {  
+ /* color: #fff;*/
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+}
+.input.field,
+.input.border {
+  background: #f0f0f0;
+  border: 3px solid #e5e5e5;
+}
+.input.border {
+  color: #696969;
+}
+.input.border.high {
+  background: #c7e3fb;
+  border-color: #4da1e9;
+  color: #4da1e9;
+}
+.input.red {
+  background: red;
+}
+.input.red:hover {
+  background: #d84225;
+}
+.input.blue {
+  background: #4da1e9;
+}
+.input.blue:hover {
+  background: #3c89cb;
+}
+.input.dark {
+  background: #525252;
+}
+.input.dark:hover {
+  background: #3b3b3b;
+}
+.input.transparent {
+  background: #000;
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+}
+.input.transparent:hover {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
+.input.primary { 
+  height: 3.429em;
+}
+a.input.primary {
+  padding-top: 1em; 
+}
+a.input.primary.border {
+  padding-top: 0.8em;
+}
+.input.secondary {
+  height: 2.714em;
+}
+.input.secondary.fixed {
+  width: 100%
+}
+.input.secondary.responsive {
+  padding-bottom: 0.65em;
+  height: auto;
+}
+a.input.secondary,
+span.input.secondary {
+  padding-top: 0.65em;
+}
+a.input.secondary.border,
+span.input.secondary.border {
+  padding-top: 0.45em;
+}
+a.input.secondary.border.responsive,
+span.input.secondary.border.responsive {
+  padding-bottom: 0.45em;
+  height: auto;
+}
+.input.tertiary {
+  height: 2.154em;
+}
+.input.tertiary.flexible {
+  padding-right: 1.077em;
+  padding-left: 1.077em;
+  display: inline-block;
+}
+a.input.tertiary {
+  padding-top: 0.35em;
+}
+a.input.tertiary.border {
+  padding-top: 0.19em;
+}
+::-moz-selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+::selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}

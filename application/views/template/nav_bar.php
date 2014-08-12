@@ -34,7 +34,10 @@
         <div class="userinfo">
             <div class="user">
                 <ul>
-                    <li><a href="#"><img title="user-name" src="<?=public_path()?>images/user-pic.png"><span>Ipsum</span></a></li>
+					<li>
+						 <a class="input button blue tertiary icon plus" href="javascript:void(0)" onclick="openSignupForm();" >Sign up</a>
+                        <a class="input button transparent tertiary" href="javascript:void(0)" onclick="openLoginForm();" >Sign in</a>
+					</li>
                 </ul>
             </div>
         </div>
