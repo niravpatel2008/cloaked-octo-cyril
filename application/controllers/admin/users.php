@@ -43,7 +43,7 @@ class Users extends CI_Controller {
 					}
 			),
 		);
-		echo json_encode( SSP::simple( $post, USERS, "du_autoid", $columns ) );exit;
+		echo json_encode( SSP::simple( $post, USERS, "u_id", $columns ) );exit;
 	}
 
 	public function add()
@@ -130,7 +130,7 @@ class Users extends CI_Controller {
 			redirect('admin/users');
 		}
 
-		$where = 'du_autoid = '.$id;
+		$where = 'u_id = '.$id;
 
 		$post = $this->input->post();
 		if ($post) {
@@ -143,7 +143,7 @@ class Users extends CI_Controller {
 				$e_flag=1;
 			}
 			else{
-				$is_unique_email = $this->common_model->isUnique(USERS, 'du_email', trim($post['email']),"du_autoid <> ". $id);
+				$is_unique_email = $this->common_model->isUnique(USERS, 'u_email', trim($post['email']),"u_id <> ". $id);
 				if (!$is_unique_email) {
 					$error['email'] = 'Email already exists.';
 					$e_flag=1;
@@ -214,7 +214,7 @@ class Users extends CI_Controller {
 		$post = $this->input->post();
 
 		if ($post) {
-			$ret = $this->common_model->deleteData(USERS, array('du_autoid' => $post['id'] ));
+			$ret = $this->common_model->deleteData(USERS, array('u_id' => $post['id'] ));
 			if ($ret > 0) {
 				echo "success";
 				#echo success_msg_box('User deleted successfully.');;
