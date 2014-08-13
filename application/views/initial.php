@@ -20,7 +20,7 @@
           </div>
 
             <div style="padding-top:10px;text-align:center;" class='row'>
-      			  <input type="button" name="signin" id="signin" value="Sign in" class="sumitbtn input button primary" style='width: 33.3333%;display:inline-block;' />
+      			  <input type="submit" name="signin" id="signin" value="Sign in" class="sumitbtn input button primary" style='width: 33.3333%;display:inline-block;' />
       			  <input type="button" name="csbtnClear" id="csbtnClear" onclick="javascript:$('#divConsLogin').modal('toggle');" value="Cancel" class="input button primary" style='width: 33.3333%;display:inline-block;' />
             </div>
 
@@ -58,7 +58,7 @@
           </div>
           <div class="row">
             <div class="" style='padding:15px;'>
-              <input type="password" class="validate[required] input field primary allow-enter" name='password2' id='password2' placeholder="Confirm password">
+              <input type="password" class="validate[required,equals[password]] input field primary allow-enter" name='password2' id='password2' placeholder="Confirm password">
             </div>
           </div>
 
@@ -87,7 +87,7 @@
         </div>
 
         <div style="padding-top:10px;text-align:center;" class='row'>
-          <input type="button" name="forgotpassword" id="forgotpassword" value="Submit" class="sumitbtn input button primary" style='width: 33.3333%;display:inline-block;' />
+          <input type="submit" name="forgotpassword" id="forgotpassword" value="Submit" class="sumitbtn input button primary" style='width: 33.3333%;display:inline-block;' />
           <input type="button" onclick="javascript:$('#divForgotPasswordForm').modal('toggle');" value="Cancel" class="input button primary" style='width: 33.3333%;display:inline-block;' />
         </div>
         <div class="clearboth" style="height:10px"></div>

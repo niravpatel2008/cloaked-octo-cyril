@@ -9,33 +9,20 @@ class Welcome extends CI_Controller {
 	}
 
 
-	public function index()
-	{
-		/*$this->load->helper('htmltopdf/WKPDF_MULTI');
-		$templateHtml = "<html><body><b>This is testing.</b></body></html>";
-		$pdf = new WKPDF();
-		$pdf->set_html($templateHtml);
-		$pdf->render();
-		$pdf->output('I','sample.pdf');
-		exit;*/
-		$data['categories'] = $this->common_model->selectData(DEAL_CATEGORY, 'dc_catname,dc_catid');
-		$data['view'] = "index";
-		$this->load->view('content', $data);
-	}
-
 	public function login()
 	{
 		$post = $this->input->post();
 		$where = array('u_email' => $post['txtuseremail'],
 							'u_password' => sha1(trim($post['txtpassword']))
 						);
-			$user = $this->common_model->selectData('users', '*', $where);
+			$user = $this->common_model->selectData(USERS, '*', $where);
+			
 			if (count($user) > 0) {
 				# create session
 				$data = array('id' => $user[0]->u_id,
 								'uname' => $user[0]->u_fname,
 								'email' => $user[0]->u_email,
-								'create_date' => $user[0]->u_create_date
+								'create_date' => $user[0]->u_created_date
 							);
 				$this->session->set_userdata('front_session',$data);
 				echo "success";
@@ -45,19 +32,19 @@ class Welcome extends CI_Controller {
 
 		}
 
-	}
+	
 
 	public function signup()
 	{
 		$post = $this->input->post();
 		//echo '<pre>';print_r($post);die;
 		if ($post) {
-			//$is_unique_email = $this->common_model->isUnique(DEAL_USER, 'du_email', trim($post['email']));
+			$is_unique_email = $this->common_model->isUnique(USERS, 'u_email', trim($post['email']));
 
-		/*	if (!$is_unique_email) {
+			if (!$is_unique_email) {
 				echo 'Email already exists.';
 				exit;
-			}*/
+			}
 
 			$data = array('u_fname' => $post['name'],
 								'u_email' => $post['email'],				
@@ -65,8 +52,8 @@ class Welcome extends CI_Controller {
 								'u_created_date' => date('Y-m-d H:i:s'),
 								'u_modified_date' => date('Y-m-d H:i:s')
 						);
-			$ret = $this->common_model->insertData('users', $data);
-			echo $ret;die;
+			$ret = $this->common_model->insertData(USERS, $data);
+			
 			if ($ret > 0) {
 				# create session
 				$data = array('id' => $ret,
@@ -79,7 +66,14 @@ class Welcome extends CI_Controller {
 				$login_details = array('username' => $post['email'],
 										'password' => trim($post['password'])
 									);
-				$emailTpl = $this->get_welcome_tpl($login_details);
+				//$emailTpl = $this->get_welcome_tpl($login_details);
+				//$ret = sendEmail($post['email'], SUBJECT_LOGIN_INFO, $emailTpl, FROM_EMAIL, FROM_NAME);
+				$emailTpl = $this->load->view('email_templates/signup', '', true);
+
+				$search = array('{username}', '{password}');
+				$replace = array($login_details['username'], $login_details['password']);
+				$emailTpl = str_replace($search, $replace, $emailTpl);
+
 				$ret = sendEmail($post['email'], SUBJECT_LOGIN_INFO, $emailTpl, FROM_EMAIL, FROM_NAME);
 
 				echo "success";
@@ -106,16 +100,22 @@ class Welcome extends CI_Controller {
 		$post = $this->input->post();
 		if ($post) {
 			$where = array('u_email' => trim($post['txtemail']));
-			$user = $this->common_model->selectData('users', '*', $where);
+			$user = $this->common_model->selectData(USERS, '*', $where);
 			if (count($user) > 0) {
 
 				$newpassword = random_string('alnum', 8);
 				$data = array('u_password' => sha1($newpassword));
-				$upid = $this->common_model->updateData('users',$data,$where);
+				$upid = $this->common_model->updateData(USERS,$data,$where);
 
 				$login_details = array('username' => $user[0]->u_email,'password' => $newpassword);
-				$emailTpl = $this->get_forgotpassword_tpl($login_details);
+				$emailTpl = $this->load->view('email_templates/forgot_password', '', true);
+
+				$search = array('{username}', '{password}');
+				$replace = array($login_details['username'], $login_details['password']);
+				$emailTpl = str_replace($search, $replace, $emailTpl);
+
 				$ret = sendEmail($user[0]->u_email, SUBJECT_LOGIN_INFO, $emailTpl, FROM_EMAIL, FROM_NAME);
+				print_r($ret);die;
 				if ($ret) {
 					echo "success";
 				}else{

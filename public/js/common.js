@@ -23,33 +23,36 @@ function openForgotPasswordForm () {
     $("#divForgotPasswordForm").modal();
 }
 $(document).ready(function(){
-
-$("#loginform").validationEngine();
+	$("#loginform").validationEngine();
 $("#loginform").on('submit', function (e) {
 	e.preventDefault();
+		if(!$("#loginform").validationEngine('validate')) return ;
 		var url =  base_url()+'welcome/login';
 		var data =  $("#loginform").serialize();
 		$.post(url,data,function(e){
 			if(e == 'success'){
 				location.reload();
 			}else{
-				alert(data);
+				alert("Invalid Username or Password");
 				return false;
 			}
 		});
+	
 	});
 
 $("#signupform").validationEngine();
 	$("#signupform").on('submit', function (e) {
 		e.preventDefault();
+		if(!$("#signupform").validationEngine('validate')) return ;
 	var url = base_url()+'welcome/signup';
 	var data = $("#signupform").serialize();
 	
 		$.post(url,data,function(e){
 				if(e == 'success'){
+					alert("Account Successfully Created");
 					location.reload();
 				}else{
-					alert(data);
+					alert(e);
 					return false;
 				}
 			});
@@ -58,6 +61,7 @@ $("#signupform").validationEngine();
 	$("#forgotpwdform").validationEngine();
 	$("#forgotpwdform").on('submit', function (e) {
 		e.preventDefault();
+		if(!$("#forgotpwdform").validationEngine('validate')) return ;
 		var url = base_url()+'welcome/forgotpassword';
 		var data = $("#forgotpwdform").serialize();
 		$.post(url,data,function(e){
@@ -65,7 +69,7 @@ $("#signupform").validationEngine();
 					alert("Email has been sent to your email.");
 					$('#divForgotPasswordForm').modal('toggle');
 				}else{
-					alert(data);
+					alert(e);
 					return false;
 				}
 			});

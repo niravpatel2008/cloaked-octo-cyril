@@ -10,12 +10,11 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
     <!-- //webfonts -->
     <!-- Global CSS for the page and tiles -->
-    <link rel="stylesheet" href="<?=public_path()?>css/main.css">
+    
 	<link rel="stylesheet" href="<?=public_path()?>css/bootstrap.css">
 	<link rel="stylesheet" href="<?=public_path()?>css/bootstrap.min.css">
-	<link rel="stylesheet" href="<?=public_path()?>css/bootstrap-responsive.css">
-	<link rel="stylesheet" href="<?=public_path()?>css/bootstrap-responsive.min.css">
 	<link rel="stylesheet" href="<?=public_path()?>css/btvalidation.css">
+	<link rel="stylesheet" href="<?=public_path()?>css/main.css">
     <!-- //Global CSS for the page and tiles -->
     <!-- start-click-drop-down-menu -->
     <script src="<?=public_path()?>js/jquery-2.1.1.min.js"></script>
