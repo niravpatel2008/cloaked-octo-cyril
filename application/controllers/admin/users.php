@@ -8,10 +8,6 @@ class Users extends CI_Controller {
 		is_login();
 
 		$this->user_session = $this->session->userdata('user_session');
-
-		if (!@in_array("users", @array_keys(config_item('user_role')[$this->user_session['role']])) && $this->user_session['role'] != 'a') {
-			redirect("admin/dashboard");
-		}
 	}
 
 	public function index()
@@ -91,7 +87,7 @@ class Users extends CI_Controller {
 			if ($e_flag == 0) {
 				$data = array('u_fname' => $post['u_fname'],
 								'u_lname' => $post['u_lname'],
-								'u_email' => $post['u_email'],
+								'u_email' => $post['email'],
 								'u_url' => $post['u_url'],
 								'u_gender' => $post['u_gender'],
 								'u_phone' => $post['u_phone'],
@@ -171,7 +167,7 @@ class Users extends CI_Controller {
 
 				$data = array(  'u_fname' => $post['u_fname'],
 								'u_lname' => $post['u_lname'],
-								'u_email' => $post['u_email'],
+								'u_email' => $post['email'],
 								'u_url' => $post['u_url'],
 								'u_gender' => $post['u_gender'],
 								'u_phone' => $post['u_phone'],

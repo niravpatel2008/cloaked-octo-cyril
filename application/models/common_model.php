@@ -101,11 +101,13 @@ class common_model extends CI_Model{
 	/**
 	* check unique fields
 	*/
-	public function isUnique($table, $field, $value)
+	public function isUnique($table, $field, $value,$where = "")
 	{
 		$this->db->select('*');
 		$this->db->from($table);
 		$this->db->where($field,$value);
+		if ($where != "")
+			$this->db->where($where);
 		$query = $this->db->get();
 		$data = $query->num_rows();
 		$query->free_result();

@@ -45,7 +45,7 @@
                             }
                         ?>
                         <label for="email">Email address:</label>
-                        <input type="email" placeholder="Enter email" id="email" class="form-control validate[required,custom[email]]" name="email" value="<?=@$user[0]->du_email?>" >
+                        <input type="email" placeholder="Enter email" id="email" class="form-control validate[required,custom[email]]" name="email" value="<?=@$user[0]->u_email?>" >
                     </div>
 					<div class="form-group">
                         <label>Password:</label>
@@ -63,8 +63,8 @@
                         <label>Gender:</label>
                         <select class="form-control" name="u_gender" id="u_gender">
                             <option value="">Select</option>
-                            <option value="m" <?=(@$user[0]->du_role == 'm')?'selected':''?> >Male</option>
-                            <option value="f" <?=(@$user[0]->du_role == 'f')?'selected':''?> >Female</option>
+                            <option value="m" <?=(@$user[0]->u_gender == 'm')?'selected':''?> >Male</option>
+                            <option value="f" <?=(@$user[0]->u_gender == 'f')?'selected':''?> >Female</option>
                         </select>
                     </div>
 					<div class="form-group">

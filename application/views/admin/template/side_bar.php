@@ -8,7 +8,7 @@
                 <img alt="User Image" class="img-circle" src="img/avatar3.png">
             </div> -->
             <div class="pull-left info">
-                <p>Hello, <?php echo $this->user_session['uname'];?></p>
+                <p>Hello, <?php echo $this->user_session['u_fname'];?></p>
 
                 <!-- <a href="#"><i class="fa fa-circle text-success"></i> Online</a> -->
             </div>
@@ -30,60 +30,21 @@
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                 </a>
             </li>
-
-
-            <?php
-
-                if (@in_array("users",@array_keys(config_item('user_role')[$this->user_session['role']] ) ) || $this->user_session['role'] == 'a') {
-            ?>
-                <li class="<?=get_active_tab("users")?>">
-                    <a href="<?=admin_path()."users"?>">
-                        <i class="fa fa-dashboard"></i> <span>Users</span>
-                    </a>
-                </li>
-            <?php
-                }
-            ?>
-
-
-            <?php
-                if (@in_array("dealer", @array_keys(config_item('user_role')[$this->user_session['role']])) || $this->user_session['role'] == 'a') {
-            ?>
-                <li class="<?=get_active_tab("dealer")?>">
-    				<a href="<?=admin_path()."dealer"?>">
-                        <i class="fa fa-dashboard"></i> <span>Dealer</span>
-                    </a>
-                </li>
-			<?php
-                }
-            ?>
-
-
-            <?php
-                if (@in_array("category", @array_keys(config_item('user_role')[$this->user_session['role']])) || $this->user_session['role'] == 'a') {
-            ?>
-                <li class="<?=get_active_tab("category")?>">
-                    <a href="<?=admin_path()."category"?>">
-                        <i class="fa fa-dashboard"></i> <span>Category</span>
-                    </a>
-                </li>
-            <?php
-                }
-            ?>
-
-
-            <?php
-                if (@in_array("deal", @array_keys(config_item('user_role')[$this->user_session['role']])) || $this->user_session['role'] == 'a') {
-            ?>
-                <li class="<?=get_active_tab("deal")?>">
-    				<a href="<?=admin_path()."deal"?>">
-                        <i class="fa fa-th"></i> <span>Deal</span>
-                    </a>
-                </li>
-            <?php
-                }
-            ?>
-
+            <li class="<?=get_active_tab("users")?>">
+				<a href="<?=admin_path()."users"?>">
+					<i class="fa fa-dashboard"></i> <span>Users</span>
+				</a>
+            </li>
+            <li class="<?=get_active_tab("album")?>">
+				<a href="<?=admin_path()."album"?>">
+					<i class="fa fa-dashboard"></i> <span>Album</span>
+				</a>
+            </li>
+			 <li class="<?=get_active_tab("stamp")?>">
+				<a href="<?=admin_path()."stamp"?>">
+					<i class="fa fa-dashboard"></i> <span>Stamp</span>
+				</a>
+            </li>
 
         </ul>
     </section>
