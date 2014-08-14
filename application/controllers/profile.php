@@ -20,24 +20,19 @@ class Profile extends CI_Controller {
 	public function edit()
 	{
 		$post = $this->input->post();
+		$data = array();
+		$flash_arr = array();
+		$error = array();
 		if ($post) {
 			#pr($post);
-			$error = array();
+			
 			$e_flag=0;
-			if(trim($post['username']) == ''){
-				$error['username'] = 'Please enter username.';
-				$e_flag=1;
-			}
-			if(!valid_email(trim($post['email'])) && trim($post['email']) == ""){
+			if(trim($post['email']) == ''){
 				$error['email'] = 'Please enter email.';
 				$e_flag=1;
 			}
-			if(trim($post['contact']) == ''){
-				$error['contact'] = 'Please enter contact.';
-				$e_flag=1;
-			}
-
-			if ($_FILES['profile_image']['error'] > 0) {
+			
+			/*if ($_FILES['profile_image']['error'] > 0) {
 				$error['profile_image'] = 'Error in image upload.';
 				$e_flag=1;
 			}
@@ -63,24 +58,27 @@ class Profile extends CI_Controller {
 					$error['profile_image'] = $this->upload->display_errors();
 					$e_flag=1;
 				}
-			}
+			}*/
 
 			if ($e_flag == 0) {
 
-				$data = array('du_uname' => $post['username'],
-								'du_contact' => $post['contact'],
-								'du_email' => $post['email'],
-								'du_profile_picture' => $config['file_name']
+				$data = array('u_fname' => $post['name'],
+								'u_phone' => $post['contact'],
+								'u_country' => $post['country'],
+								'u_state' => $post['state'],
+								'u_city' => $post['city'],
+								'u_gender' => $post['gender']
 							);
-				$ret = $this->common_model->updateData(DEAL_USER, $data, 'du_autoid = '.$this->front_session['id']);
+				$ret = $this->common_model->updateData(USERS, $data, 'u_id = '.$this->front_session['id']);
 				if ($ret > 0) {
 					# update session
 					$session_data = array('id' => $this->front_session['id'],
-									'uname' => $post['username'],
-									'contact' => $post['contact'],
-									'email' => $post['email'],
-									'profile_picture' => $config['file_name'],
-									'create_date' => $this->front_session['create_date']
+									'u_fname' => $post['name'],
+								'u_phone' => $post['contact'],
+								'u_country' => $post['country'],
+								'u_state' => $post['state'],
+								'u_city' => $post['city'],
+								'u_gender' => $post['gender']
 								);
 					$this->session->set_userdata('front_session',$session_data);
 					$this->front_session = $this->session->userdata('front_session');
@@ -95,12 +93,14 @@ class Profile extends CI_Controller {
 									);
 					#$this->session->set_flashdata($flash_arr);
 				}
-				$data['flash_msg'] = $flash_arr;
+				//$data['flash_msg'] = $flash_arr;
 			}
-			$data['error_msg'] = $error;
+			//$data['error_msg'] = $error;
 		}
-		$result = $this->common_model->selectData(USERS,"*",$data);
+		$result = $this->common_model->selectData(USERS,"*",'');
 		$data['view'] = "edit";
+		$data['error_msg'] = $error;
+		$data['flash_msg'] = $flash_arr;
 		$data['userinfo'] = $result;
 		$this->load->view('content', $data);
 	}
@@ -144,12 +144,21 @@ class Profile extends CI_Controller {
 					#$this->session->set_flashdata($flash_arr);
 				}
 			}
-
+			/*if($e_flag == 0 && $flash_arr['flash_type'] == 'success')
+				redirect(base_url());*/
 			$data['error_msg'] = $error;
 			$data['flash_msg'] = @$flash_arr;
+			$data = json_encode($data);
+			echo $data;
+			exit;
 		}
-		$data['view'] = "password";
-		$this->load->view('content', $data);
+		
+			$data['view'] = "password";
+			$this->load->view('content', $data);
+		
+		
+		//$this->load->view('content', $data);
+		
 	}
 
 

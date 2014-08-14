@@ -7,11 +7,7 @@ class Index extends CI_Controller {
 		$this->front_session = $this->session->userdata('front_session');
     }
 
-	public function index()
-	{
-		$data['view'] = "index";
-		$this->load->view('content', $data);
-	}
+	
 }
 
 /* End of file index.php */
