@@ -20,7 +20,7 @@
                         <li class="dropdown user user-menu">
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <i class="glyphicon glyphicon-user"></i>
-                                <span><?=$this->user_session['uname']?> <i class="caret"></i></span>
+                                <span><?=$this->user_session['u_fname']?> <i class="caret"></i></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- Menu Footer-->

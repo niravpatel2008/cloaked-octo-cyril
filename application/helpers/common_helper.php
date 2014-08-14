@@ -31,7 +31,7 @@
 		$CI =& get_instance();
 		$session = $CI->session->userdata('user_session');
 
-		if (!isset($session['id'])) {
+		if (!isset($session['u_id'])) {
 			redirect(base_url());
 		}
 	}
@@ -42,7 +42,7 @@
         $CI =& get_instance();
         $session = $CI->session->userdata('front_session');
 
-        if (!isset($session['id'])) {
+        if (!isset($session['u_id'])) {
             redirect(base_url());
         }
     }

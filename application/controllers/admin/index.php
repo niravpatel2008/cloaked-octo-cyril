@@ -11,7 +11,7 @@ class Index extends CI_Controller {
 
 		$session = $this->session->userdata('user_session');
 		#pr($session,1);
-		if (isset($session['id'])) {
+		if (isset($session['u_id'])) {
 			redirect(admin_path()."dashboard");
 		}
 
@@ -23,7 +23,7 @@ class Index extends CI_Controller {
 			if(trim($post['userid']) == ''){
 				$error['userid'] = 'Please enter userid.';
 				$e_flag=1;
-			}else if(trim($post['userid']) != 'stampadmin'){
+			}else if(trim($post['userid']) != 'admin@stampstockist.com'){
 				$error['userid'] = 'Invalid email address.';
 				$e_flag=1;
 			}
@@ -53,8 +53,6 @@ class Index extends CI_Controller {
 			}
 
 			$data['error_msg'] = $error;
-
-
 		}
 
 		$this->load->view('admin/index/index', $data);
