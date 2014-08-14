@@ -23,20 +23,20 @@ class Stamp extends CI_Controller {
 
 		$columns = array(
 			array( 'db' => 'u_fname', 'dt' => 0 ),
-			array( 'db' => 't_name', 'dt' => 0 ),
-			array( 'db' => 'al_name', 'dt' => 0 ),
-			array( 'db' => 't_price',  'dt' => 1 ),
-			array( 'db' => 't_year',  'dt' => 2 ),
-			array( 'db' => 't_bio',  'dt' => 3 ),
-			array( 'db' => 't_ownercountry',  'dt' => 3 ),
+			array( 'db' => 't_name', 'dt' => 1 ),
+			array( 'db' => 'al_name', 'dt' => 2 ),
+			array( 'db' => 't_price',  'dt' => 3 ),
+			array( 'db' => 't_year',  'dt' => 4 ),
+			array( 'db' => 't_bio',  'dt' => 5 ),
+			array( 'db' => 't_ownercountry',  'dt' => 6 ),
 			array('db'        => 't_modified_date',
-					'dt'        => 4,
+					'dt'        => 7,
 					'formatter' => function( $d, $row ) {
 						return date( 'jS M y', strtotime($d));
 					}
 			),
 			array( 'db' => 't_id',
-					'dt' => 5,
+					'dt' => 8,
 					'formatter' => function( $d, $row ) {
 						return '<a href="'.site_url('/admin/stamp/edit/'.$d).'" class="fa fa-edit"></a> <a href="javascript:void(0);" onclick="delete_stamp('.$d.')" class="fa fa-trash-o"></a>';
 					}

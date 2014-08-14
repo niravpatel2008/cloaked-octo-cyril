@@ -23,11 +23,11 @@ class Album extends CI_Controller {
 
 		$columns = array(
 			array( 'db' => 'u_fname', 'dt' => 0 ),
-			array( 'db' => 'al_name', 'dt' => 0 ),
-			array( 'db' => 'al_ownercountry',  'dt' => 1 ),
-			array( 'db' => 'al_price',  'dt' => 2 ),
+			array( 'db' => 'al_name', 'dt' => 1 ),
+			array( 'db' => 'al_ownercountry',  'dt' => 2 ),
+			array( 'db' => 'al_price',  'dt' => 3 ),
 			array('db'        => 'u_created_date',
-					'dt'        => 3,
+					'dt'        => 4,
 					'formatter' => function( $d, $row ) {
 						return date( 'jS M y', strtotime($d));
 					}
