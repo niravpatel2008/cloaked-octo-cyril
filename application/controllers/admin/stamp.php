@@ -62,12 +62,12 @@ class Stamp extends CI_Controller {
 			
 			if ($e_flag == 0) {
 				$data = array('t_name' => $post['t_name'],
-								't_url' => $post['t_url'],
 								't_price' => $post['t_price'],
 								't_year' => $post['t_year'],
 								't_bio' => $post['t_bio'],
 								't_ownercountry' => $post['t_ownercountry'],
 								't_uid' => $this->user_session['u_id'],
+								't_mainphoto'=> $post['t_mainphoto'],
 								't_albumid' => $post['t_albumid'],
 								't_created_date' => date('Y-m-d H:i:s'),
 								't_modified_date' => date('Y-m-d H:i:s'),
@@ -154,10 +154,10 @@ class Stamp extends CI_Controller {
 			if ($e_flag == 0) {
 
 				$data = array('t_name' => $post['t_name'],
-								't_url' => $post['t_url'],
 								't_price' => $post['t_price'],
 								't_year' => $post['t_year'],
 								't_bio' => $post['t_bio'],
+								't_mainphoto'=> $post['t_mainphoto'],
 								't_ownercountry' => $post['t_ownercountry'],
 								't_albumid' => $post['t_albumid'],
 								't_modified_date' => date('Y-m-d H:i:s'),
