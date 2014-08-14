@@ -55,13 +55,8 @@
 		<script src="<?=public_path()?>js/admin/<?=$this->router->fetch_class()?>/add_edit.js" type="text/javascript"></script>
 	<?php }?>
 	<script src="<?=public_path()?>js/admin/<?=$this->router->fetch_class()?>/index.js" type="text/javascript"></script>
-    
-	<?php if ($this->router->fetch_class() == "dealer" && in_array($this->router->fetch_method(), array("add","edit"))) { ?>
-		<script type="text/javascript" src='http://maps.google.com/maps/api/js?sensor=false&libraries=places'></script>
-		<script src="<?=public_path()?>js/plugins/location/locationpicker.jquery.js" type="text/javascript"></script>
-    <?php } ?>
 
-	<?php if ($this->router->fetch_class() == "deal" && in_array($this->router->fetch_method(), array("add","edit"))) { ?>
+	<?php if ($this->router->fetch_class() == "stamp" && in_array($this->router->fetch_method(), array("add","edit"))) { ?>
 		<script src="<?=public_path()?>js/plugins/tagedit/jquery.tagedit.js" type="text/javascript"></script>
 		<script src="<?=public_path()?>js/plugins/tagedit/jquery.autoGrowInput.js" type="text/javascript"></script>
 		<script src="<?=public_path()?>js/plugins/dropzone/dropzone.js" type="text/javascript"></script>
