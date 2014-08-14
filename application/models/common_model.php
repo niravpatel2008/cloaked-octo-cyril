@@ -116,5 +116,60 @@ class common_model extends CI_Model{
 	}
 
 
+	function setImageOrder($imglist,$objid,$type)
+	{
+		$imglist = json_decode($imglist,1);
+		foreach($imglist as $imgdata)
+		{
+			$where = array();
+			$where['link_id'] = $imgdata['link_id'];
+			$where['link_object_id'] = $objid;
+			$where['link_type'] = $type;
+
+			$data = array();
+			$data['link_order'] = $imgdata['link_order'];
+			$this->common_model->updateData(DEAL_LINKS, $data, $where);
+		}
+	}
+
+	public function assingImagesToStamp($t_id,$image_ids)
+	{
+		$this->db->where_in('link_id',$image_ids);
+		$data = array("link_object_id"=>$t_id);
+		if($this->db->update(DEAL_LINKS, $data)){
+			return 1;
+		}else{
+			return 0;
+		}
+	}
+
+	public function getTags($obj_id,$type)
+	{
+		$this->db->select("tag_id,tag_name");
+		$this->db->from(TICKET_TAG);
+		$this->db->join(TICKET_TAG_MAPPING, "tm_object_id = tag_id");
+		$this->db->where(array("tm_object_id"=>$obj_id));
+		$this->db->where(array("tm_type"=>$type));
+
+		$query = $this->db->get();
+		$tags = $query->result_array();
+		$query->free_result();
+		return ($tags);
+	}
+	
+	public function deleteTags($tm_tagid,$obj_id,$type)
+	{
+		$this->db->where_in('tm_tagid', $tm_tagid);
+		$this->db->where(array('tm_object_id'=>$obj_id));
+		$this->db->where(array('tm_type'=>$type));
+		$del = $this->db->delete(TICKET_TAG_MAPPING);
+		if($del){
+			$delqry = "DELETE FROM TICKET_TAG WHERE tag_id IN (".implode(",",$tm_tagid).") AND (SELECT IF (COUNT(*)=0,1,0) FROM TICKET_TAG_MAPPING WHERE tm_tagid = tag_id AND tm_type = '$type')";
+			$this->db->query($delqry);
+			return 1;
+		}else{
+			return 0;
+		}
+	}
 
 }

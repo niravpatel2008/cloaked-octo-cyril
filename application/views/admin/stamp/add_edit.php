@@ -84,12 +84,56 @@
                         <label>Bio:</label>
                         <textarea placeholder="Description here" id="t_bio" class="form-control" name="t_bio"><?=@$stamp[0]->t_bio?></textarea>
                     </div>
-                   
-                    
+					<div class="form-group <?=(@$error_msg['t_tags'] != '')?'has-error':'' ?>">
+                        <?php
+                            if(@$error_msg['t_tags'] != ''){
+                        ?>
+                            <label for="inputError" class="control-label"><i class="fa fa-times-circle-o"></i><?=@$error_msg['t_tags']?></label><br/>
+                        <?php
+                            }
+                        ?>
+                        <label for="t_tags">Tags:</label>
+						<?php if(count(@$t_tags) > 0) {
+								foreach ($t_tags as $tag){
+									echo "<input placeholder=\"Enter Tags\" class=\"form-control dd_tags\" value=\"".$tag['tag_name']."\" name=\"t_tags[".$tag['tag_id']."-a]\">";
+								}
+						}else{?>
+									<input placeholder="Enter Tags" class="form-control t_tags validate[required]" value="" name="t_tags[]">
+						<?php }?>
+                    </div>
+					<div class="form-group clearfix dealuploaddiv"> <!-- Uploaded images will be shown here -->
+						<input type='hidden' name='newimages' id='newimages'>
+						<input type='hidden' name='sortOrder' id='sortOrder'>
+						<input type='hidden' name='t_mainphoto' id='t_mainphoto' value='<?=(@$stamp[0]->t_mainphoto)?>'>
+						<label for="">Select Main Image:</label>
+						<?php if(count(@$ticket_links) == 0) {
+							echo "<div class='form-group'>Please upload images for stamp than you can select main image for stamp.</div>";
+						}?>
+                        <ul id='img-container' class='list-unstyled'>
+							<?php foreach(@$ticket_links as $img) {?>
+								<li class='pull-left'>
+								<img src='<?=(base_url()."uploads/stamp/".$img->link_url)?>' class='newimg' imgid = '<?=($img->link_id)?>'>
+								<br>
+								<center><a class="removeimage" link_id="<?=($img->link_id)?>" href="#"><i class="fa fa-trash-o"></i></a></center>
+								</li>
+							<?php }?>
+						</ul>
+                    </div>
                     <div class="form-group">
                         <button class="btn btn-primary btn-flat" type="submit" id="submit">Submit</button>
                     </div>
                 </form>
+				<div class='col-md-6'>
+				<div class='box box-info'>
+					<div class="box-header">
+						<h3 class="box-title">Upload Stamp Images</h3>
+					</div>
+					<div class="box-body">
+						<form id="my-awesome-dropzone" action="<?=base_url()."admin/stamp/fileupload"?>" class="dropzone">
+							<input type='hidden' name='t_id' value='<?=(@$stamp[0]->t_id)?>'>
+						</form>
+					</div>
+				</div>
             </div>
     	</div>
     </div>

@@ -73,9 +73,44 @@ class Stamp extends CI_Controller {
 								't_modified_date' => date('Y-m-d H:i:s'),
 							);
 				
-				$ret = $this->common_model->insertData(TICKET_COLLECTION, $data);
+				$ret_stamp = $this->common_model->insertData(TICKET_COLLECTION, $data);
 
-				if ($ret > 0) {
+				if ($ret_stamp > 0) {
+					/*ADd Tags*/
+					$post_tags = $post['t_tags'];
+					foreach ($post_tags as $tag)
+					{
+						$tag = trim($tag);
+						$tagid = $this->common_model->selectData(TICKET_TAG,"tag_id",array("tag_name"=>$tag));
+						if(!$tagid)
+						{
+							$tagdata =  array("tag_name"=>$tag);
+							$tagid = $this->common_model->insertData(TICKET_TAG, $tagdata);
+						}
+						else
+						{
+							$tagid = ($tagid[0]->tag_id);
+						}
+
+
+						$tagmap = $this->common_model->selectData(TICKET_TAG_MAPPING,"*",array("tm_object_id"=>$ret_stamp,"tm_tagid"=>$tagid,"tm_type"=>"stamp"));
+						if (!$tagmap)
+						{
+							$tagmapdata =  array("tm_object_id"=>$ret_stamp,"tm_tagid"=>$tagid,"tm_type"=>"stamp");
+							$this->common_model->insertData(DEAL_MAP_TAGS, $tagmapdata);
+						}
+					}
+
+					/*update deal id to uploaded image link*/
+					$newimages = array_filter(explode(",",$post['newimages']));
+					if (count($newimages) > 0)
+						$this->common_model->assingImagesToDeal($ret_stamp,$newimages);
+
+
+					/*Deal Images sorting.*/
+					if($post['sortOrder'] != "")
+						$this->common_model->setImageOrder($post['sortOrder'],$ret_stamp,"stamp");
+
 					$flash_arr = array('flash_type' => 'success',
 										'flash_msg' => 'Stamp added successfully.'
 									);
@@ -131,6 +166,55 @@ class Stamp extends CI_Controller {
 				$ret = $this->common_model->updateData(TICKET_COLLECTION, $data, $where);
 
 				if ($ret > 0) {
+					/*Add/Update tags */
+					$post_tags = $post['t_tags'];
+					$old_tags = $this->common_model->getTags($id,"stamp");
+
+					foreach ($post_tags as $tag)
+					{
+						$tag = trim($tag);
+
+						$found = false;
+						foreach ($old_tags as $k=>$v)
+						{
+							if ($tag == $v['t_tag'])
+							{
+								$found = true;
+								unset($old_tags[$k]);
+							}
+						}
+
+						if ($found) continue;
+
+						$tagid = $this->common_model->selectData(TICKET_TAG,"tag_id",array("tag_name"=>$tag));
+						if(!$tagid)
+						{
+							$tagdata =  array("tag_name"=>$tag);
+							$tagid = $this->common_model->insertData(TICKET_TAG, $tagdata);
+						}
+						else
+						{
+							$tagid = ($tagid[0]->tag_id);
+						}
+
+						$tagmap = $this->common_model->selectData(TICKET_TAG_MAPPING,"*",array("tm_object_id"=>$id,"tm_tagid"=>$tagid,"tm_type"=>"stamp"));
+						if (!$tagmap)
+						{
+							$tagmapdata =  array("tm_object_id"=>$id,"tm_tagid"=>$tagid,"tm_type"=>"stamp");
+							$this->common_model->insertData(DEAL_MAP_TAGS, $tagmapdata);
+						}
+					}
+
+					if (count($old_tags)>0)
+					{
+						$del_ids = array_reduce($old_tags,function($arr,$k){ $arr[] = $k['tag_id']; return $arr;});
+						$this->common_model->deleteTags($del_ids,$id,"stamp");
+					}
+
+					/*Deal Images sorting.*/
+					if($post['sortOrder'] != "")
+						$this->common_model->setImageOrder($post['sortOrder'],$id);
+
 					$flash_arr = array('flash_type' => 'success',
 										'flash_msg' => 'Stamp updated successfully.'
 									);
@@ -155,6 +239,43 @@ class Stamp extends CI_Controller {
 		$this->load->view('admin/content', $data);
 	}
 
+	public function fileupload()
+	{
+		$file_name = "";
+		$error = "";
+		$post = $this->input->post();
+		if($_FILES['file']['name'] != '' && $_FILES['file']['error'] == 0){
+			$config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|bmp|jpeg';
+
+			$file_name_arr = explode('.',$_FILES['file']['name']);
+			$file_name_arr = array_reverse($file_name_arr);
+			$file_extension = $file_name_arr[0];
+			$file_name = $config['file_name'] = "stamp_".time().".".$file_extension;
+
+			$this->load->library('upload', $config);
+
+			if ( ! $this->upload->do_upload('file'))
+			{
+				$e_flag = 1;
+				$error = $this->upload->display_errors();
+			}
+
+			if ($error != "")
+				echo "Error:".$error;
+			else
+			{
+				$t_id = isset($post['t_id'])?$post['t_id']:"";
+				$linkdata =  array("link_object_id"=>$t_id,"link_type"=>"stamp","link_url"=>$file_name);
+				$link_id = $this->common_model->insertData(TICKET_LINKS, $linkdata);
+				echo '{"id":"'.$link_id.'","path":"'.base_url()."uploads/stamp/".$file_name.'"}';
+			}
+			exit;
+		}else
+		{
+			echo "Error: File not uploaded to server.";
+		}
+	}
 
 	public function delete()
 	{
