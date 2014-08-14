@@ -35,7 +35,7 @@ body{
 	background:url(../images/border.png) repeat-x 0px 0px #FFF;
 	padding: 1.5em 0 1.2em;
 	border-bottom: 1px solid rgba(214, 213, 212, 0.64);
-	position: fixed;
+	position: relative;
 	width: 100%;
 	top: 0;
 	z-index: 999;
@@ -101,8 +101,8 @@ body{
 	cursor:pointer;
 }
 .box{
-	position:absolute;
-	top:-100px;
+	/*position:absolute;
+	top:-100px;*/
 	width:100%;
 	color:#7F7F7F;
 	margin:auto;
