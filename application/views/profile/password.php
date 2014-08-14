@@ -16,21 +16,21 @@
 		?>
 	</div>
 	<div class="box">
-		<form action="" method="post">
+		<form name="frmChangePwd" method="post" id="frmChangePwd">
 		<div class="box-body">
 				<div class='form-group'>
 					<label for="username">New Password: </label>
-					<input class='form-control' type="password" name="password" id="password" value="">
+					<input class='form-control validate[required]' type="password" name="password" id="change_password" value="">
 					<?=@$error_msg['password']?>
 				</div>
 				<div class='form-group'>
 					<label for="username">Repeat Password: </label>
-					<input class='form-control' type="password" name="re_password" id="re_password" value="">
+					<input class='form-control validate[required,equals[change_password]]' type="password" name="re_password" id="re_password" value="">
 					<?=@$error_msg['re_password']?>
 				</div>
 		</div>
 		<div class='box-footer'>
-			<input type="submit" name="submit" id="submit" value="Submit" class="input button primary" style="width:150px;" />
+			<input type="submit" name="pwd_submit" id="pwd_submit" value="Submit" class="input button primary" style="width:150px;" />
 		</div>
 		</form>
 	</div>
