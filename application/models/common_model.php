@@ -116,5 +116,31 @@ class common_model extends CI_Model{
 	}
 
 
+	function setImageOrder($imglist,$objid,$type)
+	{
+		$imglist = json_decode($imglist,1);
+		foreach($imglist as $imgdata)
+		{
+			$where = array();
+			$where['link_id'] = $imgdata['link_id'];
+			$where['link_object_id'] = $objid;
+			$where['link_type'] = $type;
+
+			$data = array();
+			$data['link_order'] = $imgdata['link_order'];
+			$this->common_model->updateData(DEAL_LINKS, $data, $where);
+		}
+	}
+
+	public function assingImagesToStamp($t_id,$image_ids)
+	{
+		$this->db->where_in('link_id',$image_ids);
+		$data = array("link_object_id"=>$t_id);
+		if($this->db->update(DEAL_LINKS, $data)){
+			return 1;
+		}else{
+			return 0;
+		}
+	}
 
 }
