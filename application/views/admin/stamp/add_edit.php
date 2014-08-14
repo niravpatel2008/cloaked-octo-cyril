@@ -65,10 +65,6 @@
                         <input type="text" placeholder="Enter ..." class="form-control validate[required]" name="t_name" id="t_name" value="<?=@$stamp[0]->t_name?>" >
                     </div>
 					<div class="form-group">
-                        <label>Url:</label>
-                        <input type="text" placeholder="Enter ..." class="form-control validate[custom[url]" name="t_url" id="t_url" value="<?=@$stamp[0]->t_url?>">
-                    </div>
-					<div class="form-group">
                         <label>Price:</label>
                         <input type="text" placeholder="Enter ..." class="form-control" name="t_price" id="t_price" value="<?=@$stamp[0]->t_price?>" >
                     </div>
