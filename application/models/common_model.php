@@ -143,4 +143,33 @@ class common_model extends CI_Model{
 		}
 	}
 
+	public function getTags($obj_id,$type)
+	{
+		$this->db->select("tag_id,tag_name");
+		$this->db->from(TICKET_TAG);
+		$this->db->join(TICKET_TAG_MAPPING, "tm_object_id = tag_id");
+		$this->db->where(array("tm_object_id"=>$obj_id));
+		$this->db->where(array("tm_type"=>$type));
+
+		$query = $this->db->get();
+		$tags = $query->result_array();
+		$query->free_result();
+		return ($tags);
+	}
+	
+	public function deleteTags($tm_tagid,$obj_id,$type)
+	{
+		$this->db->where_in('tm_tagid', $tm_tagid);
+		$this->db->where(array('tm_object_id'=>$obj_id));
+		$this->db->where(array('tm_type'=>$type));
+		$del = $this->db->delete(TICKET_TAG_MAPPING);
+		if($del){
+			$delqry = "DELETE FROM TICKET_TAG WHERE tag_id IN (".implode(",",$tm_tagid).") AND (SELECT IF (COUNT(*)=0,1,0) FROM TICKET_TAG_MAPPING WHERE tm_tagid = tag_id AND tm_type = '$type')";
+			$this->db->query($delqry);
+			return 1;
+		}else{
+			return 0;
+		}
+	}
+
 }

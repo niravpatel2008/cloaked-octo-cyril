@@ -166,6 +166,55 @@ class Stamp extends CI_Controller {
 				$ret = $this->common_model->updateData(TICKET_COLLECTION, $data, $where);
 
 				if ($ret > 0) {
+					/*Add/Update tags */
+					$post_tags = $post['t_tags'];
+					$old_tags = $this->common_model->getTags($id,"stamp");
+
+					foreach ($post_tags as $tag)
+					{
+						$tag = trim($tag);
+
+						$found = false;
+						foreach ($old_tags as $k=>$v)
+						{
+							if ($tag == $v['t_tag'])
+							{
+								$found = true;
+								unset($old_tags[$k]);
+							}
+						}
+
+						if ($found) continue;
+
+						$tagid = $this->common_model->selectData(TICKET_TAG,"tag_id",array("tag_name"=>$tag));
+						if(!$tagid)
+						{
+							$tagdata =  array("tag_name"=>$tag);
+							$tagid = $this->common_model->insertData(TICKET_TAG, $tagdata);
+						}
+						else
+						{
+							$tagid = ($tagid[0]->tag_id);
+						}
+
+						$tagmap = $this->common_model->selectData(TICKET_TAG_MAPPING,"*",array("tm_object_id"=>$id,"tm_tagid"=>$tagid,"tm_type"=>"stamp"));
+						if (!$tagmap)
+						{
+							$tagmapdata =  array("tm_object_id"=>$id,"tm_tagid"=>$tagid,"tm_type"=>"stamp");
+							$this->common_model->insertData(DEAL_MAP_TAGS, $tagmapdata);
+						}
+					}
+
+					if (count($old_tags)>0)
+					{
+						$del_ids = array_reduce($old_tags,function($arr,$k){ $arr[] = $k['tag_id']; return $arr;});
+						$this->common_model->deleteTags($del_ids,$id,"stamp");
+					}
+
+					/*Deal Images sorting.*/
+					if($post['sortOrder'] != "")
+						$this->common_model->setImageOrder($post['sortOrder'],$id);
+
 					$flash_arr = array('flash_type' => 'success',
 										'flash_msg' => 'Stamp updated successfully.'
 									);
