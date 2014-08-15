@@ -23,7 +23,7 @@
         <!-- bootstrap wysihtml5 - text editor -->
         <link href="<?=public_path()?>css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" />
 
-		<?php if ($this->router->fetch_class() == "deal") { ?>
+		<?php if ($this->router->fetch_class() == "stamp") { ?>
 			<link href="<?=public_path()?>css/tagedit/jquery.tagedit.css" rel="stylesheet" type="text/css" />
 		<?php } ?>
 
