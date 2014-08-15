@@ -43,7 +43,7 @@ class Stamp extends CI_Controller {
 			),
 		);
 		$join1 = array(USERS,'u_id = t_uid');
-		$join2 = array(TICKET_ALBUM,'al_id = t_albumid');
+		$join2 = array(TICKET_ALBUM,'al_id = t_albumid',"LEFT");
 		echo json_encode( SSP::simple( $post, TICKET_COLLECTION, "t_id", $columns,array($join1,$join2)) );exit;
 	}
 
@@ -97,14 +97,14 @@ class Stamp extends CI_Controller {
 						if (!$tagmap)
 						{
 							$tagmapdata =  array("tm_object_id"=>$ret_stamp,"tm_tagid"=>$tagid,"tm_type"=>"stamp");
-							$this->common_model->insertData(DEAL_MAP_TAGS, $tagmapdata);
+							$this->common_model->insertData(TICKET_TAG_MAPPING, $tagmapdata);
 						}
 					}
 
 					/*update deal id to uploaded image link*/
 					$newimages = array_filter(explode(",",$post['newimages']));
 					if (count($newimages) > 0)
-						$this->common_model->assingImagesToDeal($ret_stamp,$newimages);
+						$this->common_model->assingImagesToStamp($ret_stamp,$newimages);
 
 
 					/*Deal Images sorting.*/
@@ -127,7 +127,7 @@ class Stamp extends CI_Controller {
 
 		$data['users'] = $this->common_model->selectData(USERS, 'u_id,u_fname,u_email');
 		$data['albums'] = $this->common_model->selectData(TICKET_ALBUM, 'al_id,al_name',array("al_uid"=>$this->user_session['u_id']));
-		
+		$data['ticket_links'] = array();
 		$data['view'] = "add_edit";
 		$this->load->view('admin/content', $data);
 	}
@@ -138,7 +138,7 @@ class Stamp extends CI_Controller {
 			redirect('admin/stamp');
 		}
 
-		$where = 'u_id = '.$id;
+		$where = 't_id = '.$id;
 
 		$post = $this->input->post();
 		if ($post) {
@@ -201,7 +201,7 @@ class Stamp extends CI_Controller {
 						if (!$tagmap)
 						{
 							$tagmapdata =  array("tm_object_id"=>$id,"tm_tagid"=>$tagid,"tm_type"=>"stamp");
-							$this->common_model->insertData(DEAL_MAP_TAGS, $tagmapdata);
+							$this->common_model->insertData(TICKET_TAG_MAPPING, $tagmapdata);
 						}
 					}
 
@@ -232,10 +232,12 @@ class Stamp extends CI_Controller {
 		if (empty($stamp)) {
 			redirect('admin/stamp');
 		}
-
+		
 		$data['users'] = $this->common_model->selectData(USERS, 'u_id,u_fname,u_email');
 		$data['albums'] = $this->common_model->selectData(TICKET_ALBUM, 'al_id,al_name',array("al_uid"=>$this->user_session['u_id']));
+		$data['ticket_links'] = $this->common_model->selectData(TICKET_LINKS, 'link_id,link_url',array("link_object_id"=>$id,"link_type"=>"stamp"),"link_order","ASC");
 		$data['view'] = "add_edit";
+		$data['t_tags'] = $this->common_model->getTags($id,"stamp");
 		$this->load->view('admin/content', $data);
 	}
 
@@ -245,7 +247,7 @@ class Stamp extends CI_Controller {
 		$error = "";
 		$post = $this->input->post();
 		if($_FILES['file']['name'] != '' && $_FILES['file']['error'] == 0){
-			$config['upload_path'] = './uploads/';
+			$config['upload_path'] = './uploads/stamp/';
 			$config['allowed_types'] = 'gif|jpg|png|bmp|jpeg';
 
 			$file_name_arr = explode('.',$_FILES['file']['name']);

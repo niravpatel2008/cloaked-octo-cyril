@@ -46,7 +46,7 @@
                             }
                         ?>
 						<label>Select Album</label>
-						<select class="form-control validate[required]" id="t_albumid" name="t_albumid">
+						<select class="form-control" id="t_albumid" name="t_albumid">
                             <option value="">Select</option>
 							<?php foreach ($albums as $album) { ?>
 								<option value='<?=$album->al_id; ?>'  <?=(@$stamp[0]->t_albumid == $album->al_id)?'selected':''?>  ><?=$album->al_name; ?></option>
@@ -91,7 +91,7 @@
                         <label for="t_tags">Tags:</label>
 						<?php if(count(@$t_tags) > 0) {
 								foreach ($t_tags as $tag){
-									echo "<input placeholder=\"Enter Tags\" class=\"form-control dd_tags\" value=\"".$tag['tag_name']."\" name=\"t_tags[".$tag['tag_id']."-a]\">";
+									echo "<input placeholder=\"Enter Tags\" class=\"form-control t_tags\" value=\"".$tag['tag_name']."\" name=\"t_tags[".$tag['tag_id']."-a]\">";
 								}
 						}else{?>
 									<input placeholder="Enter Tags" class="form-control t_tags validate[required]" value="" name="t_tags[]">
@@ -118,19 +118,20 @@
                     <div class="form-group">
                         <button class="btn btn-primary btn-flat" type="submit" id="submit">Submit</button>
                     </div>
-                </form>
-				<div class='col-md-6'>
-				<div class='box box-info'>
-					<div class="box-header">
-						<h3 class="box-title">Upload Stamp Images</h3>
-					</div>
-					<div class="box-body">
-						<form id="my-awesome-dropzone" action="<?=base_url()."admin/stamp/fileupload"?>" class="dropzone">
-							<input type='hidden' name='t_id' value='<?=(@$stamp[0]->t_id)?>'>
-						</form>
-					</div>
-				</div>
-            </div>
+				</form>
+			</div>
     	</div>
+		<div class='col-md-6'>
+			<div class='box box-info'>
+				<div class="box-header">
+					<h3 class="box-title">Upload Stamp Images</h3>
+				</div>
+				<div class="box-body">
+					<form id="my-awesome-dropzone" action="<?=base_url()."admin/stamp/fileupload"?>" class="dropzone">
+						<input type='hidden' name='t_id' value='<?=(@$stamp[0]->t_id)?>'>
+					</form>
+				</div>
+			</div>
+		</div>
     </div>
 </section>

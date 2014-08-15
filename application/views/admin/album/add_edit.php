@@ -50,7 +50,7 @@
                     </div>
                     <div class="form-group">
                         <label>Country:</label>
-                        <input type="text" placeholder="Enter ..." class="form-control" name="al_ownercountry" id="al_ownercountry" value="<?=@$album[0]->al_ownercountry?>" >
+                        <input type="text" placeholder="Enter ..." class="form-control" name="al_country" id="al_country" value="<?=@$album[0]->al_country?>" >
                     </div>
                     <div class="form-group">
                         <label>Price:</label>

@@ -128,7 +128,7 @@ class common_model extends CI_Model{
 
 			$data = array();
 			$data['link_order'] = $imgdata['link_order'];
-			$this->common_model->updateData(DEAL_LINKS, $data, $where);
+			$this->common_model->updateData(TICKET_LINKS, $data, $where);
 		}
 	}
 
@@ -136,7 +136,7 @@ class common_model extends CI_Model{
 	{
 		$this->db->where_in('link_id',$image_ids);
 		$data = array("link_object_id"=>$t_id);
-		if($this->db->update(DEAL_LINKS, $data)){
+		if($this->db->update(TICKET_LINKS, $data)){
 			return 1;
 		}else{
 			return 0;
@@ -147,9 +147,8 @@ class common_model extends CI_Model{
 	{
 		$this->db->select("tag_id,tag_name");
 		$this->db->from(TICKET_TAG);
-		$this->db->join(TICKET_TAG_MAPPING, "tm_object_id = tag_id");
-		$this->db->where(array("tm_object_id"=>$obj_id));
-		$this->db->where(array("tm_type"=>$type));
+		$this->db->join(TICKET_TAG_MAPPING, "tm_tagid = tag_id");
+		$this->db->where(array("tm_object_id"=>$obj_id,"tm_type"=>$type));
 
 		$query = $this->db->get();
 		$tags = $query->result_array();
