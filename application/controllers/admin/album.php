@@ -24,7 +24,7 @@ class Album extends CI_Controller {
 		$columns = array(
 			array( 'db' => 'u_fname', 'dt' => 0 ),
 			array( 'db' => 'al_name', 'dt' => 1 ),
-			array( 'db' => 'al_ownercountry',  'dt' => 2 ),
+			array( 'db' => 'al_country',  'dt' => 2 ),
 			array( 'db' => 'al_price',  'dt' => 3 ),
 			array('db'        => 'u_created_date',
 					'dt'        => 4,
@@ -32,8 +32,9 @@ class Album extends CI_Controller {
 						return date( 'jS M y', strtotime($d));
 					}
 			),
+			array( 'db' => '(select count(*) from ticket_collection where t_albumid=al_id) as db_stampcount',  'dt' => 5 ,'coloumn_name'=>'db_stampcount'),
 			array( 'db' => 'al_id',
-					'dt' => 5,
+					'dt' => 6,
 					'formatter' => function( $d, $row ) {
 						return '<a href="'.site_url('/admin/album/edit/'.$d).'" class="fa fa-edit"></a> <a href="javascript:void(0);" onclick="delete_album('.$d.')" class="fa fa-trash-o"></a>';
 					}
@@ -59,7 +60,7 @@ class Album extends CI_Controller {
 			if ($e_flag == 0) {
 				$data = array('al_name' => $post['al_name'],
 								'al_uid' => $this->user_session['u_id'],
-								'al_ownercountry' => $post['al_ownercountry'],
+								'al_country' => $post['al_country'],
 								'al_price' => $post['al_price'],
 								'al_url' => $post['al_url'],
 								'al_created_date' =>  date('Y-m-d H:i:s'),
@@ -93,7 +94,7 @@ class Album extends CI_Controller {
 			redirect('admin/album');
 		}
 
-		$where = 'u_id = '.$id;
+		$where = 'al_id = '.$id;
 
 		$post = $this->input->post();
 		if ($post) {
@@ -109,7 +110,7 @@ class Album extends CI_Controller {
 			if ($e_flag == 0) {
 
 				$data = array('al_name' => $post['al_name'],
-								'al_ownercountry' => $post['al_ownercountry'],
+								'al_country' => $post['al_country'],
 								'al_url' => $post['al_url'],
 								'al_price' => $post['al_price'],
 								'al_modified_date' => date('Y-m-d H:i:s')

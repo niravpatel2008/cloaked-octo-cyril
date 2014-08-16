@@ -37,6 +37,7 @@
 									<th>Country</th>
 									<th>Price</th>
 									<th>Created At</th>
+									<th>Stamps</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -47,6 +48,7 @@
 									<th>Country</th>
 									<th>Price</th>
 									<th>Created At</th>
+									<th>Stamps</th>
 									<th>Action</th>
 								</tr>
 							</tfoot>
