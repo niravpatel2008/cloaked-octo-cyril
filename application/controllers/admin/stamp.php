@@ -66,7 +66,7 @@ class Stamp extends CI_Controller {
 								't_year' => $post['t_year'],
 								't_bio' => $post['t_bio'],
 								't_ownercountry' => $post['t_ownercountry'],
-								't_uid' => $this->user_session['u_id'],
+								't_uid' => (isset($post['t_uid']) && $post['t_uid'] != "")?$post['t_uid']:$this->user_session['u_id'],
 								't_mainphoto'=> $post['t_mainphoto'],
 								't_albumid' => $post['t_albumid'],
 								't_created_date' => date('Y-m-d H:i:s'),
@@ -157,6 +157,7 @@ class Stamp extends CI_Controller {
 								't_price' => $post['t_price'],
 								't_year' => $post['t_year'],
 								't_bio' => $post['t_bio'],
+								't_uid' => (isset($post['t_uid']) && $post['t_uid'] != "")?$post['t_uid']:$this->user_session['u_id'],
 								't_mainphoto'=> $post['t_mainphoto'],
 								't_ownercountry' => $post['t_ownercountry'],
 								't_albumid' => $post['t_albumid'],
@@ -284,7 +285,7 @@ class Stamp extends CI_Controller {
 		$post = $this->input->post();
 
 		if ($post) {
-			$ret = $this->common_model->deleteData(TICKET_COLLECTION, array('u_id' => $post['id'] ));
+			$ret = $this->common_model->deleteData(TICKET_LINKS, array('link_id' => $post['id'] ));
 			if ($ret > 0) {
 				echo "success";
 				#echo success_msg_box('User deleted successfully.');;
