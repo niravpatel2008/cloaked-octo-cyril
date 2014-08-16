@@ -60,11 +60,41 @@
                         <label>Url:</label>
                         <input type="text" placeholder="Enter ..." class="form-control validate[custom[url]" name="al_url" id="al_url" value="<?=@$album[0]->al_url?>">
                     </div>
+					<div class="form-group clearfix dealuploaddiv"> <!-- Uploaded images will be shown here -->
+						<input type='hidden' name='newimages' id='newimages'>
+						<input type='hidden' name='sortOrder' id='sortOrder'>
+						<input type='hidden' name='al_mainphoto' id='al_mainphoto' value='<?=(@$stamp[0]->al_mainphoto)?>'>
+						<label for="">Select Album Image:</label>
+						<?php if(count(@$ticket_links) == 0) {
+							echo "<div class='form-group'>Please upload image for Album than you can select images for stamp.</div>";
+						}?>
+                        <ul id='img-container' class='list-unstyled'>
+							<?php foreach(@$ticket_links as $img) {?>
+								<li class='pull-left'>
+								<img src='<?=(base_url()."uploads/stamp/".$img->link_url)?>' class='newimg' imgid = '<?=($img->link_id)?>'>
+								<br>
+								<center><a class="removeimage" link_id="<?=($img->link_id)?>" href="#" title="Delete"><i class="fa fa-trash-o"></i></a></center>
+								</li>
+							<?php }?>
+						</ul>
+                    </div>
                     <div class="form-group">
                         <button class="btn btn-primary btn-flat" type="submit" id="submit">Submit</button>
                     </div>
                 </form>
             </div>
     	</div>
+		<div class='col-md-6'>
+			<div class='box box-info'>
+				<div class="box-header">
+					<h3 class="box-title">Upload Album Image</h3>
+				</div>
+				<div class="box-body">
+					<form id="my-awesome-dropzone" action="<?=base_url()."admin/album/fileupload"?>" class="dropzone">
+						<input type='hidden' name='al_id' value='<?=(@$stamp)?>'>
+					</form>
+				</div>
+			</div>
+		</div>
     </div>
 </section>
