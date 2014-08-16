@@ -59,7 +59,7 @@ class Album extends CI_Controller {
 
 			if ($e_flag == 0) {
 				$data = array('al_name' => $post['al_name'],
-								'al_uid' => $this->user_session['u_id'],
+								'al_uid' => (isset($post['al_uid']) && $post['al_uid'] != "")?$post['al_uid']:$this->user_session['u_id'],
 								'al_country' => $post['al_country'],
 								'al_price' => $post['al_price'],
 								'al_url' => $post['al_url'],
@@ -68,6 +68,27 @@ class Album extends CI_Controller {
 							);
 				
 				$ret = $this->common_model->insertData(TICKET_ALBUM, $data);
+
+				if ($ret > 0) {
+					
+					/*update id to uploaded image link*/
+					$newimages = array_filter(explode(",",$post['newimages']));
+					if (count($newimages) > 0)
+						$this->common_model->assingImagesToStamp($ret,$newimages);
+
+
+					/*Deal Images sorting.*/
+					if($post['sortOrder'] != "")
+						$this->common_model->setImageOrder($post['sortOrder'],$ret_stamp,"stamp");
+
+					$flash_arr = array('flash_type' => 'success',
+										'flash_msg' => 'Stamp added successfully.'
+									);
+				}else{
+					$flash_arr = array('flash_type' => 'error',
+										'flash_msg' => 'An error occurred while processing.'
+									);
+				}
 
 				if ($ret > 0) {
 					$flash_arr = array('flash_type' => 'success',
@@ -85,6 +106,7 @@ class Album extends CI_Controller {
 		}
 		$data['users'] = $this->common_model->selectData(USERS, 'u_id,u_fname,u_email');
 		$data['view'] = "add_edit";
+		$data['ticket_links'] = array();
 		$this->load->view('admin/content', $data);
 	}
 
@@ -138,9 +160,48 @@ class Album extends CI_Controller {
 			redirect('admin/album');
 		}
 		$data['view'] = "add_edit";
+		$data['ticket_links'] = $this->common_model->selectData(TICKET_LINKS, 'link_id,link_url',array("link_object_id"=>$id,"link_type"=>"album"),"link_order","ASC");
 		$data['users'] = $this->common_model->selectData(USERS, 'u_id,u_fname,u_email');
 		$this->load->view('admin/content', $data);
 	}
+	public function fileupload()
+	{
+		$file_name = "";
+		$error = "";
+		$post = $this->input->post();
+		if($_FILES['file']['name'] != '' && $_FILES['file']['error'] == 0){
+			$config['upload_path'] = './uploads/stamp/';
+			$config['allowed_types'] = 'gif|jpg|png|bmp|jpeg';
+
+			$file_name_arr = explode('.',$_FILES['file']['name']);
+			$file_name_arr = array_reverse($file_name_arr);
+			$file_extension = $file_name_arr[0];
+			$file_name = $config['file_name'] = "stamp_".time().".".$file_extension;
+
+			$this->load->library('upload', $config);
+
+			if ( ! $this->upload->do_upload('file'))
+			{
+				$e_flag = 1;
+				$error = $this->upload->display_errors();
+			}
+
+			if ($error != "")
+				echo "Error:".$error;
+			else
+			{
+				$al_id = isset($post['al_id'])?$post['al_id']:"";
+				$linkdata =  array("link_object_id"=>$al_id,"link_type"=>"album","link_url"=>$file_name);
+				$link_id = $this->common_model->insertData(TICKET_LINKS, $linkdata);
+				echo '{"id":"'.$link_id.'","path":"'.base_url()."uploads/stamp/".$file_name.'"}';
+			}
+			exit;
+		}else
+		{
+			echo "Error: File not uploaded to server.";
+		}
+	}
+
 
 
 	public function delete()
