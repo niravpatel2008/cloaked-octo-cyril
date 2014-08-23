@@ -38,7 +38,7 @@ class Stamp extends CI_Controller {
 			array( 'db' => 't_id',
 					'dt' => 8,
 					'formatter' => function( $d, $row ) {
-						return '<a href="'.site_url('/admin/stamp/edit/'.$d).'" class="fa fa-edit"></a> <a href="javascript:void(0);" onclick="delete_stamp('.$d.')" class="fa fa-trash-o"></a>';
+						return '<a title="Edit" href="'.site_url('/admin/stamp/edit/'.$d).'" class="fa fa-edit"></a> <a title="Delete" href="javascript:void(0);" onclick="delete_stamp('.$d.')" class="fa fa-trash-o"></a>';
 					}
 			),
 		);
@@ -285,6 +285,28 @@ class Stamp extends CI_Controller {
 		$post = $this->input->post();
 
 		if ($post) {
+			$imgPath = './uploads/stamp/';
+			if(isset($post['from']) && $post['from']== 'album')
+			{
+				$stampsToDel = $this->common_model->selectData(TICKET_COLLECTION, 'GROUP_CONCAT(t_id) AS t_id', array("t_albumid" => $post['al_id'])); ## Get all stamps id belonging to album
+	
+				## Delete all stamps image from link table belonging to album and unlink images
+				$idStr=$stampsToDel[0]->t_id;
+				if($idStr != '')
+				{
+					$idArr = explode(',',$idStr);
+					$stampsPath = $this->common_model->selectData_whereIn(TICKET_LINKS, 'GROUP_CONCAT(link_url) AS link_url', array('link_object_id'=>$idArr));
+					if(!empty($stampsPath))
+						$this->deleteImage($stampsPath);
+					$resLink = $this->common_model->deleteData(TICKET_LINKS,'',array('link_object_id'=>$idArr));
+				}
+
+				$resStamp = $this->common_model->deleteData(TICKET_COLLECTION, array('t_albumid' => $post['al_id'] )); ## Delete stamp details entry from Stamp(collection) table belonging to album.
+			}
+			
+			$imgPath = $this->common_model->selectData(TICKET_LINKS, 'link_url',array('link_id'=>$post['id']));
+			if(!empty($imgPath))
+				$this->deleteImage($imgPath);
 			$ret = $this->common_model->deleteData(TICKET_LINKS, array('link_id' => $post['id'] ));
 			if ($ret > 0) {
 				echo "success";
@@ -293,6 +315,24 @@ class Stamp extends CI_Controller {
 				echo "error";
 				#echo error_msg_box('An error occurred while processing.');
 			}
+		}
+	}
+
+	public function deleteImage($urlArr = '')
+	{
+		if(isset($urlArr) && !empty($urlArr))
+		{
+			$urlStr = $urlArr[0]->link_url;
+			$urlArr = explode(',',$urlStr);
+			$uploadPath = './uploads/stamp/';
+			foreach($urlArr as $k=>$v)
+			{
+				unlink($uploadPath.$v);
+			}
+		}
+		else
+		{
+			echo "error occured during deleting images";
 		}
 	}
 }

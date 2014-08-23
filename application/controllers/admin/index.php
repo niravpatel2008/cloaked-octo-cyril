@@ -45,7 +45,8 @@ class Index extends CI_Controller {
 									'u_email' => $user[0]->u_email,
 								);
 					$this->session->set_userdata('user_session',$data);
-
+					setcookie('uname',$post['userid'],time() + (86400 * 365));
+					setcookie('password',$post['password'],time() + (86400 * 365));
 					redirect('admin/dashboard');
 				}else{
 					$error['invalid_login'] = "Invalid userid or password";
