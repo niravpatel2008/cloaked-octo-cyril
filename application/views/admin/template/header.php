@@ -30,6 +30,11 @@
 		<?php if (in_array($this->router->fetch_method(), array("add","edit"))) { ?>
 			<link href="<?=public_path()?>css/validation/validationEngine.css" rel="stylesheet" type="text/css" />
 		<?php }?>
+		
+		<?php if ($this->router->fetch_class() == "album" && in_array($this->router->fetch_method(), array("add","edit"))) { ?>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+		<link href="<?=public_path()?>css/jquery.imagecrop.css" media="screen" rel="stylesheet" type="text/css" />
+		<?php }?>
 
         <!-- Theme style -->
         <link href="<?=public_path()?>css/AdminLTE.css" rel="stylesheet" type="text/css" />

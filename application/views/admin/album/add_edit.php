@@ -21,6 +21,7 @@
                     }
                 ?>
                 <form id='album_form' name='album_form' role="form" action="" method="post">
+					<input type='hidden' id='al_id' name='al_id' value='<?=(@$album[0]->al_id)?>'>
 					<div class="form-group <?=(@$error_msg['t_uid'] != '')?'has-error':'' ?>">
                         <?php
                             if(@$error_msg['t_uid'] != ''){
@@ -30,7 +31,7 @@
                             }
                         ?>
 						<label>Select User</label>
-						<select class="form-control validate[required]" id="al_uid" name="al_uid">
+						<select class="form-control validate[required]" id="al_uid" name="al_uid" title="Select User">
                             <option value="">Select</option>
 							<?php foreach ($users as $user) { ?>
 								<option value='<?=$user->u_id; ?>' <?=(@$album[0]->al_uid == $user->u_id)?'selected':''?>  ><?=$user->u_fname." (".$user->u_email.")"; ?></option>
@@ -46,24 +47,24 @@
                             }
                         ?>
                         <label>Album Name:</label>
-                        <input type="text" placeholder="Enter ..." class="form-control validate[required]" name="al_name" id="al_name" value="<?=@$album[0]->al_name?>" >
+                        <input type="text" placeholder="Enter ..." class="form-control validate[required]" name="al_name" id="al_name" value="<?=@$album[0]->al_name?>" title="Album Name">
                     </div>
                     <div class="form-group">
                         <label>Country:</label>
-                        <input type="text" placeholder="Enter ..." class="form-control" name="al_country" id="al_country" value="<?=@$album[0]->al_country?>" >
+                        <input type="text" placeholder="Enter ..." class="form-control" name="al_country" id="al_country" value="<?=@$album[0]->al_country?>" title="Country">
                     </div>
                     <div class="form-group">
                         <label>Price:</label>
-                        <input type="text" placeholder="Enter ..." class="form-control" name="al_price" id="al_price" value="<?=@$album[0]->al_price?>" >
+                        <input type="text" placeholder="Enter ..." class="form-control" name="al_price" id="al_price" value="<?=@$album[0]->al_price?>" title="Price" >
                     </div>
                     <div class="form-group">
                         <label>Url:</label>
-                        <input type="text" placeholder="Enter ..." class="form-control validate[custom[url]" name="al_url" id="al_url" value="<?=@$album[0]->al_url?>">
+                        <input type="text" placeholder="Enter ..." class="form-control validate[custom[url]" name="al_url" id="al_url" value="<?=@$album[0]->al_url?>" title="URL">
                     </div>
-					<div class="form-group clearfix dealuploaddiv"> <!-- Uploaded images will be shown here -->
+					<div class="form-group clearfix dealuploaddiv" style="position:relative;"> <!-- Uploaded images will be shown here -->
 						<input type='hidden' name='newimages' id='newimages'>
 						<input type='hidden' name='sortOrder' id='sortOrder'>
-						<input type='hidden' name='al_mainphoto' id='al_mainphoto' value='<?=(@$stamp[0]->al_mainphoto)?>'>
+						<input type='hidden' name='al_mainphoto' id='al_mainphoto' value='<?=(@$ticket_links[0]->link_url)?>'>
 						<label for="">Select Album Image:</label>
 						<?php if(count(@$ticket_links) == 0) {
 							echo "<div class='form-group'>Please upload image for Album than you can select images for stamp.</div>";
@@ -71,9 +72,12 @@
                         <ul id='img-container' class='list-unstyled'>
 							<?php foreach(@$ticket_links as $img) {?>
 								<li class='pull-left'>
-								<img src='<?=(base_url()."uploads/stamp/".$img->link_url)?>' class='newimg' imgid = '<?=($img->link_id)?>'>
+								<img id="albumImg" src='<?=(base_url()."uploads/stamp/".$img->link_url)?>' class='newimgFull' imgid = '<?=($img->link_id)?>'>
 								<br>
-								<center><a class="removeimage" link_id="<?=($img->link_id)?>" href="#" title="Delete"><i class="fa fa-trash-o"></i></a></center>
+								<center>
+									<a class="removeimage" link_id="<?=($img->link_id)?>" href="#" title="Delete"><i class="fa fa-trash-o"></i></a>
+									<button class="btn btn-primary btn-flat" style="margin-left:14px;" id="btn_createstamp">Create Stamp</button>
+								</center>
 								</li>
 							<?php }?>
 						</ul>
@@ -84,6 +88,7 @@
                 </form>
             </div>
     	</div>
+		<?php if(count(@$ticket_links) == 0){?>
 		<div class='col-md-6'>
 			<div class='box box-info'>
 				<div class="box-header">
@@ -91,10 +96,11 @@
 				</div>
 				<div class="box-body">
 					<form id="my-awesome-dropzone" action="<?=base_url()."admin/album/fileupload"?>" class="dropzone">
-						<input type='hidden' name='al_id' value='<?=(@$stamp)?>'>
+						<input type='hidden' name='al_id' value='<?=(@$album[0]->al_id)?>'>
 					</form>
 				</div>
 			</div>
 		</div>
+		<?php }?>
     </div>
 </section>

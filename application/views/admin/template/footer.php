@@ -56,11 +56,16 @@
 	<?php }?>
 	<script src="<?=public_path()?>js/admin/<?=$this->router->fetch_class()?>/index.js" type="text/javascript"></script>
 
-	<?php if (($this->router->fetch_class() == "stamp" || $this->router->fetch_class() == "album") && in_array($this->router->fetch_method(), array("add","edit"))) { ?>
+	<?php if (($this->router->fetch_class() == "stamp") && in_array($this->router->fetch_method(), array("add","edit"))) { ?>
 		<script src="<?=public_path()?>js/plugins/tagedit/jquery.tagedit.js" type="text/javascript"></script>
 		<script src="<?=public_path()?>js/plugins/tagedit/jquery.autoGrowInput.js" type="text/javascript"></script>
 		<script src="<?=public_path()?>js/plugins/dropzone/dropzone.js" type="text/javascript"></script>
     <?php } ?>
+
+	<?php if (($this->router->fetch_class() == "album") && in_array($this->router->fetch_method(), array("add","edit"))) { ?>
+		<script src="<?=public_path()?>js/plugins/dropzone/dropzone.js" type="text/javascript"></script>
+		<script src="<?=public_path()?>js/plugins/imageCrop/imagecrop.js" type="text/javascript"></script>
+	<?php } ?>
 
     <script src="<?=public_path()?>js/AdminLTE/app.js" type="text/javascript"></script>
     <script src="<?=public_path()?>js/AdminLTE/demo.js" type="text/javascript"></script>

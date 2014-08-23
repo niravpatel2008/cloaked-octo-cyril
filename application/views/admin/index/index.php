@@ -10,7 +10,8 @@
         <link href="<?=public_path()?>css/font-awesome.min.css" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
         <link href="<?=public_path()?>css/AdminLTE.css" rel="stylesheet" type="text/css" />
-
+		<script src="<?=public_path()?>js/jquery-2.1.1.min.js"></script>
+		<script src="<?=public_path()?>js/jquery.cookie.js"></script>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -46,7 +47,7 @@
                         <?php
                             }
                         ?>
-                        <input type="text" name="userid" class="form-control allow-enter" placeholder="User ID"/>
+                        <input type="text" id="txtUsername" name="userid" class="form-control allow-enter" placeholder="User ID" value="<?php if(isset($_COOKIE['uname'])) echo $_COOKIE['uname']; ?>"/>
                     </div>
                     <div class="form-group <?=(@$error_msg['password'] != '')?'has-error':'' ?>">
                         <?php
@@ -56,14 +57,14 @@
                         <?php
                             }
                         ?>
-                        <input type="password" name="password" class="form-control allow-enter" placeholder="Password"/>
+                        <input id="txtPassword" type="password" name="password" class="form-control allow-enter" placeholder="Password" value="<?php if(isset($_COOKIE['password'])) echo $_COOKIE['password']; ?>"/>
                     </div>
                     <div class="form-group">
-                        <input type="checkbox" name="remember_me"/> Remember me
+                        <input type="checkbox" name="remember_me" id="chkRemember" name="chkRemember"/> Remember me
                     </div>
                 </div>
                 <div class="footer">
-                    <button type="submit" class="btn bg-olive btn-block sumitbtn">Sign me in</button>
+                    <button id="btnSignin" type="submit" class="btn bg-olive btn-block sumitbtn">Sign me in</button>
 
                     <p><a href="<?=admin_path()?>forgotpassword">I forgot my password</a></p>
 
@@ -90,3 +91,38 @@
         <script src="<?=public_path()?>js/AdminLTE/app.js" type="text/javascript"></script>
     </body>
 </html>
+<script type="text/javascript">
+var $ = jQuery.noConflict();
+$(document).ready(function(){
+	$('#btnSignin').click(function(e){
+		//e.preventDefault();
+		//rememberBkaIdPassword($("#txtUsername").val(),$("#txtPassword").val());
+	});
+	function chkBkaCookieRemember()
+	{
+		var strck = "";
+		strck = $.cookie("rememberBrokerIdPassword");
+		if(strck=="" || strck==null )
+		{}
+		else
+		{
+			var strcksplit = strck.split(";");
+			$("#txtUsername").val(strcksplit[0]);
+			$("#txtPassword").val(strcksplit[1]);
+			$("input[name=chkRemember]").attr("checked",true);
+		}
+	}
+	function rememberBkaIdPassword(uname,password)
+	{
+		strCookie = uname+";"+password;
+		if($('input[name=chkRemember]').is(':checked'))
+		{
+			$.cookie("rememberBrokerIdPassword",strCookie,{ expires: 365});
+		}
+		else
+		{
+			$.cookie("rememberBrokerIdPassword","");
+		}
+	}
+});
+</script>
