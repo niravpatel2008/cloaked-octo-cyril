@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	$("#album_form").validationEngine();
-	Dropzone.options.myAwesomeDropzone = {
+Dropzone.options.myAwesomeDropzone = {
   maxFiles: 1,
   accept: function(file, done) {
     console.log("uploaded");
@@ -8,10 +8,15 @@ $(document).ready(function(){
   },
   init: function() {
     this.on("maxfilesexceeded", function(file){
+		this.removeFile(file);
         alert("No more files please!");
     });
   }
 };
+initCrop();
+
+	//if(typeof($cropObj) !== 'undefined')
+	//
 	if ($("#my-awesome-dropzone").length > 0)
 	{
 		setTimeout(function(){
@@ -21,20 +26,19 @@ $(document).ready(function(){
 					{
 						var file = JSON.parse(res);
 						var html = "<li class='pull-left'>";
-						html += "<img src='"+file.path+"' class='newimg' imgid = '"+file.id+"'>";
+						html += "<img src='"+file.path+"' id='albumImg' class='newimgFull' imgid = '"+file.id+"'>";
 						html += "<br>";
-						html += "<center><a class='removeimage' link_id='"+file.id+"' href='#'><i class='fa fa-trash-o'></i></a></center></li>";
+						html += "<center><a class='removeimage' link_id='"+file.id+"' href='#'><i class='fa fa-trash-o'></i></a><button class='btn btn-primary btn-flat' style='margin-left:14px;' id='btn_createstamp'>Create Stamp</button></center></li>";
 						$("#img-container").append(html);
 						$('#newimages').val($('#newimages').val() +"," +file.id);
+						initCrop();
 						doOrderImage();
+						
 					}
 				});
 		},1000)
 	}
-	/*if($('#img-container li ').length == 0)
-	{
-		$("#my-awesome-dropzone").removeClass('dz-max-files-reached');
-	}*/
+	
 	$('#img-container').delegate("img",'click',function(){
 		$('#img-container img').removeClass('selected');
 		$(this).addClass('selected');
@@ -44,9 +48,9 @@ $(document).ready(function(){
 	var mainimgid = $('#t_mainphoto').val();
 	$('#img-container img[imgid="'+mainimgid+'"]').addClass('selected');
 
-	$( ".t_tags").tagedit({
+	/*$( ".t_tags").tagedit({
 		//autocompleteURL: 'server/autocomplete.php',
-	});
+	});*/
 
 	$( "#img-container" ).sortable({stop: function( event, ui ) {doOrderImage();}});
 
@@ -54,22 +58,54 @@ $(document).ready(function(){
 		e.preventDefault();
 		atag = $(this);
 		link_id = $(atag).attr('link_id');
-		url = admin_path()+'stamp/delete',
-		data = {id:link_id};
+
+		var cnf = confirm("All Associated Stamps with this Album will be deleted. Do You want to Continue ?");
+		if(cnf == true)
+		{
+			url = admin_path()+'stamp/delete',
+			data = {id:link_id,from:'album',al_id:$('#al_id').val()};
+			$.post(url,data,function(e){
+				if (e == "success") {
+					if ($('#t_mainphoto').val() == link_id)
+					{
+						$('#t_mainphoto').val("");
+					}
+					$(atag).closest('li.pull-left').remove();
+					//$("#flash_msg").html(success_msg_box ('Image deleted successfully.'));
+					alert("Images Deleted Successfully");
+					//Dropzone.empty();
+					location.reload();
+				}else{
+					$("#flash_msg").html(error_msg_box ('An error occurred while processing.'));
+				}
+			});
+		}
+	});
+	
+	$('#btn_createstamp').click(function(e){
+		var cropJson = $cropObj[0].crop.getSelection();
+		if(cropJson == null || cropJson == '')
+		{
+			alert("Create Stamp , You must have to crop image");return false;
+		}
+		var mainSrc = $('img#albumImg').attr('src');
+		var al_id = $('#al_id').val();
+		var albumName = $('#al_name').val();
+		var price = $('#al_price').val();
+		var country = $('#al_country').val();
+		console.log(cropJson);
+		e.preventDefault();
+		url = admin_path()+'album/createStamp',
+		data = {stampJson:cropJson,mainimg:mainSrc,al_id:al_id,al_name:albumName,price:price,country:country};
 		$.post(url,data,function(e){
 			if (e == "success") {
-				if ($('#t_mainphoto').val() == link_id)
-				{
-					$('#t_mainphoto').val("");
-				}
-				$(atag).closest('li.pull-left').remove();
-				$("#flash_msg").html(success_msg_box ('Image deleted successfully.'));
-			}else{
-				$("#flash_msg").html(error_msg_box ('An error occurred while processing.'));
+				alert("Stamps Created Successfully");
+			}else
+			{
+				alert("Please try again later");
 			}
 		});
 	});
-
 	doOrderImage();
 });
 function doOrderImage(){
@@ -81,4 +117,12 @@ function doOrderImage(){
 	});
 	orderStr = JSON.stringify(order);
 	$('#sortOrder').val(orderStr);
+}
+
+function initCrop()
+{
+	var $cropObj ;
+	$cropObj = $('img#albumImg').imageCrop({
+	overlayOpacity : 0.25
+});
 }
