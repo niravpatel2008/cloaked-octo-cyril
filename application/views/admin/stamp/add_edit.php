@@ -110,7 +110,7 @@
 								<li class='pull-left'>
 								<img src='<?=(base_url()."uploads/stamp/".$img->link_url)?>' class='newimg' imgid = '<?=($img->link_id)?>'>
 								<br>
-								<center><a class="removeimage" link_id="<?=($img->link_id)?>" href="#"><i class="fa fa-trash-o"></i></a></center>
+								<center><a class="removeimage" link_id="<?=($img->link_id)?>" href="#" title="Delete"><i class="fa fa-trash-o"></i></a></center>
 								</li>
 							<?php }?>
 						</ul>

@@ -23,7 +23,7 @@ function openForgotPasswordForm () {
     $("#divForgotPasswordForm").modal();
 }
 $(document).ready(function(){
-	$("#loginform").validationEngine();
+$("#loginform").validationEngine();
 $("#loginform").on('submit', function (e) {
 	e.preventDefault();
 		if(!$("#loginform").validationEngine('validate')) return ;
@@ -74,6 +74,27 @@ $("#signupform").validationEngine();
 				}
 			});
 	});
+
+	$("#frmChangePwd").validationEngine();
+	$("#frmChangePwd").on('submit', function (e) {
+		e.preventDefault();
+		if(!$("#frmChangePwd").validationEngine('validate')) return ;
+		var url = base_url()+'profile/change_password';
+		var data = $("#frmChangePwd").serialize();
+		$.post(url,data,function(e){
+			var result = jQuery.parseJSON(e);
+			resVal = result.flash_msg.flash_type;
+			if(resVal == 'success'){
+				alert(result.flash_msg.flash_msg);
+				location.href = base_url();
+				//$('#divForgotPasswordForm').modal('toggle');
+			}else{
+				alert(result.flash_msg.flash_msg);
+				return false;
+			}
+		});
+	});
+
 
 	$('.allow-enter').keydown(function(e){
 		 if (e.which == 13) {

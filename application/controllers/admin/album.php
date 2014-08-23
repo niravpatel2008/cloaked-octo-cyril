@@ -36,7 +36,7 @@ class Album extends CI_Controller {
 			array( 'db' => 'al_id',
 					'dt' => 6,
 					'formatter' => function( $d, $row ) {
-						return '<a href="'.site_url('/admin/album/edit/'.$d).'" class="fa fa-edit"></a> <a href="javascript:void(0);" onclick="delete_album('.$d.')" class="fa fa-trash-o"></a>';
+						return '<a title="Edit" href="'.site_url('/admin/album/edit/'.$d).'" class="fa fa-edit"></a> <a title="Delete" href="javascript:void(0);" onclick="delete_album('.$d.')" class="fa fa-trash-o"></a>';
 					}
 			),
 		);
@@ -59,7 +59,7 @@ class Album extends CI_Controller {
 
 			if ($e_flag == 0) {
 				$data = array('al_name' => $post['al_name'],
-								'al_uid' => $this->user_session['u_id'],
+								'al_uid' => (isset($post['al_uid']) && $post['al_uid'] != "")?$post['al_uid']:$this->user_session['u_id'],
 								'al_country' => $post['al_country'],
 								'al_price' => $post['al_price'],
 								'al_url' => $post['al_url'],
@@ -68,6 +68,27 @@ class Album extends CI_Controller {
 							);
 				
 				$ret = $this->common_model->insertData(TICKET_ALBUM, $data);
+
+				if ($ret > 0) {
+					
+					/*update id to uploaded image link*/
+					$newimages = array_filter(explode(",",$post['newimages']));
+					if (count($newimages) > 0)
+						$this->common_model->assingImagesToStamp($ret,$newimages);
+
+
+					/*Deal Images sorting.*/
+					if($post['sortOrder'] != "")
+						$this->common_model->setImageOrder($post['sortOrder'],$ret_stamp,"stamp");
+
+					$flash_arr = array('flash_type' => 'success',
+										'flash_msg' => 'Stamp added successfully.'
+									);
+				}else{
+					$flash_arr = array('flash_type' => 'error',
+										'flash_msg' => 'An error occurred while processing.'
+									);
+				}
 
 				if ($ret > 0) {
 					$flash_arr = array('flash_type' => 'success',
@@ -85,6 +106,7 @@ class Album extends CI_Controller {
 		}
 		$data['users'] = $this->common_model->selectData(USERS, 'u_id,u_fname,u_email');
 		$data['view'] = "add_edit";
+		$data['ticket_links'] = array();
 		$this->load->view('admin/content', $data);
 	}
 
@@ -138,15 +160,54 @@ class Album extends CI_Controller {
 			redirect('admin/album');
 		}
 		$data['view'] = "add_edit";
+		$data['ticket_links'] = $this->common_model->selectData(TICKET_LINKS, 'link_id,link_url',array("link_object_id"=>$id,"link_type"=>"album"),"link_order","ASC");
 		$data['users'] = $this->common_model->selectData(USERS, 'u_id,u_fname,u_email');
 		$this->load->view('admin/content', $data);
 	}
+	public function fileupload()
+	{
+		$file_name = "";
+		$error = "";
+		$post = $this->input->post();
+		if($_FILES['file']['name'] != '' && $_FILES['file']['error'] == 0){
+			$config['upload_path'] = './uploads/stamp/';
+			$config['allowed_types'] = 'gif|jpg|png|bmp|jpeg';
+
+			$file_name_arr = explode('.',$_FILES['file']['name']);
+			$file_name_arr = array_reverse($file_name_arr);
+			$file_extension = $file_name_arr[0];
+			$file_name = $config['file_name'] = "album_".time().".".$file_extension;
+
+			$this->load->library('upload', $config);
+
+			if ( ! $this->upload->do_upload('file'))
+			{
+				$e_flag = 1;
+				$error = $this->upload->display_errors();
+			}
+
+			if ($error != "")
+				echo "Error:".$error;
+			else
+			{
+				$al_id = isset($post['al_id'])?$post['al_id']:"";
+				$linkdata =  array("link_object_id"=>$al_id,"link_type"=>"album","link_url"=>$file_name);
+				$link_id = $this->common_model->insertData(TICKET_LINKS, $linkdata);
+				echo '{"id":"'.$link_id.'","path":"'.base_url()."uploads/stamp/".$file_name.'"}';
+			}
+			exit;
+		}else
+		{
+			echo "Error: File not uploaded to server.";
+		}
+	}
+
 
 
 	public function delete()
 	{
 		$post = $this->input->post();
-
+		
 		if ($post) {
 			$ret = $this->common_model->deleteData(TICKET_ALBUM, array('al_id' => $post['id'] ));
 			if ($ret > 0) {
@@ -155,5 +216,73 @@ class Album extends CI_Controller {
 				echo "error";
 			}
 		}
+	}
+
+	public function createStamp()
+	{
+		$post = $this->input->post();
+		//pr($post,1);
+		if(isset($post['stampJson'])){
+			$jsonArr = $post['stampJson'];
+			$file_extension = pathinfo($post['mainimg'], PATHINFO_EXTENSION);
+			$uploadpath = '';
+			$err_flg = 0;
+
+			foreach($jsonArr as $k=>$v)
+			{			
+				$uploadpath = "./uploads/stamp/"."stamp_".$k."_".time().".".$file_extension;
+				$file_name = "stamp_".$k."_".time().".".$file_extension;
+				$vJson = json_encode($v);
+				
+				//echo intval($v['x'])."===". $v['y'].'\n';continue;
+				$new = imagecreatetruecolor($v['w'], $v['h']);
+				
+				
+				$srcImg = imagecreatefromjpeg($post['mainimg']);
+				if(!$srcImg)
+					$err_flg = 1;
+				
+				$jpeg_quality = 90;
+				//$copyRes = imagecopy($new,$srcImg, 0 ,0 ,$v['x'], $v['y'],  $v['w'], $v['h']); ## copy image from crop selection
+				//if($copyRes && $err_flg != 1)
+				{
+					imagecopyresampled($new,$srcImg, 0, 0, intval($v['x']), intval($v['y']),  $v['w'], $v['h'], $v['w'], $v['h']);
+					imagejpeg($new,$uploadpath,$jpeg_quality);
+				}
+				 
+				 if($err_flg == 1)
+				{
+					echo "Issue occur during creating stamp";
+					exit;
+				 }
+
+
+				## Insert entries in link table
+				$al_id = isset($post['al_id'])?$post['al_id']:"";
+				$linkdata =  array("link_object_id"=>$al_id,"link_type"=>"stamp","link_url"=>$file_name);
+				$link_id = $this->common_model->insertData(TICKET_LINKS, $linkdata);
+
+				## Insert entries in stamp(ticket_collection) table
+				$data = array('t_name' => $post['al_name'],
+								't_price' => $post['price'],
+								't_ownercountry' => $post['country'],
+								't_uid' => (isset($post['t_uid']) && $post['t_uid'] != "")?$post['t_uid']:$this->user_session['u_id'],
+								't_mainphoto'=> $link_id,
+								't_albumid' => $post['al_id'],
+								't_created_date' => date('Y-m-d H:i:s'),
+								't_modified_date' => date('Y-m-d H:i:s'),
+								't_dimension'=>$vJson);
+				
+				$ret_stamp_id = $this->common_model->insertData(TICKET_COLLECTION, $data);
+
+				$data = array("link_object_id"=>$ret_stamp_id);
+				$where = 'link_id = '.$link_id;
+				$ret = $this->common_model->updateData(TICKET_LINKS, $data, $where);
+			}
+			if($err_flg == 0)
+				echo "success";
+		}
+		
+		//pr($post,1);
 	}
 }

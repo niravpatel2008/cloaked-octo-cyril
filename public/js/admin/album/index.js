@@ -11,6 +11,10 @@ $(document).ready(function() {
 		  {
 			 bSortable: false,
 			 aTargets: [ -1 ]
+		  },
+		  {
+			 bSortable: false,
+			 aTargets: [ -2 ]
 		  }
 		]
 	} );

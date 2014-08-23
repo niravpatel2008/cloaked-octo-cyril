@@ -87,9 +87,19 @@ class common_model extends CI_Model{
 	*
 	* general function to delete the records
 	*/
-	public function deleteData($table, $data)
+	public function deleteData($table, $data,$where_in='')
 	{
-		if($this->db->delete($table, $data)){
+		if(!empty($where_in))
+		{
+			$key = key($where_in);
+			$this->db->where_in($key,$where_in[$key]);
+			if($this->db->delete($table)){
+				return 1;
+			}else{
+				return 0;
+			}
+		}
+		else if($this->db->delete($table, $data)){
 			return 1;
 		}else{
 			return 0;
@@ -169,6 +179,45 @@ class common_model extends CI_Model{
 		}else{
 			return 0;
 		}
+	}
+
+	public function selectData_whereIn($table, $fields='*', $whereIn='', $order_by="", $order_type="", $group_by="", $limit="", $rows="", $type='')
+	{
+		$this->db->select($fields);
+		$this->db->from($table);
+		if ($whereIn != "") {
+			$key = key($whereIn);
+			$this->db->where_in($key,$whereIn[$key]);
+		}
+
+		if ($order_by != '') {
+			$this->db->order_by($order_by,$order_type);
+		}
+
+		if ($group_by != '') {
+			$this->db->group_by($group_by);
+		}
+
+		if ($limit > 0 && $rows == "") {
+			$this->db->limit($limit);
+		}
+		if ($rows > 0) {
+			$this->db->limit($rows, $limit);
+		}
+
+
+		$query = $this->db->get();
+
+		if ($type == "rowcount") {
+			$data = $query->num_rows();
+		}else{
+			$data = $query->result();
+		}
+
+		#echo "<pre>"; print_r($this->db->queries); exit;
+		$query->free_result();
+
+		return $data;
 	}
 
 }

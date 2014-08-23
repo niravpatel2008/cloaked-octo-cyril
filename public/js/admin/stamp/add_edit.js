@@ -50,7 +50,7 @@ $(document).ready(function(){
 		e.preventDefault();
 		atag = $(this);
 		link_id = $(atag).attr('link_id');
-		url = admin_path()+'stamp/removeImage',
+		url = admin_path()+'stamp/delete',
 		data = {id:link_id};
 		$.post(url,data,function(e){
 			if (e == "success") {

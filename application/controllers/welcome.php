@@ -7,6 +7,11 @@ class Welcome extends CI_Controller {
 
 		$this->front_session = $this->session->userdata('front_session');
 	}
+	public function index()
+	{
+		$data['view'] = "index";
+		$this->load->view('content', $data);
+	}
 
 
 	public function login()
@@ -20,9 +25,9 @@ class Welcome extends CI_Controller {
 			if (count($user) > 0) {
 				# create session
 				$data = array('id' => $user[0]->u_id,
-								'uname' => $user[0]->u_fname,
-								'email' => $user[0]->u_email,
-								'create_date' => $user[0]->u_created_date
+								'u_fname' => $user[0]->u_fname,
+								'u_email' => $user[0]->u_email,
+								'u_created_date' => $user[0]->u_created_date
 							);
 				$this->session->set_userdata('front_session',$data);
 				echo "success";
@@ -57,9 +62,9 @@ class Welcome extends CI_Controller {
 			if ($ret > 0) {
 				# create session
 				$data = array('id' => $ret,
-								'uname' => $post['name'],
-								'email' => $post['email'],
-								'create_date' => date('Y-m-d H:i:s')
+								'u_fname' => $post['name'],
+								'u_email' => $post['email'],
+								'u_created_date' => date('Y-m-d H:i:s')
 							);
 				$this->session->set_userdata('front_session',$data);
 
@@ -129,6 +134,18 @@ class Welcome extends CI_Controller {
 			}
 
 		}
+	}
+
+	public function contact()
+	{
+		$post = $this->input->post();
+		if ($post)
+		{
+		
+		exit;
+		}
+		$data['view'] = 'contactus';
+		$this->load->view('content',$data);
 	}
 }
 
