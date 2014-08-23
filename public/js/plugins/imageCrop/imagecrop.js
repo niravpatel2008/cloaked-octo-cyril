@@ -26,6 +26,11 @@
 				});
 			$this = this;
 			this.$image.mousedown(function(event){$this.setSelection($this,event)});
+
+			if (typeof(this.config.selections) != "undefined")
+			{
+				this.setAllSelection(this);
+			}
 			return this;
     },
 	getElementOffset: function(object) {
@@ -44,7 +49,7 @@
 
 		return [x, y];
 	},
-	addNewSelection: function() {
+	addNewSelection: function(v) {
 		$this = this;
 		var id = this.config.count++;
 		$(".image-crop-outline").css({borderColor:'#ffffff'});
@@ -53,8 +58,8 @@
 				opacity : this.config.outlineOpacity,
 				position : 'absolute',
 				borderColor:'#99C8FF',
-				width: this.config.minSelect[0],
-				height: this.config.minSelect[1]
+				width: (v)?v.w:this.config.minSelect[0],
+				height: (v)?v.h:this.config.minSelect[1]
 			})
 			.insertAfter(this.$image);
 
@@ -76,10 +81,18 @@
 			delete $this.config.outlines[nid];
 			$(this).remove();
 		});
+		if (v.x)
+		{
+			$this.$outline.css({
+				cursor : 'all-scroll',
+				display : 'block',
+				left : v.x,
+				top : v.y
+			})
+		}
 	},
 	setSelection: function($this,event) {
 		$this.addNewSelection();
-		console.log($this);
 		event.preventDefault();
 		event.stopPropagation();
 
@@ -96,10 +109,16 @@
 		$.each(this.config.outlines,function(e,v){
 			if (typeof(v) != "undefined")
 			{
-				$pos.push({x:$(v).css("left") ,y:$(v).css("top") ,w:$(v).width() ,h:$(v).height() });
+				$pos.push({x:$(v).css('left') ,y:$(v).css('top') ,w:$(v).width() ,h:$(v).height() });
 			}
 		})
 		return $pos;
+	},
+	setAllSelection: function() {
+		$this = this;
+		$(this.config.selections).each(function(e,v){
+			$this.addNewSelection(v);
+		});
 	}
 	 
   }
