@@ -1,19 +1,20 @@
 $(document).ready(function(){
 	$("#album_form").validationEngine();
-Dropzone.options.myAwesomeDropzone = {
-  maxFiles: 1,
-  accept: function(file, done) {
-    console.log("uploaded");
-    done();
-  },
-  init: function() {
-    this.on("maxfilesexceeded", function(file){
-		this.removeFile(file);
-        alert("No more files please!");
-    });
-  }
-};
-initCrop();
+	Dropzone.options.myAwesomeDropzone = {
+	  maxFiles: 1,
+	  accept: function(file, done) {
+		console.log("uploaded");
+		done();
+	  },
+	  init: function() {
+		this.on("maxfilesexceeded", function(file){
+			this.removeFile(file);
+			alert("No more files please!");
+		});
+	  }
+	};
+
+	initCrop();
 
 	//if(typeof($cropObj) !== 'undefined')
 	//
@@ -39,11 +40,11 @@ initCrop();
 		},1000)
 	}
 	
-	$('#img-container').delegate("img",'click',function(){
+	/*$('#img-container').delegate("img",'click',function(){
 		$('#img-container img').removeClass('selected');
 		$(this).addClass('selected');
 		$('#t_mainphoto').val($(this).attr('imgid'));
-	});
+	});*/
 
 	var mainimgid = $('#t_mainphoto').val();
 	$('#img-container img[imgid="'+mainimgid+'"]').addClass('selected');
@@ -52,7 +53,7 @@ initCrop();
 		//autocompleteURL: 'server/autocomplete.php',
 	});*/
 
-	$( "#img-container" ).sortable({stop: function( event, ui ) {doOrderImage();}});
+	//$( "#img-container" ).sortable({stop: function( event, ui ) {doOrderImage();}});
 
 	$('#img-container').delegate(".removeimage","click",function(e){
 		e.preventDefault();
@@ -106,26 +107,13 @@ initCrop();
 			}
 		});
 	});
-	doOrderImage();
 });
-function doOrderImage(){
-	var order = {};
-	$('.newimg').each(function(k,v){
-		imageid = $(this).attr('imgid');
-		imageorder = k;
-		order[k] = ({"link_id":imageid,"link_order":imageorder});
-	});
-	orderStr = JSON.stringify(order);
-	$('#sortOrder').val(orderStr);
-}
 
 function initCrop()
 {
 	var $cropObj ;
 	$cropObj = $('img#albumImg').imageCrop({
-	overlayOpacity : 0.25,
-		selections : [{"x":"125px","y":"78px","w":50,"h":50},{"x":"114px","y":"169px","w":73,"h":131},{"x":"277px","y":"167px","w":126,"h":65},{"x":"335px","y":"275px","w":50,"h":50},{"x":"416px","y":"7px","w":50,"h":50}]
-});
-
-});
+		overlayOpacity : 0.25,
+//		selections : [{"x":"125px","y":"78px","w":50,"h":50},{"x":"114px","y":"169px","w":73,"h":131},{"x":"277px","y":"167px","w":126,"h":65},{"x":"335px","y":"275px","w":50,"h":50},{"x":"416px","y":"7px","w":50,"h":50}]
+	});
 }

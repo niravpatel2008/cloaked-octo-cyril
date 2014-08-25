@@ -69,7 +69,7 @@
 						<?php if(count(@$ticket_links) == 0) {
 							echo "<div class='form-group'>Please upload image for Album than you can select images for stamp.</div>";
 						}?>
-                        <ul id='img-container' class='list-unstyled'>
+                        <ul id='img-container' class='list-unstyled clearfix'>
 							<?php foreach(@$ticket_links as $img) {?>
 								<li class='pull-left'>
 								<img id="albumImg" src='<?=(base_url()."uploads/stamp/".$img->link_url)?>' class='newimgFull' imgid = '<?=($img->link_id)?>'>
