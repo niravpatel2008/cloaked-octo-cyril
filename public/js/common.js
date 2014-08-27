@@ -4,14 +4,14 @@ function IsEmail(email) {
 }
 
 function openLoginForm()
-{
+{console.log(1);
 	$("#divCreateAccountForm").modal('hide');
 	$("#divForgotPasswordForm").modal('hide');
     $('#divConsLogin').modal();
 }
 
 function openSignupForm()
-{
+{console.log(2);
 	$('#divConsLogin').modal('hide');
 	$("#divForgotPasswordForm").modal('hide');
     $("#divCreateAccountForm").modal();
