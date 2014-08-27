@@ -3578,12 +3578,8 @@ fieldset[disabled] .btn-vk.active {
     width: 100px;
 }
 .newimgFull {
-	border: 1px solid #ACACAC;
 	display: inline-block;
     height: 100%;
-    width: 900px;
-	margin: 10px;
-    padding: 5px;
     position: relative;
 }
 

@@ -1,6 +1,6 @@
 	<!-- jQuery 2.0.2 -->
     <script src="<?=public_path()?>js/jquery.2.0.2.min.js"></script>
-    <script src="<?=public_path()?>js/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
+    <script src="<?=public_path()?>js/jquery-ui-1.10.3.js" type="text/javascript"></script>
     <script src="<?=public_path()?>js/bootstrap.min.js" type="text/javascript"></script>
     <script src="<?=public_path()?>js/plugins/jqueryKnob/jquery.knob.js" type="text/javascript"></script>
     <script src="<?=public_path()?>js/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>

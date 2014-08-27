@@ -81,7 +81,7 @@
 			delete $this.config.outlines[nid];
 			$(this).remove();
 		});
-		if (v.x)
+		if (v && v.x)
 		{
 			$this.$outline.css({
 				cursor : 'all-scroll',
