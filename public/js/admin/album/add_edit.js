@@ -112,8 +112,11 @@ $(document).ready(function(){
 
 function initCrop()
 {
+	var stampJson = '';
+	stampJson = $('#t_dimension').val();console.log(stampJson);
 	$cropObj = $('img#albumImg').imageCrop({
 		overlayOpacity : 0.25,
 //		selections : [{"x":"125px","y":"78px","w":50,"h":50},{"x":"114px","y":"169px","w":73,"h":131},{"x":"277px","y":"167px","w":126,"h":65},{"x":"335px","y":"275px","w":50,"h":50},{"x":"416px","y":"7px","w":50,"h":50}]
-	});
+		selections : JSON.parse("["+stampJson+"]")
+	});console.log($cropObj);
 }

@@ -107,6 +107,7 @@ class Album extends CI_Controller {
 		$data['users'] = $this->common_model->selectData(USERS, 'u_id,u_fname,u_email');
 		$data['view'] = "add_edit";
 		$data['ticket_links'] = array();
+		$data['ticket_collection'] = '';
 		$this->load->view('admin/content', $data);
 	}
 
@@ -161,6 +162,14 @@ class Album extends CI_Controller {
 		}
 		$data['view'] = "add_edit";
 		$data['ticket_links'] = $this->common_model->selectData(TICKET_LINKS, 'link_id,link_url',array("link_object_id"=>$id,"link_type"=>"album"),"link_order","ASC");
+
+		## Get dimensions of stamp to plot all stamp on main album during edit time. 
+		$data['ticket_collection'] = $this->common_model->selectData(TICKET_COLLECTION, '*',array("t_albumid"=>$id),"t_id","ASC");
+		$tmpNewArr = array();
+		foreach($data['ticket_collection'] as $k => $v)
+			$tmpNewArr[] = $v->t_dimension;
+		$data['ticket_collection'] = implode(',',$tmpNewArr);
+
 		$data['users'] = $this->common_model->selectData(USERS, 'u_id,u_fname,u_email');
 		$this->load->view('admin/content', $data);
 	}

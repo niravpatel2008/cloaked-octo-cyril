@@ -42,7 +42,7 @@
         $CI =& get_instance();
         $session = $CI->session->userdata('front_session');
 
-        if (!isset($session['u_id'])) {
+        if (!isset($session['id'])) {
             redirect(base_url());
         }
     }

@@ -97,7 +97,7 @@ class Profile extends CI_Controller {
 			}
 			//$data['error_msg'] = $error;
 		}
-		$result = $this->common_model->selectData(USERS,"*",'');
+		$result = $this->common_model->selectData(USERS,"*",'u_id = '.$this->front_session['id']);
 		$data['view'] = "edit";
 		$data['error_msg'] = $error;
 		$data['flash_msg'] = $flash_arr;
