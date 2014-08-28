@@ -12,6 +12,11 @@
 </div>
 
 </body>
+
+<?php if(in_array($this->router->fetch_class(),array('welcome'))) {?>
+<script type="text/javascript" src="<?=public_path()?>js/index.js" charset="utf-8"></script>
+<?php }?>
+
 <script src="http://www.laravel-tricks.com/js/vendor/masonry.pkgd.min.js"></script>
 <script>
 $(function(){$container=$(".js-trick-container");$container.masonry({gutter:0,itemSelector:".trick-card",columnWidth:".trick-card"});$(".js-goto-trick a").click(function(e){e.stopPropagation()});$(".js-goto-trick").click(function(e){e.preventDefault();var t="http://www.laravel-tricks.com/tricks";var n=$(this).data("slug");window.location=t+"/"+n})})
