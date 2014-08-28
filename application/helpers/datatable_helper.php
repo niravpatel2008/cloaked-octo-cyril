@@ -80,7 +80,9 @@ class SSP {
 						'ASC' :
 						'DESC';
 					
-					if(isset($column['coloumn_name']))
+					if(isset($column['sort']))
+						$orderBy[] = $column['sort'].'||'.$dir;
+					else if(isset($column['coloumn_name']))
 						$orderBy[] = $column['coloumn_name'].'||'.$dir;
 					else
 						$orderBy[] = $column['db'].'||'.$dir;
@@ -124,7 +126,10 @@ class SSP {
 				$column = $columns[ $columnIdx ];
 
 				if ( $requestColumn['searchable'] == 'true' ) {
-					$globalSearch[] = "`".$column['db']."` LIKE ".'"%'.$str.'%"';
+					if(isset($column['coloumn_name']))
+						$globalSearch[] = "`".$column['coloumn_name']."` LIKE ".'"%'.$str.'%"';
+					else
+						$globalSearch[] = "`".$column['db']."` LIKE ".'"%'.$str.'%"';
 				}
 			}
 		}
@@ -139,7 +144,10 @@ class SSP {
 
 			if ( $requestColumn['searchable'] == 'true' &&
 			 $str != '' ) {
-				$columnSearch[] = "`".$column['db']."` LIKE ".'"%'.$str.'%"';
+				if(isset($column['coloumn_name']))
+					$columnSearch[] = "`".$column['coloumn_name']."` LIKE ".'"%'.$str.'%"';
+				else
+					$columnSearch[] = "`".$column['db']."` LIKE ".'"%'.$str.'%"';
 			}
 		}
 
@@ -185,10 +193,7 @@ class SSP {
 
 		foreach($join as $j)
 		{
-			if (isset($j[2]))
-				$model->db->join($j[0], $j[1] ,$j[2]);
-			else
-				$model->db->join($j[0], $j[1]);
+			$model->db->join($j[0], $j[1]);
 		}
 		
 		$where = SSP::filter( $request, $columns, $bindings );
