@@ -9,6 +9,35 @@ class Welcome extends CI_Controller {
 	}
 	public function index()
 	{
+		$post = $this->input->post();
+		if(isset($post['getStamps']) && $post['getStamps'] == '1')
+		{
+			/*$selectFields = '*';
+			$where = array();
+			$sortBy = 't_modified_date';
+			$sortType = 'ASC';
+			$limit =  20;
+			$page = 1;
+			$stampRes = $this->common_model->selectData(TICKET_COLLECTION, $selectFields,$where,$sortBy,$sortType,'',$limit,$page);
+			pr($stampRes,1);
+			if (count($stampRes) > 0) {
+				
+			}*/
+
+			$where = array();
+			$sortBy = (isset($post) && isset($post['sortBy']))?$post['sortBy']:"t_modified_date";
+			$sortType = (isset($post) && isset($post['sortType']))?$post['sortType']:"ASC";
+			$page = (isset($post) && isset($post['page']))?$post['page']:1;
+			$limit = (isset($post) && isset($post['limit']))?$post['limit']:21;
+			$selectFields = (isset($post) && isset($post['selectFields']))?$post['selectFields']:"*";
+			$stampRes = $this->common_model->selectData(TICKET_COLLECTION, $selectFields,$where,$sortBy,$sortType,'',$page,$limit);
+			if (count($stampRes) > 0) {
+				echo json_encode($stampRes);exit;	
+			}else
+				return null;
+			//pr($stampRes,1);
+			
+		}
 		$data['view'] = "index";
 		$this->load->view('content', $data);
 	}
