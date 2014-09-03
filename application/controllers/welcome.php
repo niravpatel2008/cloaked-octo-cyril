@@ -23,18 +23,30 @@ class Welcome extends CI_Controller {
 			if (count($stampRes) > 0) {
 				
 			}*/
-
 			$where = array();
+			//$where = array('t_mainphoto'=> "IS NOT NULL ");
 			$sortBy = (isset($post) && isset($post['sortBy']))?$post['sortBy']:"t_modified_date";
 			$sortType = (isset($post) && isset($post['sortType']))?$post['sortType']:"ASC";
 			$page = (isset($post) && isset($post['page']))?$post['page']:1;
 			$limit = (isset($post) && isset($post['limit']))?$post['limit']:21;
-			$selectFields = (isset($post) && isset($post['selectFields']))?$post['selectFields']:"*";
-			$stampRes = $this->common_model->selectData(TICKET_COLLECTION, $selectFields,$where,$sortBy,$sortType,'',$page,$limit);
-			if (count($stampRes) > 0) {
-				echo json_encode($stampRes);exit;	
-			}else
+			$selectFields_stamp = (isset($post) && isset($post['selectFields_stamp']))?$post['selectFields_stamp']:"*";
+			$selectFields_users = (isset($post) && isset($post['selectFields_users']))?$post['selectFields_users']:'CONCAT(u_fname," ", `users`.u_lname) as uname';
+			$stampRes = $this->common_model->searchStamp($selectFields_stamp,$selectFields_users,$where,$sortBy,$sortType,$page,$limit);
+
+			$totalCount = $stampRes['totalRecordsCount'];
+			unset($stampRes['totalRecordsCount']);
+
+			if ($totalCount > 0) {
+				foreach($stampRes as $k=>$v)
+				{
+					$v['t_modified_date'] = Date("jS M, Y",strtotime($v['t_modified_date']));
+					$finalResArr[] = $v;
+				}
+				echo json_encode($finalResArr);exit;	
+			}
+			else
 				return null;
+			
 			//pr($stampRes,1);
 			
 		}
