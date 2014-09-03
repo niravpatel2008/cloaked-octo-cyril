@@ -220,4 +220,40 @@ class common_model extends CI_Model{
 		return $data;
 	}
 
+	public function searchStamp($selectFields_stamp="*", $selectFields_users='',$where, $sortBy='t_modified_date',$sortType='ASC',$page,$limit)
+	{
+		$this->db->select("SQL_CALC_FOUND_ROWS t_id", FALSE);
+		if($selectFields_users == '')
+			$selectFields_users = "`users`.* ";
+		$this->db->select(' ticket_collection.'.$selectFields_stamp.', '.$selectFields_users.', (select link_url from '.TICKET_LINKS.' where link_id = t_mainphoto and link_type="stamp") as `stamp_photo`',FALSE);
+		$this->db->from(TICKET_COLLECTION);
+
+		//if (count ($tags) > 0)
+		//{
+			$this->db->join(USERS, 'u_id = t_uid', 'left');
+			
+		//}
+		if ($where != "") {
+			$this->db->where($where);
+		}
+		
+		if($page != "" && $limit != "")
+		{
+			$page = ($page-1)*$limit;
+			$this->db->limit($limit, $page);
+		}
+
+		$query = $this->db->get();
+		#echo "<pre>"; print_r($this->db->queries); exit;
+		$resArr = $query->result_array();
+		//pr($resArr,1);
+		$query = $this->db->query('SELECT FOUND_ROWS() AS `Count`');
+		$totalRecordsCount = $query->row()->Count;
+		
+		$finalResArr = array();
+		$finalResArr = $resArr;
+		$finalResArr['totalRecordsCount'] = $totalRecordsCount;
+		return $finalResArr;
+	}
+
 }
