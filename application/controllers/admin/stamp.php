@@ -71,6 +71,7 @@ class Stamp extends CI_Controller {
 								't_albumid' => $post['t_albumid'],
 								't_created_date' => date('Y-m-d H:i:s'),
 								't_modified_date' => date('Y-m-d H:i:s'),
+								't_tags' => implode(',',$post['t_tags']),
 							);
 				
 				$ret_stamp = $this->common_model->insertData(TICKET_COLLECTION, $data);
@@ -162,6 +163,7 @@ class Stamp extends CI_Controller {
 								't_ownercountry' => $post['t_ownercountry'],
 								't_albumid' => $post['t_albumid'],
 								't_modified_date' => date('Y-m-d H:i:s'),
+								't_tags' => implode(',',$post['t_tags']),
 							);
 			
 				$ret = $this->common_model->updateData(TICKET_COLLECTION, $data, $where);
@@ -205,7 +207,7 @@ class Stamp extends CI_Controller {
 							$this->common_model->insertData(TICKET_TAG_MAPPING, $tagmapdata);
 						}
 					}
-
+					//pr($old_tags,1);
 					if (count($old_tags)>0)
 					{
 						$del_ids = array_reduce($old_tags,function($arr,$k){ $arr[] = $k['tag_id']; return $arr;});
@@ -225,7 +227,7 @@ class Stamp extends CI_Controller {
 									);
 				}
 				$this->session->set_flashdata($flash_arr);
-				redirect("admin/stamp");
+				//redirect("admin/stamp");
 			}
 			$data['error_msg'] = $error;
 		}

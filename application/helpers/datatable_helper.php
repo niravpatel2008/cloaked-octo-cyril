@@ -188,6 +188,7 @@ class SSP {
 		$model = SSP::get_model();
 
 		$fields = SSP::pluck($columns, 'db');
+		$model->db->select("SQL_CALC_FOUND_ROWS ".$primaryKey, FALSE);
 		$model->db->select($fields);
 		$model->db->from($table);
 
@@ -212,16 +213,13 @@ class SSP {
 
 		$rows = isset($request['start'])?$request['start']:"";
 		$limit = isset($request['length'])?$request['length']:0;
-		if ($limit > 0 && $rows == "") {
-			$model->db->limit($limit);
-		}	
-		if ($rows > 0) {
-			$model->db->limit($rows, $limit);
-		}
+		$model->db->limit($limit, $rows);
 
 		$query = $model->db->get();
 
-		$recordsFiltered = $query->num_rows();
+		$cquery = $model->db->query('SELECT FOUND_ROWS() AS `Count`');
+
+		$recordsFiltered = $cquery->row()->Count;
 		$data = $query->result_array();
 		$query->free_result();
 		

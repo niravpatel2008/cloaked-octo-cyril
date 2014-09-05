@@ -68,7 +68,7 @@
 					<?php
 						foreach($details['all_tags'] as $k => $v)
 						{
-							echo '<li><a href="#">'.$v['tag_name'].'</a></li>';
+							echo '<li><a href="'.base_url().'tags/'.$v['tag_name'].'">'.$v['tag_name'].'</a></li>';
 						}
 					?>
 				</ul>

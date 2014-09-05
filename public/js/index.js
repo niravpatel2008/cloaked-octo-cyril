@@ -1,16 +1,51 @@
+var isAjaxLoad = false;
 $(document).ready(function(){
-	getStamps();
+	document.body.scrollTop = document.documentElement.scrollTop = 0; // Always starts page load from Top
+	$('#hdnCurrPage').val('1');
+	getStamps('');
+
+	$(window).scroll(function () {
+		var curPage = $('#hdnCurrPage').val();
+		if((curPage * $('#hdnRecLimit').val()) <= $('#hdnTotalRec').val())
+		{
+			//if (isAjaxLoad == false && $(document).height() <= $(window).scrollTop() + $(window).height()) {
+			if (isAjaxLoad == false && $(window).scrollTop() >= ($(document).height() - $(window).height())*0.75) {
+				// Lazy Load made ajax call when 75% scroll has been made 
+				curPage++;
+				$('#hdnCurrPage').val(curPage);
+				getStamps(curPage);
+			}
+		}
+		else
+			return;
+    });
 });
 
-function getStamps()
+function getStamps(curPage)
 {
 	var url =  base_url()+'welcome/index';
-	var data =  {from:"user",getStamps:1};
+	
+	var page ;
+	if($('#hdnCurrPage').length > 0)
+		page = $('#hdnCurrPage').val();
+	else if(!isNaN(curPage)) 
+		page = $.trim(curPage);
+
+	var limit = $('#hdnRecLimit').val();
+	
+	var hdnTag = $('#hdnTag').val();
+	
+	var searchKeyword = $('#searchKeyword').val();
+
+	var data =  {from:"user",getStamps:1,page:page,limit:limit,hdnTag:hdnTag,searchKeyword:searchKeyword};
+	isAjaxLoad = true;
 	$.post(url,data,function(e){
 		if(e != ""){
+			isAjaxLoad = false;
 			displayStamps(e);
 		}else{
-			alert("Please Try again later");
+			$('#mainStampContainer').html('<div class="col-lg-12"><div class="alert alert-danger">Ooops!! No Record Found</div></div>');
+			isAjaxLoad = false;
 			return false;
 		}
 	});
@@ -22,9 +57,11 @@ function displayStamps(result)
 	//alert(1);
 	var flag = false;
 	var stampHtml = '';
-	result = JSON.parse(result);
+	resultJson = JSON.parse(result);
 	var imgPath = base_url()+"uploads/stamp/";
-	var totalRec = result.totalRecordsCount;
+	var totalRec = resultJson.total;
+	result = resultJson.data;
+	$('#hdnTotalRec').val(totalRec);
 	$.each(result, function(index,element)
 	{ 
 		//favClass = (element.is_fav)?'unfavme':'favme';
@@ -34,7 +71,7 @@ function displayStamps(result)
 		{
 			stampHtml += '<div id="stampBlock" href="#" class="trick-card col-lg-4 col-md-6 col-sm-6 col-xs-12" style="">';
 			stampHtml += '<div class="trick-card-inner js-goto-trick" data-slug="modelmap-jquerymap-style">';
-				stampHtml += '<a class="trick-card-title" href="#" style="text-align:center;">';
+				stampHtml += '<a class="trick-card-title" href="'+base_url()+'stampDetail/viewDetail/?tid='+element.t_id+'" style="text-align:center;">';
 					//stampHtml += 'Title Goes Here';
 					stampHtml += element.t_name;
 				stampHtml += '</a>';
@@ -49,7 +86,10 @@ function displayStamps(result)
 					stampHtml += '<div class="trick-card-stat-block text-right"><span class="fa fa-heart"></span> 1</div>';*/
 				stampHtml += '</div>';
 				stampHtml += '<div class="trick-card-tags clearfix">';
-				    stampHtml += '<a href="stampDetail/viewDetail/?tid='+element.t_id+'" class="tag" title="models">View Details</a>';
+				$.each(element.t_tags, function(i,j){
+					if(j)
+					    stampHtml += '<a href="'+base_url()+'tags/'+j+'" class="tag" title="models">'+j+'</a>';
+				});
 				stampHtml += '</div>';
 			stampHtml += '</div>';
 		stampHtml += '</div>';
@@ -58,5 +98,5 @@ function displayStamps(result)
 			//dealCnt++;
 		}
 	});
-	$('#mainStampContainer').html(stampHtml);
+	$('#mainStampContainer').append(stampHtml);
 }
