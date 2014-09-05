@@ -220,7 +220,7 @@ class common_model extends CI_Model{
 		return $data;
 	}
 
-	public function searchStamp($selectFields_stamp="*", $selectFields_users='',$where, $sortBy='t_modified_date',$sortType='ASC',$page,$limit)
+	public function searchStamp($selectFields_stamp="*", $selectFields_users='',$where, $sortBy='t_modified_date',$sortType='ASC',$page,$limit,$orwhere='')
 	{
 		$this->db->select("SQL_CALC_FOUND_ROWS t_id", FALSE);
 		if($selectFields_users == '')
@@ -235,6 +235,9 @@ class common_model extends CI_Model{
 		//}
 		if ($where != "") {
 			$this->db->where($where);
+		}
+		if ($orwhere != "") {
+			$this->db->or_where($orwhere);
 		}
 		
 		if($page != "" && $limit != "")
