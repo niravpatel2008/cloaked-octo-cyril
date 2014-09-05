@@ -7,9 +7,10 @@ class Welcome extends CI_Controller {
 
 		$this->front_session = $this->session->userdata('front_session');
 	}
-	public function index()
+	public function index($tag= '')
 	{
 		$post = $this->input->post();
+		//$post['tag'] = $tag;
 		if(isset($post['getStamps']) && $post['getStamps'] == '1')
 		{
 			/*$selectFields = '*';
@@ -24,33 +25,45 @@ class Welcome extends CI_Controller {
 				
 			}*/
 			$where = array();
-			//$where = array('t_mainphoto'=> "IS NOT NULL ");
+			$orwhere = array();
+			if(isset($post['hdnTag']) && $post['hdnTag'] != '')
+				$where = array('t_tags like'=> '%'.$post['hdnTag'].'%');
+
+			if(isset($post['searchKeyword']) && $post['searchKeyword'] != '')
+			{
+				$where = array('t_tags like'=> '%'.$post['searchKeyword'].'%');
+				$orwhere = array('t_name like' => '%'.$post['searchKeyword'].'%' , 't_bio like' => '%'.$post['searchKeyword'].'%' ,'t_ownercountry like' => '%'.$post['searchKeyword'].'%' );
+			}
+			
 			$sortBy = (isset($post) && isset($post['sortBy']))?$post['sortBy']:"t_modified_date";
 			$sortType = (isset($post) && isset($post['sortType']))?$post['sortType']:"ASC";
 			$page = (isset($post) && isset($post['page']))?$post['page']:1;
 			$limit = (isset($post) && isset($post['limit']))?$post['limit']:21;
 			$selectFields_stamp = (isset($post) && isset($post['selectFields_stamp']))?$post['selectFields_stamp']:"*";
 			$selectFields_users = (isset($post) && isset($post['selectFields_users']))?$post['selectFields_users']:'CONCAT(u_fname," ", `users`.u_lname) as uname';
-			$stampRes = $this->common_model->searchStamp($selectFields_stamp,$selectFields_users,$where,$sortBy,$sortType,$page,$limit);
+			$stampRes = $this->common_model->searchStamp($selectFields_stamp,$selectFields_users,$where,$sortBy,$sortType,$page,$limit,$orwhere);
 
 			$totalCount = $stampRes['totalRecordsCount'];
 			unset($stampRes['totalRecordsCount']);
 
-			if ($totalCount > 0) {
+			if($totalCount > 0) {
 				foreach($stampRes as $k=>$v)
 				{
 					$v['t_modified_date'] = Date("jS M, Y",strtotime($v['t_modified_date']));
-					$finalResArr[] = $v;
+					$v['t_tags'] = explode(',',$v['t_tags']);
+					$finalResArr['data'][] = $v;
 				}
+				$finalResArr['total'] = $totalCount;
 				echo json_encode($finalResArr);exit;	
 			}
 			else
-				return null;
-			
-			//pr($stampRes,1);
-			
+				return null;	
 		}
 		$data['view'] = "index";
+		$data['hdnTag'] = $tag;
+		$data['searchKeyword'] = '';
+		if(isset($_GET['search']) && $_GET['search'] != '')
+			$data['searchKeyword'] = $_GET['search'];
 		$this->load->view('content', $data);
 	}
 
