@@ -12,7 +12,7 @@
 				</div>
 				<div class="form-group">
 					<label for="password" class="control-label">Password</label>
-					<input class="validate[required] form-control" placeholder="Password..." name="txtpassword" type="txtpassword" value="" id="txtpassword">
+					<input class="validate[required] form-control" placeholder="Password..." name="txtpassword" type="password" value="" id="txtpassword" >
 				</div>
 					
 				<div class="form-group">
