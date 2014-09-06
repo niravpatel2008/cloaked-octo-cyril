@@ -12,7 +12,7 @@
 <section class="content">
 	<div class="row">
     	<div class="col-md-6">
-    		<div class="box-body">
+    		<div class="box box-info">
                 <?php 
                     if (@$flash_msg != "") {
                 ?>
@@ -20,7 +20,7 @@
                 <?php
                     }
                 ?>
-                <form id='album_form' name='album_form' role="form" action="" method="post">
+                <form id='album_form' name='album_form' role="form" action="" method="post" class="box-body">
 					<input type='hidden' id='al_id' name='al_id' value='<?=(@$album[0]->al_id)?>'>
 					<input type='hidden' id='t_dimension' name='t_dimension' value='<?=(@$ticket_collection)?>'>
 					<div class="form-group <?=(@$error_msg['t_uid'] != '')?'has-error':'' ?>">
@@ -72,24 +72,9 @@
 						}?>
                         
                     </div>
-                    <div class="form-group">
-                        <button class="btn btn-primary btn-flat" type="submit" id="submit">Submit</button>
-                    </div>
                 </form>
             </div>
     	</div>
-		<ul id='img-container' class='list-unstyled clearfix'>
-			<?php foreach(@$ticket_links as $img) {?>
-				<li class='pull-left'>
-				<img id="albumImg" src='<?=(base_url()."uploads/stamp/".$img->link_url)?>' class='newimgFull' imgid = '<?=($img->link_id)?>'>
-				<br>
-				<center>
-					<a class="removeimage" link_id="<?=($img->link_id)?>" href="#" title="Delete"><i class="fa fa-trash-o"></i></a>
-					<button class="btn btn-primary btn-flat" style="margin-left:14px;" id="btn_createstamp">Create Stamp</button>
-				</center>
-				</li>
-			<?php }?>
-		</ul>
 		<?php if(count(@$ticket_links) == 0){?>
 		<div class='col-md-6'>
 			<div class='box box-info'>
@@ -105,4 +90,23 @@
 		</div>
 		<?php }?>
     </div>
+	<div class='row'>
+		<ul id='img-container' class='list-unstyled clearfix'>
+			<?php foreach(@$ticket_links as $img) {?>
+				<li class='pull-left'>
+				<img id="albumImg" src='<?=(base_url()."uploads/stamp/".$img->link_url)?>' class='newimgFull' imgid = '<?=($img->link_id)?>'>
+				<br>
+				<center>
+					<a class="removeimage" link_id="<?=($img->link_id)?>" href="#" title="Delete"><i class="fa fa-trash-o"></i></a>
+					<button class="btn btn-primary btn-flat" style="margin-left:14px;" id="btn_createstamp">Create Stamp</button>
+				</center>
+				</li>
+			<?php }?>
+		</ul>
+	</div>
+	<div class='row'>
+			<div class="form-group">
+                        <button class="btn btn-primary btn-flat" type="button" onclick="$('#album_form').submit();" id="submit">Submit</button>
+             </div>
+	</div>
 </section>

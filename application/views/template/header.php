@@ -91,10 +91,19 @@
 				
 				<?php if($this->front_session['id'] > 0) { ?>
 					<div class="navbar-right hidden-xs">
-						<a href="javascript:void(0);" title="Welcome <?=$this->front_session['u_fname']?>" class="btn"><?=$this->front_session['u_fname']?></a>
-						<a href="<?=base_url()?>profile/edit" class="btn btn-primary">Edit Profile</a>
-						<a href="<?=base_url()?>profile/change_password" class="btn btn-primary">Change Password</a>
-						<a href="<?=base_url()?>profile/logout" class="btn btn-primary">Log Out</a>
+						<ul class="nav">
+							<li class="dropdown ">
+								<a data-toggle="dropdown" class="dropdown-toggle btn btn-primary" href="#">
+									Welcome <?=$this->front_session['u_fname']?>
+									<b class="caret"></b>
+								 </a>
+								<ul class="dropdown-menu">
+									<li class=""><a href="<?=base_url()?>profile/edit">Edit Profile</a></li>
+									<li class=""><a href="<?=base_url()?>profile/change_password">Change Password</a></li>
+									<li><a href="<?=base_url()?>profile/logout">Logout</a></li>
+								</ul>
+							</li>
+						</ul>
 					</div>
 				<?php }else{ ?>
 

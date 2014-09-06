@@ -1,4 +1,4 @@
-<div class="col-lg-4 col-lg-push-4 col-md-6 col-md-push-3 col-sm-8 col-sm-push-2" style="margin-top:20px;">
+<div class="col-md-6 col-md-push-3 col-sm-8 col-sm-push-2" style="margin-top:20px;">
 		<div class="content-box register-form">
 			<h1 class="page-title">Edit Profile</h1>
 			<div id="flash_msg">
@@ -21,17 +21,17 @@
 				<input class='form-control' type="text" name="name" id="name" value="<?=$this->front_session['u_fname']?>">
 			</div>
 			<div class='form-group'>
-				<label for="email" class="control-label">Email: </label> 
-				<input class='form-control' type="text" name="email" id="email" value="<?=$userinfo[0]->u_email;?>" readonly>
+				<label for="email" class="control-label" title="Email Can't be Edit">Email: </label> 
+				<input class='form-control' type="text" name="email" id="email" value="<?=$userinfo[0]->u_email;?>" readonly title="Email Can't be Edit">
 			</div>
 			<div class='form-group'>
 				<label for="contact" class="control-label">Contact: </label> 
 				<input class='form-control' type="text" name="contact" id="contact" value="<?=$userinfo[0]->u_phone;?>">
 			</div>
 			<div class='form-group'>
-				<label for="gender" class="control-label">Gender </label> 
-				<input class='form-control' type="radio" name="gender" id="gender_m" value="m" <?php if($check == 'm') echo 'checked';?>> Male
-				<input class='form-control' type="radio" name="gender" id="gender_f" value="f" <?php if($check == 'f') echo 'checked'?>> Female
+				<label for="gender" class="control-label" style="width:100%">Gender </label> 
+				<input class='' type="radio" name="gender" id="gender_m" value="m" <?php if($check == 'm') echo 'checked';?>> Male
+				<input class='' type="radio" name="gender" id="gender_f" value="f" <?php if($check == 'f') echo 'checked'?>> Female
 			</div>
 			<div class='form-group'>
 				<label for="country" class="control-label">Country: </label> 
