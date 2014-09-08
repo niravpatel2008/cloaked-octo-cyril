@@ -258,5 +258,25 @@ class common_model extends CI_Model{
 		$finalResArr['totalRecordsCount'] = $totalRecordsCount;
 		return $finalResArr;
 	}
+	
+
+	## unlink images
+	public function deleteImage($urlArr = '')
+	{
+		if(isset($urlArr) && !empty($urlArr))
+		{
+			$urlStr = $urlArr[0]->link_url;
+			$urlArr = explode(',',$urlStr);
+			$uploadPath = './uploads/stamp/';
+			foreach($urlArr as $k=>$v)
+			{
+				unlink($uploadPath.$v);
+			}
+		}
+		else
+		{
+			echo "error occured during deleting images";
+		}
+	}
 
 }
