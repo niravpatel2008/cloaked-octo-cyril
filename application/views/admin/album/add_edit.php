@@ -23,6 +23,7 @@
                 <form id='album_form' name='album_form' role="form" action="" method="post" class="box-body">
 					<input type='hidden' id='al_id' name='al_id' value='<?=(@$album[0]->al_id)?>'>
 					<input type='hidden' id='t_dimension' name='t_dimension' value='<?=(@$ticket_collection)?>'>
+					<input type='hidden' id='hdnStampIdsVal' name='hdnStampIdsVal' value=''/>
 					<div class="form-group <?=(@$error_msg['t_uid'] != '')?'has-error':'' ?>">
                         <?php
                             if(@$error_msg['t_uid'] != ''){
@@ -105,7 +106,7 @@
 		</ul>
 	</div>
 	<div class='row'>
-			<div class="form-group">
+			<div class="form-group" style="margin-left:17px;">
                         <button class="btn btn-primary btn-flat" type="button" onclick="$('#album_form').submit();" id="submit">Submit</button>
              </div>
 	</div>
