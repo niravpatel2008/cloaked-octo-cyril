@@ -84,7 +84,7 @@ $(document).ready(function(){
 		}
 	});
 	
-	$('#btn_createstamp').click(function(e){
+	$('#img-container').delegate('#btn_createstamp','click',function(){
 		var cropJson = $cropObj[0].crop.getSelection();
 		if(cropJson == null || cropJson == '')
 		{
@@ -96,11 +96,13 @@ $(document).ready(function(){
 		var price = $('#al_price').val();
 		var country = $('#al_country').val();
 		console.log(cropJson);
-		e.preventDefault();
+		
 		url = admin_path()+'album/createStamp',
 		data = {stampJson:cropJson,mainimg:mainSrc,al_id:al_id,al_name:albumName,price:price,country:country};
 		$.post(url,data,function(e){
-			if (e == "success") {
+			var resE = e.split('||');
+			$('#hdnStampIdsVal').val(resE[1]);
+			if (resE[0] == "success") {
 				alert("Stamps Created Successfully");
 			}else
 			{
@@ -113,10 +115,21 @@ $(document).ready(function(){
 function initCrop()
 {
 	var stampJson = '';
-	stampJson = $('#t_dimension').val();console.log(stampJson);
+	stampJson = $('#t_dimension').val();
+	//console.log(stampJson);
 	$cropObj = $('img#albumImg').imageCrop({
 		overlayOpacity : 0.25,
 //		selections : [{"x":"125px","y":"78px","w":50,"h":50},{"x":"114px","y":"169px","w":73,"h":131},{"x":"277px","y":"167px","w":126,"h":65},{"x":"335px","y":"275px","w":50,"h":50},{"x":"416px","y":"7px","w":50,"h":50}]
 		selections : JSON.parse("["+stampJson+"]")
 	});console.log($cropObj);
+}
+function doOrderImage(){
+	var order = {};
+	$('.newimg').each(function(k,v){
+		imageid = $(this).attr('imgid');
+		imageorder = k;
+		order[k] = ({"link_id":imageid,"link_order":imageorder});
+	});
+	orderStr = JSON.stringify(order);
+	$('#sortOrder').val(orderStr);
 }
