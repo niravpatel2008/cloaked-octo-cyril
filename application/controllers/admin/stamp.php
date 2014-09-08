@@ -299,7 +299,7 @@ class Stamp extends CI_Controller {
 					$idArr = explode(',',$idStr);
 					$stampsPath = $this->common_model->selectData_whereIn(TICKET_LINKS, 'GROUP_CONCAT(link_url) AS link_url', array('link_object_id'=>$idArr));
 					if(!empty($stampsPath))
-						$this->deleteImage($stampsPath);
+						$this->common_model->deleteImage($stampsPath);
 					$resLink = $this->common_model->deleteData(TICKET_LINKS,'',array('link_object_id'=>$idArr));
 				}
 
@@ -308,11 +308,11 @@ class Stamp extends CI_Controller {
 			
 			$imgPath = $this->common_model->selectData(TICKET_LINKS, 'link_url',array('link_id'=>$post['id']));
 			if(!empty($imgPath))
-				$this->deleteImage($imgPath);
+				$this->common_model->deleteImage($imgPath);
 			$ret = $this->common_model->deleteData(TICKET_LINKS, array('link_id' => $post['id'] ));
 			if ($ret > 0) {
 				echo "success";
-				#echo success_msg_box('User deleted successfully.');;
+				#echo success_msg_box('record deleted successfully.');;
 			}else{
 				echo "error";
 				#echo error_msg_box('An error occurred while processing.');
@@ -320,21 +320,5 @@ class Stamp extends CI_Controller {
 		}
 	}
 
-	public function deleteImage($urlArr = '')
-	{
-		if(isset($urlArr) && !empty($urlArr))
-		{
-			$urlStr = $urlArr[0]->link_url;
-			$urlArr = explode(',',$urlStr);
-			$uploadPath = './uploads/stamp/';
-			foreach($urlArr as $k=>$v)
-			{
-				unlink($uploadPath.$v);
-			}
-		}
-		else
-		{
-			echo "error occured during deleting images";
-		}
-	}
+	
 }

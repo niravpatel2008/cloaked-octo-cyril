@@ -62,7 +62,7 @@ class Index extends CI_Controller {
 
 	public function logout()
 	{
-		$this->session->sess_destroy();
+		$this->session->unset_userdata('user_session');
 		redirect(admin_path());
 	}
 

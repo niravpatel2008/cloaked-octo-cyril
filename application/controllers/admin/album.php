@@ -77,9 +77,21 @@ class Album extends CI_Controller {
 						$this->common_model->assingImagesToStamp($ret,$newimages);
 
 
-					/*Deal Images sorting.*/
+					/*Images sorting.*/
 					if($post['sortOrder'] != "")
 						$this->common_model->setImageOrder($post['sortOrder'],$ret_stamp,"stamp");
+
+					## Insert entries in stamp(ticket_collection) table
+					if(isset($post['hdnStampIdsVal']) && $post['hdnStampIdsVal'] != '')
+					{
+						$data = array('t_name' => $post['al_name'],
+									't_price' => $post['al_price'],
+									't_ownercountry' => $post['al_country'],
+									't_albumid' => $ret,
+									't_modified_date' => date('Y-m-d H:i:s'));
+						$where = 't_id IN ('.$post['hdnStampIdsVal'].')';
+						$ret_stamp_id = $this->common_model->updateData(TICKET_COLLECTION, $data,$where);
+					}
 
 					$flash_arr = array('flash_type' => 'success',
 										'flash_msg' => 'Stamp added successfully.'
@@ -216,15 +228,45 @@ class Album extends CI_Controller {
 	public function delete()
 	{
 		$post = $this->input->post();
-		
+		//pr($post,1);
 		if ($post) {
-			$ret = $this->common_model->deleteData(TICKET_ALBUM, array('al_id' => $post['id'] ));
+			$imgPath = './uploads/stamp/';
+			if(isset($post['from']) && $post['from']== 'album')
+			{
+				$stampsToDel = $this->common_model->selectData(TICKET_COLLECTION, 'GROUP_CONCAT(t_id) AS t_id', array("t_albumid" => $post['al_id'])); ## Get all stamps id belonging to album
+	
+				## Delete all stamps image from link table belonging to album and unlink images
+				$idStr=$stampsToDel[0]->t_id;
+				if($idStr != '')
+				{
+					$idArr = explode(',',$idStr);
+					$stampsPath = $this->common_model->selectData_whereIn(TICKET_LINKS, 'GROUP_CONCAT(link_url) AS link_url', array('link_object_id'=>$idArr));
+					if(!empty($stampsPath))
+						$this->common_model->deleteImage($stampsPath);// pass array with image name
+					$resLink = $this->common_model->deleteData(TICKET_LINKS,'',array('link_object_id'=>$idArr));
+				}
+
+				$resStamp = $this->common_model->deleteData(TICKET_COLLECTION, array('t_albumid' => $post['al_id'] )); ## Delete stamp details entry from Stamp(collection) table belonging to album.
+			}
+			
+			//delete main album image
+			
+			$imgPath = $this->common_model->selectData(TICKET_LINKS, '*',array('link_object_id'=>$post['al_id']));
+			if(!empty($imgPath))
+				$this->common_model->deleteImage($imgPath);
+			$delAlbumId = $this->common_model->deleteData(TICKET_LINKS, array('link_object_id' => $post['al_id'] ));
+
+			$ret = $this->common_model->deleteData(TICKET_ALBUM, array('al_id' => $post['al_id'] ));
+
 			if ($ret > 0) {
 				echo "success";
+				#echo success_msg_box('record deleted successfully.');;
 			}else{
 				echo "error";
+				#echo error_msg_box('An error occurred while processing.');
 			}
 		}
+		
 	}
 
 	public function createStamp()
@@ -236,6 +278,7 @@ class Album extends CI_Controller {
 			$file_extension = pathinfo($post['mainimg'], PATHINFO_EXTENSION);
 			$uploadpath = '';
 			$err_flg = 0;
+			$stampIdsArr = array();
 
 			foreach($jsonArr as $k=>$v)
 			{			
@@ -283,13 +326,14 @@ class Album extends CI_Controller {
 								't_dimension'=>$vJson);
 				
 				$ret_stamp_id = $this->common_model->insertData(TICKET_COLLECTION, $data);
+				$stampIdsArr[] = $ret_stamp_id;
 
 				$data = array("link_object_id"=>$ret_stamp_id);
 				$where = 'link_id = '.$link_id;
 				$ret = $this->common_model->updateData(TICKET_LINKS, $data, $where);
 			}
 			if($err_flg == 0)
-				echo "success";
+				echo "success||".implode(',',$stampIdsArr);
 		}
 		
 		//pr($post,1);
