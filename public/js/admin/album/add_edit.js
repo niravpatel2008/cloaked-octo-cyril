@@ -64,8 +64,8 @@ $(document).ready(function(){
 		var cnf = confirm("All Associated Stamps with this Album will be deleted. Do You want to Continue ?");
 		if(cnf == true)
 		{
-			url = admin_path()+'stamp/delete',
-			data = {id:link_id,from:'album',al_id:$('#al_id').val()};
+			url = admin_path()+'album/delete',
+			data = {link_id:link_id,from:'addedit',al_id:$('#al_id').val()};
 			$.post(url,data,function(e){
 				if (e == "success") {
 					if ($('#t_mainphoto').val() == link_id)

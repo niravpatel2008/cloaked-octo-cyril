@@ -231,32 +231,32 @@ class Album extends CI_Controller {
 		//pr($post,1);
 		if ($post) {
 			$imgPath = './uploads/stamp/';
-			if(isset($post['from']) && $post['from']== 'album')
-			{
-				$stampsToDel = $this->common_model->selectData(TICKET_COLLECTION, 'GROUP_CONCAT(t_id) AS t_id', array("t_albumid" => $post['al_id'])); ## Get all stamps id belonging to album
-	
-				## Delete all stamps image from link table belonging to album and unlink images
-				$idStr=$stampsToDel[0]->t_id;
-				if($idStr != '')
-				{
-					$idArr = explode(',',$idStr);
-					$stampsPath = $this->common_model->selectData_whereIn(TICKET_LINKS, 'GROUP_CONCAT(link_url) AS link_url', array('link_object_id'=>$idArr));
-					if(!empty($stampsPath))
-						$this->common_model->deleteImage($stampsPath);// pass array with image name
-					$resLink = $this->common_model->deleteData(TICKET_LINKS,'',array('link_object_id'=>$idArr));
-				}
 
-				$resStamp = $this->common_model->deleteData(TICKET_COLLECTION, array('t_albumid' => $post['al_id'] )); ## Delete stamp details entry from Stamp(collection) table belonging to album.
+			$stampsToDel = $this->common_model->selectData(TICKET_COLLECTION, 'GROUP_CONCAT(t_id) AS t_id', array("t_albumid" => $post['al_id'])); ## Get all stamps id belonging to album
+
+			## Delete all stamps image from link table belonging to album and unlink images
+			$idStr=$stampsToDel[0]->t_id;
+			if($idStr != '')
+			{
+				$idArr = explode(',',$idStr);
+				$stampsPath = $this->common_model->selectData_whereIn(TICKET_LINKS, 'GROUP_CONCAT(link_url) AS link_url', array('link_object_id'=>$idArr));
+				if(!empty($stampsPath))
+					$this->common_model->deleteImage($stampsPath);// pass array with image name
+				$resLink = $this->common_model->deleteData(TICKET_LINKS,'',array('link_object_id'=>$idArr));
 			}
+
+			$resStamp = $this->common_model->deleteData(TICKET_COLLECTION, array('t_albumid' => $post['al_id'] )); ## Delete stamp details entry from Stamp(collection) table belonging to album.
+
 			
 			//delete main album image
 			
 			$imgPath = $this->common_model->selectData(TICKET_LINKS, '*',array('link_object_id'=>$post['al_id']));
 			if(!empty($imgPath))
 				$this->common_model->deleteImage($imgPath);
-			$delAlbumId = $this->common_model->deleteData(TICKET_LINKS, array('link_object_id' => $post['al_id'] ));
-
-			$ret = $this->common_model->deleteData(TICKET_ALBUM, array('al_id' => $post['al_id'] ));
+			$ret = $this->common_model->deleteData(TICKET_LINKS, array('link_object_id' => $post['al_id'] ));
+			
+			if(isset($post['from']) && $post['from'] == 'addedit')
+				$ret = $this->common_model->deleteData(TICKET_ALBUM, array('al_id' => $post['al_id'] ));
 
 			if ($ret > 0) {
 				echo "success";

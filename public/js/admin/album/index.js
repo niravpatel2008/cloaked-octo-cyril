@@ -23,7 +23,7 @@ function delete_album (del_id) {
 	$.ajax({
 		type: 'post',
 		url: admin_path()+'album/delete',
-		data: 'al_id='+del_id+'&from=album',
+		data: 'al_id='+del_id,
 		success: function (data) {
 			if (data == "success") {
 				oTable.fnClearTable(0);
