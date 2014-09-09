@@ -38,11 +38,12 @@
 |
 */
 
-$route['default_controller'] = "index";
+$route['default_controller'] = "welcome";
 $route['404_override'] = '';
 
 $route['admin/forgotpassword'] = "admin/index/forgotpassword";
 $route['admin'] = "admin/index";
+$route['tags/(:any)'] = "welcome/index/$1";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
