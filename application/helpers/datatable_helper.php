@@ -194,7 +194,10 @@ class SSP {
 
 		foreach($join as $j)
 		{
-			$model->db->join($j[0], $j[1]);
+			if(isset($j[2]))
+				$model->db->join($j[0], $j[1],$j[2]);
+			else
+				$model->db->join($j[0], $j[1]);
 		}
 		
 		$where = SSP::filter( $request, $columns, $bindings );

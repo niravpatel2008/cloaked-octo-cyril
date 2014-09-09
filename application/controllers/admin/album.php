@@ -26,7 +26,7 @@ class Album extends CI_Controller {
 			array( 'db' => 'al_name', 'dt' => 1 ),
 			array( 'db' => 'al_country',  'dt' => 2 ),
 			array( 'db' => 'al_price',  'dt' => 3 ),
-			array('db'        => 'u_created_date',
+			array('db'        => 'al_created_date',
 					'dt'        => 4,
 					'formatter' => function( $d, $row ) {
 						return date( 'jS M y', strtotime($d));
@@ -289,8 +289,20 @@ class Album extends CI_Controller {
 				//echo intval($v['x'])."===". $v['y'].'\n';continue;
 				$new = imagecreatetruecolor($v['w'], $v['h']);
 				
-				
-				$srcImg = imagecreatefromjpeg($post['mainimg']);
+				switch($file_extension)
+				{
+					case 'jpg':
+					case 'jpeg':
+						$srcImg = imagecreatefromjpeg($post['mainimg']);
+					break;
+					case 'png':
+						$srcImg = imagecreatefrompng($post['mainimg']);
+					break;
+					case 'gif':
+						$srcImg = imagecreatefromgif($post['mainimg']);
+					break;
+				}
+
 				if(!$srcImg)
 					$err_flg = 1;
 				
