@@ -71,7 +71,7 @@ function displayStamps(result)
 		{
 			stampHtml += '<div id="stampBlock" href="#" class="trick-card col-lg-4 col-md-6 col-sm-6 col-xs-12" style="">';
 			stampHtml += '<div class="trick-card-inner js-goto-trick" data-slug="modelmap-jquerymap-style">';
-				stampHtml += '<a class="trick-card-title" href="'+base_url()+'stampDetail/viewDetail/?tid='+element.t_id+'" style="text-align:center;">';
+				stampHtml += '<a class="trick-card-title" href="'+base_url()+'stampDetail/viewDetail/?tid='+element.t_id+'" style="text-align:center;word-wrap:break-word;">';
 					//stampHtml += 'Title Goes Here';
 					stampHtml += element.t_name;
 				stampHtml += '</a>';
