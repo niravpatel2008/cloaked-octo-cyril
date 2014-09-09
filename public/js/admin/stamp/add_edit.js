@@ -51,7 +51,7 @@ $(document).ready(function(){
 		atag = $(this);
 		link_id = $(atag).attr('link_id');
 		url = admin_path()+'stamp/delete',
-		data = {id:link_id};
+		data = {id:link_id,from:'addedit'};
 		$.post(url,data,function(e){
 			if (e == "success") {
 				if ($('#t_mainphoto').val() == link_id)
