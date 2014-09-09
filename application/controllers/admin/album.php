@@ -179,8 +179,9 @@ class Album extends CI_Controller {
 		$data['ticket_collection'] = $this->common_model->selectData(TICKET_COLLECTION, '*',array("t_albumid"=>$id),"t_id","ASC");
 		$tmpNewArr = array();
 		foreach($data['ticket_collection'] as $k => $v)
-			$tmpNewArr[] = $v->t_dimension;
-		$data['ticket_collection'] = implode(',',$tmpNewArr);
+			$tmpNewArr[] = array("id"=>$v->t_id,"area"=>$v->t_dimension);
+		
+		$data['ticket_collection'] = json_encode($tmpNewArr);
 
 		$data['users'] = $this->common_model->selectData(USERS, 'u_id,u_fname,u_email');
 		$this->load->view('admin/content', $data);
@@ -281,68 +282,60 @@ class Album extends CI_Controller {
 			$stampIdsArr = array();
 
 			foreach($jsonArr as $k=>$v)
-			{			
-				$uploadpath = "./uploads/stamp/"."stamp_".$k."_".time().".".$file_extension;
-				$file_name = "stamp_".$k."_".time().".".$file_extension;
+			{	
+				$stampId = (isset($v['t_id']) && $v['t_id'] != "")?$v['t_id']:"";
+				unset($v["t_id"]);
 				$vJson = json_encode($v);
-				
-				//echo intval($v['x'])."===". $v['y'].'\n';continue;
-				$new = imagecreatetruecolor($v['w'], $v['h']);
-				
-				switch($file_extension)
-				{
-					case 'jpg':
-					case 'jpeg':
-						$srcImg = imagecreatefromjpeg($post['mainimg']);
-					break;
-					case 'png':
-						$srcImg = imagecreatefrompng($post['mainimg']);
-					break;
-					case 'gif':
-						$srcImg = imagecreatefromgif($post['mainimg']);
-					break;
-				}
-
-				if(!$srcImg)
-					$err_flg = 1;
-				
-				$jpeg_quality = 90;
-				//$copyRes = imagecopy($new,$srcImg, 0 ,0 ,$v['x'], $v['y'],  $v['w'], $v['h']); ## copy image from crop selection
-				//if($copyRes && $err_flg != 1)
-				{
-					imagecopyresampled($new,$srcImg, 0, 0, intval($v['x']), intval($v['y']),  $v['w'], $v['h'], $v['w'], $v['h']);
-					imagejpeg($new,$uploadpath,$jpeg_quality);
-				}
-				 
-				 if($err_flg == 1)
+				$newStamp = createStamp($post['mainimg'],$v);
+				if($newStamp == 0)
 				{
 					echo "Issue occur during creating stamp";
 					exit;
-				 }
+				}
 
+				if ($stampId != "")
+				{
+					$data = array('t_name' => $post['al_name'],
+									't_price' => $post['price'],
+									't_ownercountry' => $post['country'],
+									't_modified_date' => date('Y-m-d H:i:s'),
+									't_dimension'=>$vJson);
+					$where = array('t_id'=>$stampId);
+					$ret_stamp_id = $this->common_model->updateData(TICKET_COLLECTION, $data, $where);
 
-				## Insert entries in link table
-				$al_id = isset($post['al_id'])?$post['al_id']:"";
-				$linkdata =  array("link_object_id"=>$al_id,"link_type"=>"stamp","link_url"=>$file_name);
-				$link_id = $this->common_model->insertData(TICKET_LINKS, $linkdata);
+					$link_id = $this->common_model->selectData(TICKET_COLLECTION,"t_mainphoto" $where);
+					$data = array("link_url"=>$newStamp);
+					$where = array('link_id'=>$link_id[0]['t_mainphoto']);
+					$ret = $this->common_model->updateData(TICKET_LINKS, $data, $where);
+				}
+				else
+				{
+					## Insert entries in link table
+					$al_id = isset($post['al_id'])?$post['al_id']:"";
+					$linkdata =  array("link_object_id"=>$al_id,"link_type"=>"stamp","link_url"=>$newStamp);
+					$link_id = $this->common_model->insertData(TICKET_LINKS, $linkdata);
 
-				## Insert entries in stamp(ticket_collection) table
-				$data = array('t_name' => $post['al_name'],
-								't_price' => $post['price'],
-								't_ownercountry' => $post['country'],
-								't_uid' => (isset($post['t_uid']) && $post['t_uid'] != "")?$post['t_uid']:$this->user_session['u_id'],
-								't_mainphoto'=> $link_id,
-								't_albumid' => $post['al_id'],
-								't_created_date' => date('Y-m-d H:i:s'),
-								't_modified_date' => date('Y-m-d H:i:s'),
-								't_dimension'=>$vJson);
+					## Insert entries in stamp(ticket_collection) table
+					$data = array('t_name' => $post['al_name'],
+									't_price' => $post['price'],
+									't_ownercountry' => $post['country'],
+									't_uid' => (isset($post['t_uid']) && $post['t_uid'] != "")?$post['t_uid']:$this->user_session['u_id'],
+									't_mainphoto'=> $link_id,
+									't_albumid' => $post['al_id'],
+									't_created_date' => date('Y-m-d H:i:s'),
+									't_modified_date' => date('Y-m-d H:i:s'),
+									't_dimension'=>$vJson);
+					
+					$ret_stamp_id = $this->common_model->insertData(TICKET_COLLECTION, $data);
+					$stampIdsArr[] = $ret_stamp_id;
+
+					$data = array("link_object_id"=>$ret_stamp_id);
+					$where = 'link_id = '.$link_id;
+					$ret = $this->common_model->updateData(TICKET_LINKS, $data, $where);
+					
+				}
+
 				
-				$ret_stamp_id = $this->common_model->insertData(TICKET_COLLECTION, $data);
-				$stampIdsArr[] = $ret_stamp_id;
-
-				$data = array("link_object_id"=>$ret_stamp_id);
-				$where = 'link_id = '.$link_id;
-				$ret = $this->common_model->updateData(TICKET_LINKS, $data, $where);
 			}
 			if($err_flg == 0)
 				echo "success||".implode(',',$stampIdsArr);

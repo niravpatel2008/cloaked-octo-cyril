@@ -49,7 +49,7 @@
 
 		return [x, y];
 	},
-	addNewSelection: function(v) {
+	addNewSelection: function(id,v) {
 		$this = this;
 		var id = this.config.count++;
 		$(".image-crop-outline").css({borderColor:'#ffffff'});
@@ -62,6 +62,9 @@
 				height: (v)?v.h:this.config.minSelect[1]
 			})
 			.insertAfter(this.$image);
+
+		if(id)
+			this.$outline.data("t_id",id);
 
 		this.config.outlines[id]=this.$outline;
 		//console.log($image);
@@ -109,15 +112,15 @@
 		$.each(this.config.outlines,function(e,v){
 			if (typeof(v) != "undefined")
 			{
-				$pos.push({x:$(v).css('left') ,y:$(v).css('top') ,w:$(v).width() ,h:$(v).height() });
+				$pos.push({x:$(v).css('left') ,y:$(v).css('top') ,w:$(v).width() ,h:$(v).height(), t_id:$(v).data('t_id') });
 			}
 		})
 		return $pos;
 	},
 	setAllSelection: function() {
 		$this = this;
-		$(this.config.selections).each(function(e,v){
-			$this.addNewSelection(v);
+		$(this.config.selections[0]).each(function(e,v){
+			$this.addNewSelection(v.id,JSON.parse(v.area));
 		});
 	}
 	 

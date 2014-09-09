@@ -112,4 +112,39 @@
 		return str_replace(array("/","(",")","&",),"-",$str);
 	}
 
+	function createStamp($mainimg,$v)
+	{
+		$file_name = "stamp_".$k."_".time().".".$file_extension;
+		$stamppath = "./uploads/stamp/".$file_name;
+
+		$new = imagecreatetruecolor($v['w'], $v['h']);
+				
+		switch($file_extension)
+		{
+			case 'jpg':
+			case 'jpeg':
+				$srcImg = imagecreatefromjpeg($mainimg);
+			break;
+			case 'png':
+				$srcImg = imagecreatefrompng($mainimg);
+			break;
+			case 'gif':
+				$srcImg = imagecreatefromgif($mainimg);
+			break;
+		}
+
+		if(!$srcImg)
+			$err_flg = 1;
+		
+		$jpeg_quality = 90;
+		
+		imagecopyresampled($new,$srcImg, 0, 0, intval($v['x']), intval($v['y']),  $v['w'], $v['h'], $v['w'], $v['h']);
+		imagejpeg($new,$stamppath,$jpeg_quality);
+
+		if($err_flg)
+			return 0
+		else
+			$file_name;
+	}
+
 ?>
