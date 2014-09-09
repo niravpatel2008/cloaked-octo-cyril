@@ -153,7 +153,9 @@ class Stamp extends CI_Controller {
 			}
 
 			if ($e_flag == 0) {
-
+				$tagStr = '';
+				if(isset($post['t_tags']))
+					$tagStr = implode(',',$post['t_tags']);
 				$data = array('t_name' => $post['t_name'],
 								't_price' => $post['t_price'],
 								't_year' => $post['t_year'],
@@ -163,60 +165,63 @@ class Stamp extends CI_Controller {
 								't_ownercountry' => $post['t_ownercountry'],
 								't_albumid' => $post['t_albumid'],
 								't_modified_date' => date('Y-m-d H:i:s'),
-								't_tags' => implode(',',$post['t_tags']),
+								't_tags' => $tagStr,
 							);
 			
 				$ret = $this->common_model->updateData(TICKET_COLLECTION, $data, $where);
 
 				if ($ret > 0) {
 					/*Add/Update tags */
-					$post_tags = $post['t_tags'];
-					$old_tags = $this->common_model->getTags($id,"stamp");
-
-					foreach ($post_tags as $tag)
+					if(isset($post['t_tags']))
 					{
-						$tag = trim($tag);
+						$post_tags = $post['t_tags'];
+						$old_tags = $this->common_model->getTags($id,"stamp");
 
-						$found = false;
-						foreach ($old_tags as $k=>$v)
+						foreach ($post_tags as $tag)
 						{
-							if ($tag == $v['t_tag'])
+							$tag = trim($tag);
+
+							$found = false;
+							foreach ($old_tags as $k=>$v)
 							{
-								$found = true;
-								unset($old_tags[$k]);
+								if ($tag == $v['tag_name'])
+								{
+									$found = true;
+									unset($old_tags[$k]);
+								}
+							}
+
+							if ($found) continue;
+
+							$tagid = $this->common_model->selectData(TICKET_TAG,"tag_id",array("tag_name"=>$tag));
+							if(!$tagid)
+							{
+								$tagdata =  array("tag_name"=>$tag);
+								$tagid = $this->common_model->insertData(TICKET_TAG, $tagdata);
+							}
+							else
+							{
+								$tagid = ($tagid[0]->tag_id);
+							}
+
+							$tagmap = $this->common_model->selectData(TICKET_TAG_MAPPING,"*",array("tm_object_id"=>$id,"tm_tagid"=>$tagid,"tm_type"=>"stamp"));
+							if (!$tagmap)
+							{
+								$tagmapdata =  array("tm_object_id"=>$id,"tm_tagid"=>$tagid,"tm_type"=>"stamp");
+								$this->common_model->insertData(TICKET_TAG_MAPPING, $tagmapdata);
 							}
 						}
-
-						if ($found) continue;
-
-						$tagid = $this->common_model->selectData(TICKET_TAG,"tag_id",array("tag_name"=>$tag));
-						if(!$tagid)
+						//pr($old_tags,1);
+						if (count($old_tags)>0)
 						{
-							$tagdata =  array("tag_name"=>$tag);
-							$tagid = $this->common_model->insertData(TICKET_TAG, $tagdata);
+							$del_ids = array_reduce($old_tags,function($arr,$k){ $arr[] = $k['tag_id']; return $arr;});
+							$this->common_model->deleteTags($del_ids,$id,"stamp");
 						}
-						else
-						{
-							$tagid = ($tagid[0]->tag_id);
-						}
-
-						$tagmap = $this->common_model->selectData(TICKET_TAG_MAPPING,"*",array("tm_object_id"=>$id,"tm_tagid"=>$tagid,"tm_type"=>"stamp"));
-						if (!$tagmap)
-						{
-							$tagmapdata =  array("tm_object_id"=>$id,"tm_tagid"=>$tagid,"tm_type"=>"stamp");
-							$this->common_model->insertData(TICKET_TAG_MAPPING, $tagmapdata);
-						}
-					}
-					//pr($old_tags,1);
-					if (count($old_tags)>0)
-					{
-						$del_ids = array_reduce($old_tags,function($arr,$k){ $arr[] = $k['tag_id']; return $arr;});
-						$this->common_model->deleteTags($del_ids,$id,"stamp");
 					}
 
 					/*Deal Images sorting.*/
 					if($post['sortOrder'] != "")
-						$this->common_model->setImageOrder($post['sortOrder'],$id);
+						$this->common_model->setImageOrder($post['sortOrder'],$id,'stamp');
 
 					$flash_arr = array('flash_type' => 'success',
 										'flash_msg' => 'Stamp updated successfully.'
@@ -288,28 +293,18 @@ class Stamp extends CI_Controller {
 
 		if ($post) {
 			$imgPath = './uploads/stamp/';
-			if(isset($post['from']) && $post['from']== 'album')
-			{
-				$stampsToDel = $this->common_model->selectData(TICKET_COLLECTION, 'GROUP_CONCAT(t_id) AS t_id', array("t_albumid" => $post['al_id'])); ## Get all stamps id belonging to album
-	
-				## Delete all stamps image from link table belonging to album and unlink images
-				$idStr=$stampsToDel[0]->t_id;
-				if($idStr != '')
-				{
-					$idArr = explode(',',$idStr);
-					$stampsPath = $this->common_model->selectData_whereIn(TICKET_LINKS, 'GROUP_CONCAT(link_url) AS link_url', array('link_object_id'=>$idArr));
-					if(!empty($stampsPath))
-						$this->common_model->deleteImage($stampsPath);
-					$resLink = $this->common_model->deleteData(TICKET_LINKS,'',array('link_object_id'=>$idArr));
-				}
-
-				$resStamp = $this->common_model->deleteData(TICKET_COLLECTION, array('t_albumid' => $post['al_id'] )); ## Delete stamp details entry from Stamp(collection) table belonging to album.
-			}
 			
-			$imgPath = $this->common_model->selectData(TICKET_LINKS, 'link_url',array('link_id'=>$post['id']));
+			if(!isset($post['from']))
+				$resStamp = $this->common_model->deleteData(TICKET_COLLECTION, array('t_id' => $post['id'] )); ## Delete stamp details entry from Stamp(collection) table .
+			
+			$whereCol = 'link_object_id';
+			if(isset($post['from']) && $post['from'] == 'addedit')
+				$whereCol = 'link_id';
+			$imgPath = $this->common_model->selectData(TICKET_LINKS, 'link_url',array($whereCol=>$post['id']));
 			if(!empty($imgPath))
 				$this->common_model->deleteImage($imgPath);
-			$ret = $this->common_model->deleteData(TICKET_LINKS, array('link_id' => $post['id'] ));
+			$ret = $this->common_model->deleteData(TICKET_LINKS, array($whereCol => $post['id'] ));
+
 			if ($ret > 0) {
 				echo "success";
 				#echo success_msg_box('record deleted successfully.');;
