@@ -112,11 +112,11 @@
 		return str_replace(array("/","(",")","&",),"-",$str);
 	}
 
-	function createStamp($mainimg,$v)
+	function createStamp($mainimg,$v,$k=1)
 	{
 		$err_flg = 0;
 		$file_extension = pathinfo($mainimg, PATHINFO_EXTENSION);
-		$file_name = "stamp_".time().".".$file_extension;
+		$file_name = "stamp_".$k.'_'.time().".".$file_extension;
 		$stamppath = "./uploads/stamp/".$file_name;
 
 		$new = imagecreatetruecolor($v['w'], $v['h']);
@@ -135,7 +135,7 @@
 			break;
 		}
 
-		if(!$srcImg)
+		if(!isset($srcImg))
 			$err_flg = 1;
 		
 		$jpeg_quality = 90;
@@ -146,7 +146,21 @@
 		if($err_flg)
 			return 0;
 		else
-			$file_name;
+			return $file_name;
+	}
+
+	## unlink images
+	function deleteImage($urlArr = '')
+	{
+		$uploadPath = './uploads/stamp/';
+
+		foreach($urlArr as $k=>$v)
+		{
+			$urlStr = $v->link_url;
+			$file = $uploadPath.$v;
+			if (file_exists($file))
+				unlink($file);
+		}		
 	}
 
 ?>

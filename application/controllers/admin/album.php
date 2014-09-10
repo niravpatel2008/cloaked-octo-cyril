@@ -240,9 +240,9 @@ class Album extends CI_Controller {
 			if($idStr != '')
 			{
 				$idArr = explode(',',$idStr);
-				$stampsPath = $this->common_model->selectData_whereIn(TICKET_LINKS, 'GROUP_CONCAT(link_url) AS link_url', array('link_object_id'=>$idArr));
-				if(!empty($stampsPath))
-					$this->common_model->deleteImage($stampsPath);// pass array with image name
+				$stampsPathArr = $this->common_model->selectData_whereIn(TICKET_LINKS, 'link_url', array('link_object_id'=>$idArr));
+				deleteImage($stampsPathArr);// pass array with image name
+
 				$resLink = $this->common_model->deleteData(TICKET_LINKS,'',array('link_object_id'=>$idArr));
 			}
 
@@ -253,7 +253,7 @@ class Album extends CI_Controller {
 			
 			$imgPath = $this->common_model->selectData(TICKET_LINKS, '*',array('link_object_id'=>$post['al_id']));
 			if(!empty($imgPath))
-				$this->common_model->deleteImage($imgPath);
+				deleteImage($imgPath);
 			$ret = $this->common_model->deleteData(TICKET_LINKS, array('link_object_id' => $post['al_id'] ));
 			
 			if(isset($post['from']) && $post['from'] == 'listview')
@@ -285,8 +285,8 @@ class Album extends CI_Controller {
 				$stampId = (isset($v['t_id']) && $v['t_id'] != "")?$v['t_id']:"";
 				unset($v["t_id"]);
 				$vJson = json_encode($v);
-				$newStamp = createStamp($post['mainimg'],$v);
-				if($newStamp == 0)
+				$newStamp = createStamp($post['mainimg'],$v,$k);
+				if($newStamp == "0")
 				{
 					echo "Issue occur during creating stamp";
 					exit;
@@ -304,7 +304,9 @@ class Album extends CI_Controller {
 
 					$link_id = $this->common_model->selectData(TICKET_COLLECTION,"t_mainphoto", $where);
 					$data = array("link_url"=>$newStamp);
-					$where = array('link_id'=>$link_id[0]['t_mainphoto']);
+					$where = array('link_id'=>$link_id[0]->t_mainphoto);
+					$old_img = $this->common_model->selectData(TICKET_LINKS,"link_url", $where);
+					deleteImage($old_img);
 					$ret = $this->common_model->updateData(TICKET_LINKS, $data, $where);
 				}
 				else
