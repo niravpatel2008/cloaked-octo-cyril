@@ -149,4 +149,18 @@
 			return $file_name;
 	}
 
+	## unlink images
+	function deleteImage($urlArr = '')
+	{
+		$uploadPath = './uploads/stamp/';
+
+		foreach($urlArr as $k=>$v)
+		{
+			$urlStr = $v->link_url;
+			$file = $uploadPath.$v;
+			if (file_exists($file))
+				unlink($file);
+		}		
+	}
+
 ?>
