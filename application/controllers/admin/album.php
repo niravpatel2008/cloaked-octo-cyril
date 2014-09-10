@@ -276,8 +276,7 @@ class Album extends CI_Controller {
 		//pr($post,1);
 		if(isset($post['stampJson'])){
 			$jsonArr = $post['stampJson'];
-			$file_extension = pathinfo($post['mainimg'], PATHINFO_EXTENSION);
-			$uploadpath = '';
+			
 			$err_flg = 0;
 			$stampIdsArr = array();
 
@@ -303,7 +302,7 @@ class Album extends CI_Controller {
 					$where = array('t_id'=>$stampId);
 					$ret_stamp_id = $this->common_model->updateData(TICKET_COLLECTION, $data, $where);
 
-					$link_id = $this->common_model->selectData(TICKET_COLLECTION,"t_mainphoto" $where);
+					$link_id = $this->common_model->selectData(TICKET_COLLECTION,"t_mainphoto", $where);
 					$data = array("link_url"=>$newStamp);
 					$where = array('link_id'=>$link_id[0]['t_mainphoto']);
 					$ret = $this->common_model->updateData(TICKET_LINKS, $data, $where);
@@ -311,8 +310,7 @@ class Album extends CI_Controller {
 				else
 				{
 					## Insert entries in link table
-					$al_id = isset($post['al_id'])?$post['al_id']:"";
-					$linkdata =  array("link_object_id"=>$al_id,"link_type"=>"stamp","link_url"=>$newStamp);
+					$linkdata =  array("link_type"=>"stamp","link_url"=>$newStamp);
 					$link_id = $this->common_model->insertData(TICKET_LINKS, $linkdata);
 
 					## Insert entries in stamp(ticket_collection) table
