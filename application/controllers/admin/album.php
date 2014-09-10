@@ -256,7 +256,7 @@ class Album extends CI_Controller {
 				$this->common_model->deleteImage($imgPath);
 			$ret = $this->common_model->deleteData(TICKET_LINKS, array('link_object_id' => $post['al_id'] ));
 			
-			if(isset($post['from']) && $post['from'] == 'addedit')
+			if(isset($post['from']) && $post['from'] == 'listview')
 				$ret = $this->common_model->deleteData(TICKET_ALBUM, array('al_id' => $post['al_id'] ));
 
 			if ($ret > 0) {
