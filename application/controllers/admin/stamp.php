@@ -127,7 +127,8 @@ class Stamp extends CI_Controller {
 		}
 
 		$data['users'] = $this->common_model->selectData(USERS, 'u_id,u_fname,u_email');
-		$data['albums'] = $this->common_model->selectData(TICKET_ALBUM, 'al_id,al_name',array("al_uid"=>$this->user_session['u_id']));
+		//$data['albums'] = $this->common_model->selectData(TICKET_ALBUM, 'al_id,al_name',array("al_uid"=>$this->user_session['u_id']));
+		$data['albums'] = $this->common_model->selectData(TICKET_ALBUM, 'al_id,al_name',array());
 		$data['ticket_links'] = array();
 		$data['view'] = "add_edit";
 		$this->load->view('admin/content', $data);

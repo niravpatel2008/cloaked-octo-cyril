@@ -47,7 +47,15 @@
                         <label for="email">Email address:</label>
                         <input type="email" placeholder="Enter email" id="email" class="form-control validate[required,custom[email]]" name="email" value="<?=@$user[0]->u_email?>" >
                     </div>
-					<div class="form-group">
+					<div class="form-group" <?=(@$error_msg['password'] != '')?'has-error':'' ?>>
+						<?php
+                            if(@$error_msg['password'] != ''){
+                        ?>
+                            <label for="inputError" class="control-label"><i class="fa fa-times-circle-o"></i><?=$error_msg['password']?></label><br/>
+                        <?php
+                            }
+                        ?>
+
                         <label>Password:</label>
                         <input type="password" placeholder="Password" class="form-control validate[minSize[5],maxSize[15]]" name="password" id="password">
                     </div>
@@ -56,7 +64,7 @@
                         <input type="password" placeholder="Repeat Password" class="form-control validate[equals[password]]" name="re_password" id="re_password">
                     </div>
                     <div class="form-group">
-                        <label>Url:</label>
+                        <label>Website</label>
                         <input type="text" placeholder="Enter ..." class="form-control validate[custom[url]" name="u_url" id="u_url" value="<?=@$user[0]->u_url?>">
                     </div>
                     <div class="form-group">
