@@ -130,7 +130,7 @@ class Users extends CI_Controller {
 
 		$post = $this->input->post();
 		if ($post) {
-			#pr($post);
+			//pr($post);die;
 			$error = array();
 			$e_flag=0;
 
@@ -181,6 +181,7 @@ class Users extends CI_Controller {
 					$data['u_password'] = sha1(trim($post['password']));
 				$ret = $this->common_model->updateData(USERS, $data, $where);
 
+			#echo "<pre>"; print_r($this->db->queries); exit;
 				if ($ret > 0) {
 					$flash_arr = array('flash_type' => 'success',
 										'flash_msg' => 'User updated successfully.'

@@ -16,7 +16,8 @@ $(document).ready(function() {
 			 bSortable: false,
 			 aTargets: [ -2 ]
 		  }
-		]
+		],
+		"order": [[ 4, "desc" ]]
 	} );
 } );
 function delete_album (del_id) {

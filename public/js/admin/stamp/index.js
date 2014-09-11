@@ -12,7 +12,8 @@ $(document).ready(function() {
 			 bSortable: false,
 			 aTargets: [ -1 ]
 		  }
-		]
+		],
+		"order": [[ 7, "desc" ]]
 	} );
 } );
 function delete_stamp (del_id) {

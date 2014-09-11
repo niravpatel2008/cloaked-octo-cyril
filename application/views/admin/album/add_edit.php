@@ -2,7 +2,19 @@
     <h1>
         Album
         <small>
-            <?=($this->router->fetch_method() == 'add')?'Add Album':'Edit Album'?>
+            <?php
+				if($this->router->fetch_method() == 'add')
+				{
+					$title = 'Add Album';
+					$btnName = 'Create Stamp';
+				}
+				else
+				{
+					$title = 'Edit Album';
+					$btnName = 'Update Stamp';
+				}
+				echo $title;
+				?>
         </small>
     </h1>
     <?php
@@ -99,7 +111,7 @@
 				<br>
 				<center>
 					<a class="removeimage" link_id="<?=($img->link_id)?>" href="#" title="Delete"><i class="fa fa-trash-o"></i></a>
-					<button class="btn btn-primary btn-flat" style="margin-left:14px;" id="btn_createstamp">Create Stamp</button>
+					<button class="btn btn-primary btn-flat" style="margin-left:14px;" id="btn_createstamp"><?=$btnName;?></button>
 				</center>
 				</li>
 			<?php }?>

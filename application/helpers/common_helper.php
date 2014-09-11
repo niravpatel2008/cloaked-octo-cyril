@@ -157,7 +157,7 @@
 		foreach($urlArr as $k=>$v)
 		{
 			$urlStr = $v->link_url;
-			$file = $uploadPath.$v;
+			$file = $uploadPath.$urlStr;
 			if (file_exists($file))
 				unlink($file);
 		}		

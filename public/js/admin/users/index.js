@@ -12,7 +12,8 @@ $(document).ready(function() {
 			 bSortable: false,
 			 aTargets: [ -1 ]
 		  }
-		]
+		],
+		"order": [[ 4, "desc" ]]
 	} );
 } );
 function delete_user (del_id) {
