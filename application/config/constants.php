@@ -60,4 +60,7 @@ define('SUBJECT_LOGIN_INFO', 'Login info');
 define('SUBJECT_DEAL_INFO', 'Deal info');
 
 /* End of file constants.php */
+
+/**Upload file path*/
+define('UPLOADPATH', './uploads/stamp/');
 /* Location: ./application/config/constants.php */
