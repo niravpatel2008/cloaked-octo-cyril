@@ -42,6 +42,7 @@ $route['default_controller'] = "welcome";
 $route['404_override'] = '';
 
 $route['admin/forgotpassword'] = "admin/index/forgotpassword";
+$route['profile'] = "profile/index";
 $route['admin'] = "admin/index";
 $route['tags/(:any)'] = "welcome/index/$1";
 
