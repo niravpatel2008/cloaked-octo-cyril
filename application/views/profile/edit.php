@@ -74,4 +74,15 @@
 		</form>
 	</div>
 </div>
+
+<div class="row panel-body">
+  <div class="col-lg-12">
+	  <div class="panel">
+		  <div class="panel-body">
+			  <span style="text-align:center;font-size:16px;"><a href="" >Delete My Account</a></span>
+		  </div>
+	  </div>
+  </div>
+</div>
+
 </aside>
