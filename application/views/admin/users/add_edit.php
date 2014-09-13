@@ -47,17 +47,9 @@
                         <label for="email">Email address:</label>
                         <input type="email" placeholder="Enter email" id="email" class="form-control validate[required,custom[email]]" name="email" value="<?=@$user[0]->u_email?>" >
                     </div>
-					<div class="form-group" <?=(@$error_msg['password'] != '')?'has-error':'' ?>>
-						<?php
-                            if(@$error_msg['password'] != ''){
-                        ?>
-                            <label for="inputError" class="control-label"><i class="fa fa-times-circle-o"></i><?=$error_msg['password']?></label><br/>
-                        <?php
-                            }
-                        ?>
-
-                        <label>Password:</label>
-                        <input type="password" placeholder="Password" class="form-control validate[minSize[5],maxSize[15]]" name="password" id="password">
+					<div class="form-group">
+						<label>Password:</label>
+                        <input type="password" placeholder="Password" class="form-control validate[minSize[5],maxSize[15]]" name="password" id="password" >
                     </div>
 					<div class="form-group">
                         <label>Repeat Password:</label>
@@ -90,6 +82,10 @@
 					<div class="form-group">
                         <label>City :</label>
                         <input type="text" placeholder="Enter ..." class="form-control" name="u_city" id="u_city" value="<?=@$user[0]->u_city?>">
+                    </div>
+					<div class="form-group">
+                        <label>Bio-graphy :</label>
+                        <textarea class="form-control" id="u_bio" name="u_bio" title="Say something about you" rows="6"><?=@$user[0]->u_bio?></textarea>
                     </div>
 					<div class="form-group">
                         <label>DOB :</label>

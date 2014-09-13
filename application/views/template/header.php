@@ -15,6 +15,11 @@
 	<link rel="stylesheet" href="<?=public_path()?>css/bootstrap.min.css">
 	<link rel="stylesheet" href="<?=public_path()?>css/btvalidation.css">
 	<link rel="stylesheet" href="<?=public_path()?>css/main_new.css">
+	<?php if (($this->router->fetch_class() == "profile")) { ?>
+		<link rel="stylesheet" href="<?=public_path()?>css/styleProfile.css">
+		<link rel="stylesheet" href="<?=public_path()?>css/BOOTSTRAP_RESET.css">
+	<?php } ?>
+
 	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <!-- //Global CSS for the page and tiles -->
     <!-- start-click-drop-down-menu -->
