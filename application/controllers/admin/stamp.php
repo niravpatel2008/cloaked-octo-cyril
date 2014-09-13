@@ -256,7 +256,7 @@ class Stamp extends CI_Controller {
 		$error = "";
 		$post = $this->input->post();
 		if($_FILES['file']['name'] != '' && $_FILES['file']['error'] == 0){
-			$config['upload_path'] = './uploads/stamp/';
+			$config['upload_path'] = UPLOADPATH;
 			$config['allowed_types'] = 'gif|jpg|png|bmp|jpeg';
 
 			$file_name_arr = explode('.',$_FILES['file']['name']);
@@ -293,7 +293,7 @@ class Stamp extends CI_Controller {
 		$post = $this->input->post();
 
 		if ($post) {
-			$imgPath = './uploads/stamp/';
+			$imgPath = UPLOADPATH;
 			
 			if(!isset($post['from']))
 				$resStamp = $this->common_model->deleteData(TICKET_COLLECTION, array('t_id' => $post['id'] )); ## Delete stamp details entry from Stamp(collection) table .
