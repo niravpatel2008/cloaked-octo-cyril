@@ -4,14 +4,14 @@ function IsEmail(email) {
 }
 
 function openLoginForm()
-{console.log(1);
+{
 	$("#divCreateAccountForm").modal('hide');
 	$("#divForgotPasswordForm").modal('hide');
     $('#divConsLogin').modal();
 }
 
 function openSignupForm()
-{console.log(2);
+{
 	$('#divConsLogin').modal('hide');
 	$("#divForgotPasswordForm").modal('hide');
     $("#divCreateAccountForm").modal();
@@ -31,7 +31,8 @@ $("#loginform").on('submit', function (e) {
 		var data =  $("#loginform").serialize();
 		$.post(url,data,function(e){
 			if(e == 'success'){
-				location.reload();
+				//location.reload();
+				location.href=base_url()+'profile';
 			}else{
 				alert("Invalid Username or Password");
 				return false;
