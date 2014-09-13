@@ -80,8 +80,12 @@ class Welcome extends CI_Controller {
 				# create session
 				$data = array('id' => $user[0]->u_id,
 								'u_fname' => $user[0]->u_fname,
+								'u_lname' => $user[0]->u_lname,
+								'u_photo' => $user[0]->u_photo,
 								'u_email' => $user[0]->u_email,
-								'u_created_date' => $user[0]->u_created_date
+								'u_url' => $user[0]->u_url,
+								'u_created_date' => $user[0]->u_created_date,
+								'u_photo' => $user[0]->u_photo
 							);
 				$this->session->set_userdata('front_session',$data);
 				echo "success";
@@ -121,6 +125,10 @@ class Welcome extends CI_Controller {
 								'u_created_date' => date('Y-m-d H:i:s')
 							);
 				$this->session->set_userdata('front_session',$data);
+
+				##Insert Blank entry as of now in link table for user photo
+				$arrData = array('link_object_id'=>$ret,'link_type'=>'user');
+				$insLinkTable = $this->common_model->insertData(TICKET_LINKS, $arrData);
 
 				$login_details = array('username' => $post['email'],
 										'password' => trim($post['password'])

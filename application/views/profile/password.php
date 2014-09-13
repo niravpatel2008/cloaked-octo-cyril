@@ -1,4 +1,6 @@
-<div class="col-lg-4 col-lg-push-4 col-md-6 col-md-push-3 col-sm-8 col-sm-push-2" style="margin-top:20px;">
+<?php $this->load->view('profile/userProfileSidebar');?>
+<aside class="profile-info col-lg-9">
+<div class="panel-body bio-graph-info" style="padding-top:0px;">
 	<div class="content-box login-form">
 		<h1 class="page-title">Change Password</h1>
 		<div id="flash_msg">
@@ -29,3 +31,4 @@
 	</form>
 	</div>
 </div>
+</aside>

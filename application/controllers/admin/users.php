@@ -94,6 +94,7 @@ class Users extends CI_Controller {
 								'u_country' => $post['u_country'],
 								'u_state' => $post['u_state'],
 								'u_city' => $post['u_city'],
+								'u_bio' => $post['u_bio'],
 								'u_birthdate' => $post['u_birthdate'],
 								'u_created_date' => date('Y-m-d H:i:s'),
 								'u_password' => sha1(trim($post['password'])),
@@ -174,6 +175,7 @@ class Users extends CI_Controller {
 								'u_country' => $post['u_country'],
 								'u_state' => $post['u_state'],
 								'u_city' => $post['u_city'],
+								'u_bio' => $post['u_bio'],
 								'u_birthdate' => $post['u_birthdate'],
 								'u_modified_date' => date('Y-m-d H:i:s')
 							);

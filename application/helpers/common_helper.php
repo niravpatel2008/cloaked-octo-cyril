@@ -117,7 +117,7 @@
 		$err_flg = 0;
 		$file_extension = pathinfo($mainimg, PATHINFO_EXTENSION);
 		$file_name = "stamp_".$k.'_'.time().".".$file_extension;
-		$stamppath = "./uploads/stamp/".$file_name;
+		$stamppath = UPLOADPATH.$file_name;
 
 		$new = imagecreatetruecolor($v['w'], $v['h']);
 				
@@ -152,7 +152,7 @@
 	## unlink images
 	function deleteImage($urlArr = '')
 	{
-		$uploadPath = './uploads/stamp/';
+		$uploadPath = UPLOADPATH;
 
 		foreach($urlArr as $k=>$v)
 		{

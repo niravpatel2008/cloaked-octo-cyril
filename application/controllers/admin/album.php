@@ -192,7 +192,7 @@ class Album extends CI_Controller {
 		$error = "";
 		$post = $this->input->post();
 		if($_FILES['file']['name'] != '' && $_FILES['file']['error'] == 0){
-			$config['upload_path'] = './uploads/stamp/';
+			$config['upload_path'] = UPLOADPATH;
 			$config['allowed_types'] = 'gif|jpg|png|bmp|jpeg';
 
 			$file_name_arr = explode('.',$_FILES['file']['name']);
@@ -231,7 +231,7 @@ class Album extends CI_Controller {
 		$post = $this->input->post();
 		//pr($post,1);
 		if ($post) {
-			$imgPath = './uploads/stamp/';
+			$imgPath = UPLOADPATH;
 
 			$stampsToDel = $this->common_model->selectData(TICKET_COLLECTION, 'GROUP_CONCAT(t_id) AS t_id', array("t_albumid" => $post['al_id'])); ## Get all stamps id belonging to album
 
