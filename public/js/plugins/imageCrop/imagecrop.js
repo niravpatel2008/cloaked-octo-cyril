@@ -81,6 +81,23 @@
 		});
 		this.$outline.on('dblclick',function(){
 			var nid = $(this).attr('id').replace('outline-',"");
+			var t_id = $(this).data('t_id');
+			if (typeof(t_id) != "undefined" && t_id != "")
+			{
+				$.ajax({
+					type: 'post',
+					url: admin_path()+'stamp/delete',
+					data: 'id='+t_id,
+					success: function (data) {
+						if (data == "success") {
+							$("#flash_msg").html(success_msg_box ('stamp deleted successfully.'));
+						}else{
+							$("#flash_msg").html(error_msg_box ('An error occurred while processing.'));
+						}
+					}
+				});
+
+			}			
 			delete $this.config.outlines[nid];
 			$(this).remove();
 		});

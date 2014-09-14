@@ -31,6 +31,8 @@ if ( $.fn.dataTable.Api ) {
 			var i, ien, node, button;
 			var clickHandler = function ( e ) {
 				e.preventDefault();
+				if($(e.target).closest('li').hasClass('disabled') || $(e.target).closest('li').hasClass('active'))
+					return false;
 				if ( e.data.action !== 'ellipsis' ) {
 					api.page( e.data.action ).draw( false );
 				}
