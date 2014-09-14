@@ -6,12 +6,11 @@
 				if($this->router->fetch_method() == 'add')
 				{
 					$title = 'Add Album';
-					$btnName = 'Create Stamp';
 				}
 				else
 				{
 					$title = 'Edit Album';
-					$btnName = 'Update Stamp';
+					$updateBtn = true;
 				}
 				echo $title;
 				?>
@@ -35,7 +34,7 @@
                 <form id='album_form' name='album_form' role="form" action="" method="post" class="box-body">
 					<input type='hidden' id='al_id' name='al_id' value='<?=(@$album[0]->al_id)?>'>
 					<input type='hidden' id='t_dimension' name='t_dimension' value='<?=(@$ticket_collection)?>'>
-					<input type='hidden' id='hdnStampIdsVal' name='hdnStampIdsVal' value=''/>
+					<input type='hidden' id='t_new_dimension' name='t_new_dimension' value=''>
 					<div class="form-group <?=(@$error_msg['t_uid'] != '')?'has-error':'' ?>">
                         <?php
                             if(@$error_msg['t_uid'] != ''){
@@ -105,16 +104,18 @@
     </div>
 	<div class='row'>
 		<ul id='img-container' class='list-unstyled clearfix'>
-			<?php foreach(@$ticket_links as $img) {?>
-				<li class='pull-left'>
-				<img id="albumImg" src='<?=(base_url()."uploads/stamp/".$img->link_url)?>' class='newimgFull' imgid = '<?=($img->link_id)?>'>
-				<br>
+			<?php if(@$ticket_links[0]->link_id != "") {?>
+			<li class='pull-left'>
+			<img id="albumImg" src='<?=(base_url()."uploads/stamp/".@$ticket_links[0]->link_url)?>' class='newimgFull' imgid = '<?=(@$ticket_links[0]->link_id)?>'>
+			<br>
+			<?php if(@$updateBtn) {?>
 				<center>
-					<a class="removeimage" link_id="<?=($img->link_id)?>" href="#" title="Delete"><i class="fa fa-trash-o"></i></a>
-					<button class="btn btn-primary btn-flat" style="margin-left:14px;" id="btn_createstamp"><?=$btnName;?></button>
+					<a class="removeimage" link_id="<?=(@$ticket_links[0]->link_id)?>" href="#" title="Delete"><i class="fa fa-trash-o"></i></a>
+					<button class="btn btn-primary btn-flat" style="margin-left:14px;" id="btn_createstamp">Update Stamp</button>
 				</center>
-				</li>
 			<?php }?>
+			</li>
+			<?php } ?>
 		</ul>
 	</div>
 	<div class='row'>

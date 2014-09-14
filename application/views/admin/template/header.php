@@ -19,7 +19,7 @@
 		<!-- datatable -->
         <link href="<?=public_path()?>css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
         <!-- Daterange picker -->
-        <link href="<?=public_path()?>css/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
+        <link href="<?=public_path()?>css/daterangepicker/datepicker.css" rel="stylesheet" type="text/css" />
         <!-- bootstrap wysihtml5 - text editor -->
         <link href="<?=public_path()?>css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" />
 
@@ -32,7 +32,8 @@
 		<?php }?>
 		
 		<?php if ($this->router->fetch_class() == "album" && in_array($this->router->fetch_method(), array("add","edit"))) { ?>
-		<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+		<!--<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">-->
+		<link rel="stylesheet" href="<?=public_path()?>css/jQueryUI/jquery-ui-1.10.3.custom.css">
 		<link href="<?=public_path()?>css/jquery.imagecrop.css" media="screen" rel="stylesheet" type="text/css" />
 		<?php }?>
 

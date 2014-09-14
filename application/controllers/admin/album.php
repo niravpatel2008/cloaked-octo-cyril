@@ -47,6 +47,7 @@ class Album extends CI_Controller {
 	public function add()
 	{
 		$post = $this->input->post();
+		
 		if ($post) {
 			#pr($post);
 			$error = array();
@@ -76,22 +77,16 @@ class Album extends CI_Controller {
 					if (count($newimages) > 0)
 						$this->common_model->assingImagesToStamp($ret,$newimages);
 
-
-					/*Images sorting.*/
-					if($post['sortOrder'] != "")
-						$this->common_model->setImageOrder($post['sortOrder'],$ret_stamp,"stamp");
-
 					## Insert entries in stamp(ticket_collection) table
-					if(isset($post['hdnStampIdsVal']) && $post['hdnStampIdsVal'] != '')
+					if(isset($post['t_new_dimension']) && $post['t_new_dimension'] != '')
 					{
-						$data = array('t_name' => $post['al_name'],
-									't_price' => $post['al_price'],
-									't_ownercountry' => $post['al_country'],
-									't_albumid' => $ret,
-									't_modified_date' => date('Y-m-d H:i:s'));
-						$where = 't_id IN ('.$post['hdnStampIdsVal'].')';
-						$ret_stamp_id = $this->common_model->updateData(TICKET_COLLECTION, $data,$where);
-					}
+						$data = $this->common_model->selectData(TICKET_LINKS, 'link_id,link_url',array("link_object_id"=>$ret,"link_type"=>"album"),"link_order","ASC");
+						$post['mainimg'] = base_url()."uploads/stamp/".$data[0]->link_url;
+						$post['t_new_dimension'] = urldecode($post['t_new_dimension']);
+						$post['stampJson'] = json_decode($post['t_new_dimension'],true);
+						$post['al_id'] = $ret;
+						$this->common_model->createAlbumStamp($post);
+					}	
 
 					$flash_arr = array('flash_type' => 'success',
 										'flash_msg' => 'Stamp added successfully.'
@@ -275,70 +270,8 @@ class Album extends CI_Controller {
 		$post = $this->input->post();
 		//pr($post,1);
 		if(isset($post['stampJson'])){
-			$jsonArr = $post['stampJson'];
-			
-			$err_flg = 0;
-			$stampIdsArr = array();
-
-			foreach($jsonArr as $k=>$v)
-			{	
-				$stampId = (isset($v['t_id']) && $v['t_id'] != "")?$v['t_id']:"";
-				unset($v["t_id"]);
-				$vJson = json_encode($v);
-				$newStamp = createStamp($post['mainimg'],$v,$k);
-				if($newStamp == "0")
-				{
-					echo "Issue occur during creating stamp";
-					exit;
-				}
-
-				if ($stampId != "")
-				{
-					$data = array('t_name' => $post['al_name'],
-									't_price' => $post['price'],
-									't_ownercountry' => $post['country'],
-									't_modified_date' => date('Y-m-d H:i:s'),
-									't_dimension'=>$vJson);
-					$where = array('t_id'=>$stampId);
-					$ret_stamp_id = $this->common_model->updateData(TICKET_COLLECTION, $data, $where);
-
-					$link_id = $this->common_model->selectData(TICKET_COLLECTION,"t_mainphoto", $where);
-					$data = array("link_url"=>$newStamp);
-					$where = array('link_id'=>$link_id[0]->t_mainphoto);
-					$old_img = $this->common_model->selectData(TICKET_LINKS,"link_url", $where);
-					deleteImage($old_img);
-					$ret = $this->common_model->updateData(TICKET_LINKS, $data, $where);
-				}
-				else
-				{
-					## Insert entries in link table
-					$linkdata =  array("link_type"=>"stamp","link_url"=>$newStamp);
-					$link_id = $this->common_model->insertData(TICKET_LINKS, $linkdata);
-
-					## Insert entries in stamp(ticket_collection) table
-					$data = array('t_name' => $post['al_name'],
-									't_price' => $post['price'],
-									't_ownercountry' => $post['country'],
-									't_uid' => (isset($post['t_uid']) && $post['t_uid'] != "")?$post['t_uid']:$this->user_session['u_id'],
-									't_mainphoto'=> $link_id,
-									't_albumid' => $post['al_id'],
-									't_created_date' => date('Y-m-d H:i:s'),
-									't_modified_date' => date('Y-m-d H:i:s'),
-									't_dimension'=>$vJson);
-					
-					$ret_stamp_id = $this->common_model->insertData(TICKET_COLLECTION, $data);
-					$stampIdsArr[] = $ret_stamp_id;
-
-					$data = array("link_object_id"=>$ret_stamp_id);
-					$where = 'link_id = '.$link_id;
-					$ret = $this->common_model->updateData(TICKET_LINKS, $data, $where);
-					
-				}
-
-				
-			}
-			if($err_flg == 0)
-				echo "success||".implode(',',$stampIdsArr);
+			$stampIdsArr = $this->common_model->createAlbumStamp($post);
+			echo "success";
 		}
 		
 		//pr($post,1);

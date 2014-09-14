@@ -1,4 +1,4 @@
-var $cropObj ;
+var $cropObj = "";
 $(document).ready(function(){
 	$("#album_form").validationEngine();
 	Dropzone.options.myAwesomeDropzone = {
@@ -17,8 +17,6 @@ $(document).ready(function(){
 
 	initCrop();
 
-	//if(typeof($cropObj) !== 'undefined')
-	//
 	if ($("#my-awesome-dropzone").length > 0)
 	{
 		setTimeout(function(){
@@ -27,11 +25,17 @@ $(document).ready(function(){
 					if (res.indexOf("Error:") === -1)
 					{
 						var file = JSON.parse(res);
+						var needHtml = "";
+						if ($('#al_id').val() != "")
+						{
+							needHtml = "<button class='btn btn-primary btn-flat' style='margin-left:14px;' id='btn_createstamp'>Create Stamp</button></center>";
+						}
+
 						var html = "<li class='pull-left'>";
 						html += "<img src='"+file.path+"' id='albumImg' class='newimgFull' imgid = '"+file.id+"'>";
 						html += "<br>";
-						html += "<center><a class='removeimage' link_id='"+file.id+"' href='#'><i class='fa fa-trash-o'></i></a><button class='btn btn-primary btn-flat' style='margin-left:14px;' id='btn_createstamp'>Create Stamp</button></center></li>";
-						$("#img-container").append(html);
+						html += "<center><a class='removeimage' link_id='"+file.id+"' href='#'><i class='fa fa-trash-o'></i></a>"+needHtml+"</li>";
+						$("#img-container").html(html);
 						$('#newimages').val($('#newimages').val() +"," +file.id);
 						initCrop();
 						doOrderImage();
@@ -41,20 +45,9 @@ $(document).ready(function(){
 		},1000)
 	}
 	
-	/*$('#img-container').delegate("img",'click',function(){
-		$('#img-container img').removeClass('selected');
-		$(this).addClass('selected');
-		$('#t_mainphoto').val($(this).attr('imgid'));
-	});*/
 
 	var mainimgid = $('#t_mainphoto').val();
 	$('#img-container img[imgid="'+mainimgid+'"]').addClass('selected');
-
-	/*$( ".t_tags").tagedit({
-		//autocompleteURL: 'server/autocomplete.php',
-	});*/
-
-	//$( "#img-container" ).sortable({stop: function( event, ui ) {doOrderImage();}});
 
 	$('#img-container').delegate(".removeimage","click",function(e){
 		e.preventDefault();
@@ -92,23 +85,38 @@ $(document).ready(function(){
 		}
 		var mainSrc = $('img#albumImg').attr('src');
 		var al_id = $('#al_id').val();
+		if (al_id == "") return; //Do not create stamp if album is not created
+		
 		var albumName = $('#al_name').val();
 		var price = $('#al_price').val();
 		var country = $('#al_country').val();
-		console.log(cropJson);
 		
 		url = admin_path()+'album/createStamp',
-		data = {stampJson:cropJson,mainimg:mainSrc,al_id:al_id,al_name:albumName,price:price,country:country};
+		data = {stampJson:cropJson,mainimg:mainSrc,al_id:al_id,al_name:albumName,al_price:price,al_country:country};
 		$.post(url,data,function(e){
-			var resE = e.split('||');
-			$('#hdnStampIdsVal').val(resE[1]);
-			if (resE[0] == "success") {
+			if (e == "success") {
 				alert("Stamps Created Successfully");
 			}else
 			{
 				alert("Please try again later");
 			}
 		});
+	});
+
+	$("#album_form").on('submit',function(){
+		if ($('#al_id').val() != "") return true;
+
+		if(typeof($cropObj[0]) == 'undefined')
+		{
+			alert("Please upload album image to create stamps");return false;
+		}
+
+		var cropJson = $cropObj[0].crop.getSelection();
+		if(cropJson == null || cropJson == '')
+		{
+			alert("Create Stamp , You must have to crop image");return false;
+		}
+		$('#t_new_dimension').val(encodeURIComponent(JSON.stringify(cropJson)));
 	});
 });
 

@@ -13,7 +13,7 @@ $(document).ready(function() {
 			 aTargets: [ -1 ]
 		  },
 		  {
-			 bSortable: false,
+			 bSearchable: false,
 			 aTargets: [ -2 ]
 		  }
 		],

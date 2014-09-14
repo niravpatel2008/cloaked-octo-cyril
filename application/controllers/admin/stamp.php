@@ -304,7 +304,7 @@ class Stamp extends CI_Controller {
 			$imgPath = $this->common_model->selectData(TICKET_LINKS, 'link_url',array($whereCol=>$post['id']));
 			if(!empty($imgPath))
 				deleteImage($imgPath);
-			$ret = $this->common_model->deleteData(TICKET_LINKS, array($whereCol => $post['id'] ));
+			$ret = $this->common_model->deleteData(TICKET_LINKS, array($whereCol => $post['id'],"link_type"=>"stamp"));
 
 			if ($ret > 0) {
 				echo "success";
