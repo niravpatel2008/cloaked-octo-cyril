@@ -77,6 +77,7 @@
 				$(".image-crop-outline").css({borderColor:'#ffffff'});
 				$this.$outline = $this.config.outlines[nid];
 				$this.$outline.css({borderColor:'#99C8FF'});
+				$($this.$outline).popover('show');
 			}
 		});
 		this.$outline.on('dblclick',function(){
@@ -146,7 +147,7 @@
 		tplHtml = this.popOverHtml(stampInfo);
 		id = "#"+$obj.attr('id');
 		tplTitle = "<div class='clearfix'>Stamp Info: <a href='javascript:void(0);' class='pull-right fa fa-times-circle' onclick='$(\""+id+"\").popover(\"hide\");' title='delete'></a><div>";
-		options = {html:true,placement:"top",trigger:"click",title:tplTitle,content:tplHtml};
+		options = {html:true,placement:"top",trigger:"manual",selector:false,title:tplTitle,content:tplHtml};
 		//console.log($obj);
 		$($obj).popover(options);
 	},
