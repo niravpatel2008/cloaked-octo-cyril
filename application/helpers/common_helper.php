@@ -121,7 +121,7 @@
 
 		$new = imagecreatetruecolor($v['w'], $v['h']);
 				
-		switch($file_extension)
+		switch(strtolower($file_extension))
 		{
 			case 'jpg':
 			case 'jpeg':

@@ -14,6 +14,8 @@
 				}
 				//echo '<pre>';print_r($userinfo);die;
 				$check = $userinfo[0]->u_gender;
+				if($check == '')
+					$check = 'm';
 			?>
 		</div>
 
@@ -61,7 +63,7 @@
 			</div>
 			<div class='form-group'>
 				<label for="country" class="control-label">Birthdate: </label> 
-				<input class='form-control' type="text" name="birthdate" id="birthdate" value="<?=$userinfo[0]->u_birthdate;?>">
+				<input class='form-control' type="text"  name="birthdate" id="birthdate" value="<?=$userinfo[0]->u_birthdate;?>" readonly>
 			</div>
 			<!--<div class='form-group'>
 				<label for="country" class="control-label">Change Your Photo </label>
@@ -75,14 +77,14 @@
 	</div>
 </div>
 
-<div class="row panel-body">
+<!--<div class="row panel-body">
   <div class="col-lg-12">
 	  <div class="panel">
 		  <div class="panel-body">
-			  <span style="text-align:center;font-size:16px;"><a href="" >Delete My Account</a></span>
+			  <span style="text-align:center;font-size:16px;"><a href="javascript:void(0);" id="btnDeleteAcc" title="Delete Account" >Delete My Account</a></span>
 		  </div>
 	  </div>
   </div>
-</div>
+</div>-->
 
 </aside>

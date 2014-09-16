@@ -121,6 +121,9 @@ class Welcome extends CI_Controller {
 				# create session
 				$data = array('id' => $ret,
 								'u_fname' => $post['name'],
+								'u_lname' => '',
+								'u_photo' => '',
+								'u_url' => '',
 								'u_email' => $post['email'],
 								'u_created_date' => date('Y-m-d H:i:s')
 							);

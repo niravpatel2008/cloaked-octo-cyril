@@ -16,6 +16,7 @@
 <?php if(in_array($this->router->fetch_class(),array('welcome'))) {?>
 <script type="text/javascript" src="<?=public_path()?>js/index.js" charset="utf-8"></script>
 <?php }?>
+
 <?php if (($this->router->fetch_class() == "profile")) { ?><script type="text/javascript" src="<?=public_path()?>js/profile.js" charset="utf-8"></script>
 	<?php } ?>
 
