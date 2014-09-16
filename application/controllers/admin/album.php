@@ -138,14 +138,14 @@ class Album extends CI_Controller {
 			}
 			
 			if ($e_flag == 0) {
-
 				$data = array('al_name' => $post['al_name'],
 								'al_country' => $post['al_country'],
 								'al_url' => $post['al_url'],
+								'al_uid' => $post['al_uid'],
 								'al_price' => $post['al_price'],
 								'al_modified_date' => date('Y-m-d H:i:s')
 							);
-
+				
 				$ret = $this->common_model->updateData(TICKET_ALBUM, $data, $where);
 
 				if ($ret > 0) {

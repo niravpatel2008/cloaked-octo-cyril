@@ -28,6 +28,12 @@
 	<script src="<?=public_path()?>js/btvalidation.js"></script>
 	<script src="<?=public_path()?>js/btvalidation.min.js"></script>
 	<script src="<?=public_path()?>js/common.js"></script>
+
+	<?php if (($this->router->fetch_class() == "profile") && in_array($this->router->fetch_method(), array("edit"))) { ?>
+		<link rel="stylesheet" href="<?=public_path()?>css/daterangepicker/datepicker.css">
+		<script src="<?=public_path()?>js/plugins/daterangepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+	<?php } ?>
+
     <!-- start-dropdown -->
     <script type="text/javascript">
     /*var $ = jQuery.noConflict();
@@ -85,7 +91,7 @@
 					<li><a href="#">Contact Us</a></li>
 					<li><a href="#">About Us</a></li>
 					<?php if($this->front_session['id'] > 0) { ?>
-						<li class="visible-xs"><a href="<?=base_url()?>profile/edit">Edit Profile</a></li>
+						<li class="visible-xs"><a href="<?=base_url()?>profile/">Profile</a></li>
 						<li class="visible-xs"><a href="<?=base_url()?>profile/change_password" >Change Password</a></li>
 						<li class="visible-xs"><a href="<?=base_url()?>profile/logout" >Log Out</a></li>
 					<?php }else{ ?>
@@ -103,7 +109,7 @@
 									<b class="caret"></b>
 								 </a>
 								<ul class="dropdown-menu">
-									<li class=""><a href="<?=base_url()?>profile/edit">Edit Profile</a></li>
+									<li class=""><a href="<?=base_url()?>profile/">Profile</a></li>
 									<li class=""><a href="<?=base_url()?>profile/change_password">Change Password</a></li>
 									<li><a href="<?=base_url()?>profile/logout">Logout</a></li>
 								</ul>

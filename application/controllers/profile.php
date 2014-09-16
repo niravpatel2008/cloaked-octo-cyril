@@ -53,15 +53,13 @@ class Profile extends CI_Controller {
 						$data=array('link_object_id'=>$this->front_session['id'],
 										 'link_type'=>'user',
 										 'link_url'=>$file_name);
-						$res = $this->common_model->updateData(TICKET_LINKS,$data, 'link_object_id = 
-						'.$this->front_session['id']);
+						$where = 'link_object_id = '.$this->front_session['id']. ' AND link_type="user" ';
+						$res = $this->common_model->updateData(TICKET_LINKS,$data, $where);
 
 						$tmpSessionArr = $this->front_session;
 						$tmpSessionArr['u_photo'] = $file_name;
 						$this->session->set_userdata('front_session',$tmpSessionArr);
 						$this->front_session = $this->session->userdata('front_session');
-
-						$this->front_session['u_fname'] = $file_name;
 						redirect(base_url()."profile");
 					}
 
@@ -92,34 +90,6 @@ class Profile extends CI_Controller {
 				$e_flag=1;
 			}
 			
-			/*if ($_FILES['profile_image']['error'] > 0) {
-				$error['profile_image'] = 'Error in image upload.';
-				$e_flag=1;
-			}
-
-			$config['file_name'] = $this->front_session['profile_picture'];
-			if ($_FILES['profile_image']['error'] == 0) {
-				if ($this->front_session['profile_picture'] != "") {
-					unlink(DOC_ROOT_PROFILE_IMG.$this->front_session['profile_picture']);
-				}
-				$config['overwrite'] = TRUE;
-				$config['upload_path'] = DOC_ROOT_PROFILE_IMG;
-				$config['allowed_types'] = '*';
-
-				$img_arr = explode('.',$_FILES['profile_image']['name']);
-				$img_arr = array_reverse($img_arr);
-
-				$config['file_name'] = $this->front_session['id']."_img.".$img_arr[0];
-
-				$this->load->library('upload', $config);
-
-				if ( ! $this->upload->do_upload("profile_image"))
-				{
-					$error['profile_image'] = $this->upload->display_errors();
-					$e_flag=1;
-				}
-			}*/
-
 			if ($e_flag == 0) {
 
 				$data = array('u_fname' => $post['fname'],
@@ -147,7 +117,7 @@ class Profile extends CI_Controller {
 								'u_state' => $post['state'],
 								'u_city' => $post['city'],
 								'u_gender' => $post['gender'],
-								'u_url' => $post['u_url']
+								'u_url' => $post['website']
 								);
 					$this->session->set_userdata('front_session',$session_data);
 					$this->front_session = $this->session->userdata('front_session');
@@ -236,6 +206,25 @@ class Profile extends CI_Controller {
 	{
 		$this->session->unset_userdata('front_session');
 		redirect(base_url());
+	}
+
+	public function updateBio()
+	{
+		$post = $this->input->post();
+		if($post)
+		{
+			if(isset($post['bio']) && $post['bio'] != '')
+			{
+				$res = $this->common_model->updateData(USERS, array('u_bio'=>trim($post['bio'])), 'u_id = '.$this->front_session['id']);
+				echo $res;
+				exit;
+			}else {
+			echo '0';exit;
+			}
+		}else
+		{
+			echo '0';exit;
+		}
 	}
 }
 

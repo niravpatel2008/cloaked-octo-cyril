@@ -7,16 +7,20 @@
 <?php 
 //pr($userinfo);
 $info = get_object_vars($userinfo[0]);
+if($info['u_birthdate'] != '')
+	$bDate = date('jS M,Y',strtotime($info['u_birthdate']));
+else
+	$bDate = '';
 ?>
 <div class="row">
                   <?php $this->load->view('profile/userProfileSidebar');?>
                   <aside class="profile-info col-lg-9">
                       <section class="panel">
                           <form>
-                              <textarea class="form-control input-lg p-text-area" rows="2" placeholder="Hi!! What About You ??"></textarea>
+                              <textarea id="txtBioStatus" class="form-control input-lg p-text-area" rows="2" placeholder="Share Your Biography Here !!" style="color:#89817e;"></textarea>
                           </form>
-                          <footer class="panel-footer">
-                              <button class="btn btn-danger pull-right">Post</button>
+                          <footer class="panel-footer clearfix">
+                              <button class="btn btn-danger pull-right" id="btnPost">Post</button>
                              <!-- <ul class="nav nav-pills">
                                   <li>
                                       <a href="#"><i class="fa fa-map-marker"></i></a>
@@ -34,7 +38,7 @@ $info = get_object_vars($userinfo[0]);
                           </footer>
                       </section>
                       <section class="panel">
-                          <div class="bio-graph-heading">
+                          <div class="bio-graph-heading" id="divBio">
 							<?php
 								if($info['u_bio'] == '')
 									echo "Welcome !! Share Your Historical Stamps here and Brings them to World ";
@@ -58,7 +62,7 @@ $info = get_object_vars($userinfo[0]);
                                       <p><span>Phone </span>: <?=$info['u_phone'];?></p>
                                   </div>
 								  <div class="bio-row">
-                                      <p><span>Birthday</span>: <?=date('jS M,Y',strtotime($info['u_birthdate']));?></p>
+                                      <p><span>Birthday</span>: <?=$bDate;?></p>
                                   </div>
                                   <div class="bio-row">
                                       <p><span>Country </span>: <?=$info['u_country'];?></p>

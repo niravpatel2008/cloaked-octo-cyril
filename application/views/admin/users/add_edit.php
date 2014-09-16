@@ -87,10 +87,6 @@
                         <label>Bio-graphy :</label>
                         <textarea class="form-control" id="u_bio" name="u_bio" title="Say something about you" rows="6"><?=@$user[0]->u_bio?></textarea>
                     </div>
-					<div class="form-group">
-                        <label>DOB :</label>
-                        <input type="text" placeholder="Enter ..." class="form-control" name="u_birthdate" id="u_birthdate" value="<?=@$user[0]->u_birthdate?>">
-                    </div>
 					
                     <div class="form-group">
                         <button class="btn btn-primary btn-flat" type="submit" id="submit">Submit</button>

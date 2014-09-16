@@ -3,7 +3,7 @@
     <script src="<?=public_path()?>js/jquery-ui-1.10.3.js" type="text/javascript"></script>
     <script src="<?=public_path()?>js/bootstrap.min.js" type="text/javascript"></script>
     <script src="<?=public_path()?>js/plugins/jqueryKnob/jquery.knob.js" type="text/javascript"></script>
-    <script src="<?=public_path()?>js/plugins/daterangepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+ <!--   <script src="<?=public_path()?>js/plugins/daterangepicker/bootstrap-datepicker.js" type="text/javascript"></script>-->
     <script src="<?=public_path()?>js/plugins/datatables/jquery.dataTables.js" type="text/javascript"></script>
     <script src="<?=public_path()?>js/plugins/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
     <script src="<?=public_path()?>js/plugins/datatables/jquery.dataTables.columnFilter.js" type="text/javascript"></script>

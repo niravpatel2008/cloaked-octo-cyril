@@ -6,6 +6,7 @@
 				$uphoto = $this->front_session['u_photo'];
 			else
 				$uphoto = 'nophoto.jpg';
+			$mywebsite = $this->front_session['u_url'];
 		?>
 		  <a href="#">
 			<img id="imgUserPhoto" alt="Profile Pic" imgname="<?=$uphoto?>" src="<?=base_url().UPLOADPATH.$uphoto;?>">
@@ -14,7 +15,10 @@
 		 <span id="changePic"><a href="#" data-target="#dlgProfilePic" data-toggle="modal" style="color:#fff;">Change Picture</a></span>
 		  <h1><?= ucwords($this->front_session['u_fname'].' '.$this->front_session['u_lname']);?></h1>
 		  <p><?=$this->front_session['u_email'];?></p>
-		  <p><a href="<?=$this->front_session['u_url'];?>" style="" id="myurlLink">View My Website</a></p>
+		  <?php
+			if($mywebsite != '')
+				echo '<p><a href="'.$mywebsite.'" style="" id="myurlLink" target="_blank">View My Website</a></p>';
+				?>
 	  </div>
 
 	  <ul class="nav nav-pills nav-stacked">
