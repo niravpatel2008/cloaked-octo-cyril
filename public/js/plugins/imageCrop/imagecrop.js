@@ -77,6 +77,7 @@
 				$(".image-crop-outline").css({borderColor:'#ffffff'});
 				$this.$outline = $this.config.outlines[nid];
 				$this.$outline.css({borderColor:'#99C8FF'});
+				$($this.$outline).popover('show');
 			}
 		});
 		this.$outline.on('dblclick',function(){
@@ -101,6 +102,7 @@
 			delete $this.config.outlines[nid];
 			$(this).remove();
 		});
+		$this.popOverInit($this.$outline);
 		if (v && v.x)
 		{
 			$this.$outline.css({
@@ -139,6 +141,57 @@
 		$(this.config.selections[0]).each(function(e,v){
 			$this.addNewSelection(v.id,JSON.parse(v.area));
 		});
+	},
+	popOverInit: function($obj) {
+		stampInfo = $($obj).data("stamp");
+		tplHtml = this.popOverHtml(stampInfo);
+		id = "#"+$obj.attr('id');
+		tplTitle = "<div class='clearfix'>Stamp Info: <a href='javascript:void(0);' class='pull-right fa fa-times-circle' onclick='$(\""+id+"\").popover(\"hide\");' title='delete'></a><div>";
+		options = {html:true,placement:"top",trigger:"manual",selector:false,title:tplTitle,content:tplHtml};
+		//console.log($obj);
+		$($obj).popover(options);
+	},
+	popOverHtml: function(stampInfo){
+		CountryData = (typeof(stampInfo) != 'undefined')?stampInfo.CountryData:"";
+		NameData = (typeof(stampInfo) != 'undefined')?stampInfo.CountryData:"";
+		PriceData = (typeof(stampInfo) != 'undefined')?stampInfo.CountryData:"";
+		YearData = (typeof(stampInfo) != 'undefined')?stampInfo.CountryData:"";
+
+		Name = '<div class="form-group">';
+		Name += '<input id="al_country" class="form-control" type="text" title="Name" value="'+NameData+'" name="al_country" placeholder="Name">';
+		Name += '</div>';
+
+		Price = '<div class="form-group">';
+		Price += '<input id="al_country" class="form-control" type="text" title="Price" value="'+PriceData+'" name="al_country" placeholder="Price">';
+		Price += '</div>';
+
+		Year = '<div class="form-group">';
+		Year += '<input id="al_country" class="form-control" type="text" title="Year" value="'+YearData+'" name="al_country" placeholder="Year">';
+		Year += '</div>';
+
+		Country = '<div class="form-group">';
+		Country += '<input id="al_country" class="form-control" type="text" title="Country" value="'+CountryData+'" name="al_country" placeholder="Country">';
+		Country += '</div>';
+
+		Bio = '<div class="form-group">';
+		Bio += '<textbox id="al_country" class="form-control" type="text" title="Bio" name="al_country" placeholder="Bio">'+CountryData+'</textbox>';
+		Bio += '</div>';
+
+		SubmitBtn = "<div class='form-group clearfix'>";
+		SubmitBtn += "<button class='btn btn-primary pull-left' type='submit'><i class=' fa fa-save'></i></button>";
+		SubmitBtn += "<button class='btn btn-primary pull-right'><i class=' fa fa-trash-o'></i></button>";
+		SubmitBtn += '</div>';
+
+		html = "<div class='col-md-12'>";
+		html += Name;
+		html += Price;
+		html += Year;
+		html += Country;
+		html += Bio;
+		html += SubmitBtn;
+		html += "</div>";
+
+		return html;
 	}
 	 
   }
