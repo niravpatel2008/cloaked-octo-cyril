@@ -51,7 +51,7 @@ $("#signupform").validationEngine();
 		$.post(url,data,function(e){
 				if(e == 'success'){
 					alert("Account Successfully Created");
-					location.reload();
+					location.href=base_url()+'profile';
 				}else{
 					alert(e);
 					return false;
