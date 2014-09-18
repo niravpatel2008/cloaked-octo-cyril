@@ -21,16 +21,33 @@
 				?>
 	  </div>
 
-	  <ul class="nav nav-pills nav-stacked">
+	  <ul class="nav nav-pills nav-stacked" id="mainCont">
 		  <li class="active"><a href="<?=base_url()?>profile"> <i class="fa fa-user"></i> Profile View</a></li>
 		  <li><a href="<?=base_url()?>profile/edit"> <i class="fa fa-edit"></i>Edit Profile</a></li>
 		  <li><a href="<?=base_url()?>profile/change_password"> <i class="fa fa-edit"></i>Change Password</a></li>
-		  <li><a href="#"> <i class="fa fa-calendar"></i>Album</a></li>
-		  <li><a href="#"> <i class="fa fa-calendar"></i> Stamps</a></li>
+		  <li style="" id="accordion1">
+			<a href="#childAlbum" data-toggle="collapse"  data-parent="#accordion1">
+				<i class="fa fa-calendar"></i>Album
+			</a>
+			<?php
+				if(!empty($this->session_album))
+				{
+					echo '<ul class="collapse" id="childAlbum" style="padding-left: 50px;">';
+					foreach($this->session_album as $k => $v)
+					{
+						echo "<li><a href=".base_url()."profile/myalbum/".$v->al_name."><i class='fa fa-book'></i> ".$v->al_name." </a></li>"; 
+					 }
+					echo "</ul>";
+				}
+			?>
+		</li>
+		  <li><a href="<?=base_url()?>profile/mystamp"> <i class="fa fa-picture-o"></i> Stamps</a></li>
 	  </ul>
 
   </section>
 </aside>
+
+
 <div id="dlgProfilePic" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">

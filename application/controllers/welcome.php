@@ -88,6 +88,10 @@ class Welcome extends CI_Controller {
 								'u_photo' => $user[0]->u_photo
 							);
 				$this->session->set_userdata('front_session',$data);
+				// Get all album of login user
+				$result = $this->common_model->selectData(TICKET_ALBUM,"*",'al_uid =' .$user[0]->u_id);
+				$this->session->set_userdata('session_album',$result);
+				//pr($this->session->userdata('session_album'),1);
 				echo "success";
 			}else{
 				echo "Invalid username or password";
@@ -211,6 +215,16 @@ class Welcome extends CI_Controller {
 		}
 		$data['view'] = 'contactus';
 		$this->load->view('content',$data);
+	}
+
+	public function getuinfo()
+	{
+		$post = $this->input->post();
+		if ($post)
+		{
+		
+		exit;
+		}
 	}
 }
 

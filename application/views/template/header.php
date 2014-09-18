@@ -29,10 +29,6 @@
 	<script src="<?=public_path()?>js/btvalidation.min.js"></script>
 	<script src="<?=public_path()?>js/common.js"></script>
 
-	<?php if (($this->router->fetch_class() == "profile") && in_array($this->router->fetch_method(), array("edit"))) { ?>
-		<link rel="stylesheet" href="<?=public_path()?>css/daterangepicker/datepicker.css">
-		<script src="<?=public_path()?>js/plugins/daterangepicker/bootstrap-datepicker.js" type="text/javascript"></script>
-	<?php } ?>
 
     <!-- start-dropdown -->
     <script type="text/javascript">

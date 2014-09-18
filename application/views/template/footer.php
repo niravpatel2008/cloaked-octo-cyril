@@ -17,7 +17,11 @@
 <script type="text/javascript" src="<?=public_path()?>js/index.js" charset="utf-8"></script>
 <?php }?>
 
-<?php if (($this->router->fetch_class() == "profile")) { ?><script type="text/javascript" src="<?=public_path()?>js/profile.js" charset="utf-8"></script>
+<?php if (($this->router->fetch_class() == "profile")) { ?>
+	<link rel="stylesheet" href="<?=public_path()?>css/daterangepicker/datepicker.css">
+	<script src="<?=public_path()?>js/plugins/daterangepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+	<script type="text/javascript" src="<?=public_path()?>js/profile.js" charset="utf-8"></script>
+	
 	<?php } ?>
 
 <script src="http://www.laravel-tricks.com/js/vendor/masonry.pkgd.min.js"></script>
