@@ -90,9 +90,10 @@ $(document).ready(function(){
 		var albumName = $('#al_name').val();
 		var price = $('#al_price').val();
 		var country = $('#al_country').val();
+		var al_uid = $('#al_uid').val();
 		
 		url = admin_path()+'album/createStamp',
-		data = {stampJson:cropJson,mainimg:mainSrc,al_id:al_id,al_name:albumName,al_price:price,al_country:country};
+		data = {stampJson:cropJson,mainimg:mainSrc,al_id:al_id,al_name:albumName,al_price:price,al_country:country,al_uid:al_uid};
 		$.post(url,data,function(e){
 			if (e == "success") {
 				alert("Stamps Created Successfully");

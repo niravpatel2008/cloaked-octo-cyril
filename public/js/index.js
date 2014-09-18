@@ -4,6 +4,13 @@ $(document).ready(function(){
 	$('#hdnCurrPage').val('1');
 	getStamps('');
 
+	$('.unameStamp').bind('click',function(){
+		var url = base_url()+'welcome/getuinfo';
+		var uid = this.attr('uid');
+		var data = {from:"user",uid:uid};
+		getStamps('');
+	});
+
 	$(window).scroll(function () {
 		var curPage = $('#hdnCurrPage').val();
 		if((curPage * $('#hdnRecLimit').val()) <= $('#hdnTotalRec').val())
@@ -76,7 +83,7 @@ function displayStamps(result)
 					stampHtml += element.t_name;
 				stampHtml += '</a>';
 				stampHtml += '<div style="text-align: center; margin-bottom: 15px;"><img src="'+imgPath+element.stamp_photo+'" alt="'+element.t_name+'" title="'+element.t_name+'" height="180" width="200"/></div>';
-				stampHtml += '<div class="trick-card-stats trick-card-by" style="text-align:center;border-top-style:solid;border-top-width:1px;border-top-color:#eee;">Posted by <b><a href="#">'+element.uname+'</a></b> From <b><a href="#">'+element.t_ownercountry+'</a></b>';
+				stampHtml += '<div class="trick-card-stats trick-card-by" style="text-align:center;border-top-style:solid;border-top-width:1px;border-top-color:#eee;">Posted by <b><a href="javascript:void(0);" id="" class="unameStamp" uid="'+element.t_uid+'">'+element.uname+'</a></b> From <b><a href="#">'+element.t_ownercountry+'</a></b>';
 				stampHtml += '</div>';
 				stampHtml += '<div class="trick-card-stats clearfix" style="text-align:center;">';
 					stampHtml += '<div class="trick-card-timeago">Posted On  '+element.t_modified_date;

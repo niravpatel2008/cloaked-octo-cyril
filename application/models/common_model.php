@@ -285,6 +285,7 @@ class common_model extends CI_Model{
 									't_price' => $post['al_price'],
 									't_ownercountry' => $post['al_country'],
 									't_modified_date' => date('Y-m-d H:i:s'),
+									't_uid' => (isset($post['al_uid']) && $post['al_uid'] != "")?$post['al_uid']:$this->user_session['u_id'],
 									't_dimension'=>$vJson);
 					$where = array('t_id'=>$stampId);
 					$ret_stamp_id = $this->common_model->updateData(TICKET_COLLECTION, $data, $where);
@@ -306,7 +307,7 @@ class common_model extends CI_Model{
 					$data = array('t_name' => $post['al_name'],
 									't_price' => $post['al_price'],
 									't_ownercountry' => $post['al_country'],
-									't_uid' => (isset($post['t_uid']) && $post['t_uid'] != "")?$post['t_uid']:$this->user_session['u_id'],
+									't_uid' => (isset($post['al_uid']) && $post['al_uid'] != "")?$post['al_uid']:$this->user_session['u_id'],
 									't_mainphoto'=> $link_id,
 									't_albumid' => $post['al_id'],
 									't_created_date' => date('Y-m-d H:i:s'),

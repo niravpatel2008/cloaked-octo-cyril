@@ -6,17 +6,21 @@ class Profile extends CI_Controller {
 		parent::__construct();
 
 		$this->front_session = $this->session->userdata('front_session');
+		$this->session_album = $this->session->userdata('session_album');
 		is_front_login();
 	}
 
 
 	public function index()
 	{
+		// Get login userinfo
 		$result = $this->common_model->selectData(USERS,"*",'u_id = '.$this->front_session['id']);
 		$data['userinfo'] = $result;
+		//pr($this->session_album,1);
 		$data['view'] = "index";
 		$this->load->view('content', $data);
 	}
+
 	public function fileupload()
 	{
 		$file = $_FILES;
@@ -176,16 +180,12 @@ class Profile extends CI_Controller {
 					$flash_arr = array('flash_type' => 'success',
 										'flash_msg' => 'Password updated successfully.'
 									);
-					#$this->session->set_flashdata($flash_arr);
 				}else{
 					$flash_arr = array('flash_type' => 'error',
 										'flash_msg' => 'An error occurred while processing.'
 									);
-					#$this->session->set_flashdata($flash_arr);
 				}
 			}
-			/*if($e_flag == 0 && $flash_arr['flash_type'] == 'success')
-				redirect(base_url());*/
 			$data['error_msg'] = $error;
 			$data['flash_msg'] = @$flash_arr;
 			$data = json_encode($data);
@@ -195,16 +195,13 @@ class Profile extends CI_Controller {
 		
 			$data['view'] = "password";
 			$this->load->view('content', $data);
-		
-		
-		//$this->load->view('content', $data);
-		
 	}
 
 
 	public function logout()
 	{
 		$this->session->unset_userdata('front_session');
+		$this->session->unset_userdata('session_album');
 		redirect(base_url());
 	}
 
@@ -225,6 +222,16 @@ class Profile extends CI_Controller {
 		{
 			echo '0';exit;
 		}
+	}
+
+	public function myalbum()
+	{
+		
+	}
+
+	public function mystamp()
+	{
+		
 	}
 }
 
