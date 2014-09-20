@@ -15,6 +15,7 @@
 	<input type="hidden" id="hdnCurrPage" name="hdnCurrPage" value="1" />
 	<input type="hidden" id="hdnRecLimit" name="hdnRecLimit" value="21" />
 	<input type="hidden" id="hdnTotalRec" name="hdnTotalRec" value="" />
+	<input type="hidden" id="hdnSearchUid" name="hdnSearchUid" value="" />
 	<input type="hidden" id="hdnTag" name="hdnTag" value="<?=$hdnTag;?>" />
 	<input type="hidden" id="searchKeyword" name="searchKeyword" value="<?=$searchKeyword;?>" />
 		

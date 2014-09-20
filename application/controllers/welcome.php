@@ -34,6 +34,9 @@ class Welcome extends CI_Controller {
 				$where = array('t_tags like'=> '%'.$post['searchKeyword'].'%');
 				$orwhere = array('t_name like' => '%'.$post['searchKeyword'].'%' , 't_bio like' => '%'.$post['searchKeyword'].'%' ,'t_ownercountry like' => '%'.$post['searchKeyword'].'%' );
 			}
+
+			if(isset($post['hdnUid']) && $post['hdnUid'] != '')
+				$where = array('t_uid'=>$post['hdnUid']);
 			
 			$sortBy = (isset($post) && isset($post['sortBy']))?$post['sortBy']:"t_modified_date";
 			$sortType = (isset($post) && isset($post['sortType']))?$post['sortType']:"ASC";
@@ -222,8 +225,15 @@ class Welcome extends CI_Controller {
 		$post = $this->input->post();
 		if ($post)
 		{
-		
-		exit;
+			if(isset($post['from']) && $post['from'] == 'user' && isset($post['uid']) && $post['uid'] != '')
+			{
+				$userarr = $this->common_model->selectData(USERS, '*', array('u_id'=>$post['uid']));
+				if(!empty($userarr))
+				{
+					echo json_encode($userarr[0]);exit;	
+				}
+			}else
+				echo '0';
 		}
 	}
 }
