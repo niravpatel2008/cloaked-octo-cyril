@@ -270,7 +270,17 @@ class common_model extends CI_Model{
 			foreach($jsonArr as $k=>$v)
 			{	
 				$stampId = (isset($v['t_id']) && $v['t_id'] != "")?$v['t_id']:"";
+				$st_name = @$v["st_name"]; 
+				$st_price = @$v["st_price"];
+				$st_year = @$v["st_year"];
+				$st_country = @$v["st_country"];
+				$st_bio = @$v["st_bio"];
 				unset($v["t_id"]);
+				unset($v["st_name"]);
+				unset($v["st_price"]);
+				unset($v["st_country"]);
+				unset($v["st_bio"]);
+				unset($v["st_year"]);
 				$vJson = json_encode($v);
 				$newStamp = createStamp($post['mainimg'],$v,$k);
 				if($newStamp == "0")
@@ -281,9 +291,11 @@ class common_model extends CI_Model{
 
 				if ($stampId != "")
 				{
-					$data = array('t_name' => $post['al_name'],
-									't_price' => $post['al_price'],
-									't_ownercountry' => $post['al_country'],
+					$data = array('t_name' => ($st_name != "")?$st_name:$post['al_name'],
+									't_price' => ($st_price != "")?$st_price:$post['al_price'],
+									't_ownercountry' => ($st_country != "")?$st_country:$post['al_country'],
+									't_year' => ($st_year != "")?$st_year:"",
+									't_bio' => ($st_bio != "")?$st_bio:"",
 									't_modified_date' => date('Y-m-d H:i:s'),
 									't_uid' => (isset($post['al_uid']) && $post['al_uid'] != "")?$post['al_uid']:$this->user_session['u_id'],
 									't_dimension'=>$vJson);
@@ -304,9 +316,11 @@ class common_model extends CI_Model{
 					$link_id = $this->common_model->insertData(TICKET_LINKS, $linkdata);
 
 					## Insert entries in stamp(ticket_collection) table
-					$data = array('t_name' => $post['al_name'],
-									't_price' => $post['al_price'],
-									't_ownercountry' => $post['al_country'],
+					$data = array('t_name' => ($st_name != "")?$st_name:$post['al_name'],
+									't_price' => ($st_price != "")?$st_price:$post['al_price'],
+									't_ownercountry' => ($st_country != "")?$st_country:$post['al_country'],
+									't_year' => ($st_year != "")?$st_year:"",
+									't_bio' => ($st_bio != "")?$st_bio:"",
 									't_uid' => (isset($post['al_uid']) && $post['al_uid'] != "")?$post['al_uid']:$this->user_session['u_id'],
 									't_mainphoto'=> $link_id,
 									't_albumid' => $post['al_id'],

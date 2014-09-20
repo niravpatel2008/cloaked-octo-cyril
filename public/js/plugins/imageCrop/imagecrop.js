@@ -31,6 +31,9 @@
 			{
 				this.setAllSelection(this);
 			}
+
+			$("#img-container").delegate('.stamp-save',"click",function(event){$this.saveStamp($this,event)});
+			$("#img-container").delegate('.stamp-remove',"click",function(event){$this.removeStamp($this,event)});
 			return this;
     },
 	getElementOffset: function(object) {
@@ -49,7 +52,19 @@
 
 		return [x, y];
 	},
-	addNewSelection: function(t_id,v) {
+	addNewSelection: function(v) {
+		
+		if(v)
+		{
+			t_id = v.id;
+			st_name = v.st_name;
+			st_year = v.st_year;
+			st_price = v.st_price;
+			st_country = v.st_country;
+			st_bio = v.st_bio;
+			v = JSON.parse(v.area);
+		}
+
 		$this = this;
 		var id = this.config.count++;
 		$(".image-crop-outline").css({borderColor:'#ffffff'});
@@ -64,7 +79,14 @@
 			.insertAfter(this.$image);
 
 		if(t_id)
+		{	
 			this.$outline.data("t_id",t_id);
+			this.$outline.data("country",st_country);
+			this.$outline.data("name",st_name);
+			this.$outline.data("price",st_price);
+			this.$outline.data("year",st_year);
+			this.$outline.data("bio",st_bio);
+		}
 
 		this.config.outlines[id]=this.$outline;
 		//console.log($image);
@@ -77,31 +99,28 @@
 				$(".image-crop-outline").css({borderColor:'#ffffff'});
 				$this.$outline = $this.config.outlines[nid];
 				$this.$outline.css({borderColor:'#99C8FF'});
+			}
+			var isVisible = $this.$outline.next('div.popover:visible').length;
+			if (!isVisible)
+			{	
 				$($this.$outline).popover('show');
+				$obj = $this.$outline;
+				CountryData = (typeof($($obj).data('country')) != 'undefined')?$($obj).data('country'):"";
+				NameData = (typeof($($obj).data('name')) != 'undefined')?$($obj).data('name'):"";
+				PriceData = (typeof($($obj).data('price')) != 'undefined')?$($obj).data('price'):"";
+				YearData = (typeof($($obj).data('year')) != 'undefined')?$($obj).data('year'):"";
+				BioData = (typeof($($obj).data('bio')) != 'undefined')?$($obj).data('bio'):"";
+
+				popOverForm = $obj.next('div.popover:visible')
+				$(popOverForm).find(".st_country").val(CountryData);
+				$(popOverForm).find(".st_name").val(NameData);
+				$(popOverForm).find(".st_price").val(PriceData);
+				$(popOverForm).find(".st_year").val(YearData);
+				$(popOverForm).find(".st_bio").val(BioData);
+				
 			}
 		});
-		this.$outline.on('dblclick',function(){
-			var nid = $(this).attr('id').replace('outline-',"");
-			var t_id = $(this).data('t_id');
-			if (typeof(t_id) != "undefined" && t_id != "")
-			{
-				$.ajax({
-					type: 'post',
-					url: admin_path()+'stamp/delete',
-					data: 'id='+t_id,
-					success: function (data) {
-						if (data == "success") {
-							$("#flash_msg").html(success_msg_box ('stamp deleted successfully.'));
-						}else{
-							$("#flash_msg").html(error_msg_box ('An error occurred while processing.'));
-						}
-					}
-				});
-
-			}			
-			delete $this.config.outlines[nid];
-			$(this).remove();
-		});
+		
 		$this.popOverInit($this.$outline);
 		if (v && v.x)
 		{
@@ -131,7 +150,16 @@
 		$.each(this.config.outlines,function(e,v){
 			if (typeof(v) != "undefined")
 			{
-				$pos.push({x:$(v).css('left') ,y:$(v).css('top') ,w:$(v).width()+4 ,h:$(v).height()+4, t_id:$(v).data('t_id') });
+				$pos.push({x:$(v).css('left') ,
+						   y:$(v).css('top') ,
+						   w:$(v).width()+4 ,
+					       h:$(v).height()+4, 
+						   t_id:$(v).data('t_id') ,
+						   st_country:$(v).data('country') ,
+						   st_name:$(v).data('name') ,
+						   st_price:$(v).data('price') ,
+						   st_year:$(v).data('year') ,
+						   st_bio:$(v).data('bio') });
 			}
 		})
 		return $pos;
@@ -139,47 +167,49 @@
 	setAllSelection: function() {
 		$this = this;
 		$(this.config.selections[0]).each(function(e,v){
-			$this.addNewSelection(v.id,JSON.parse(v.area));
+			$this.addNewSelection(v);
 		});
 	},
 	popOverInit: function($obj) {
-		stampInfo = $($obj).data("stamp");
-		tplHtml = this.popOverHtml(stampInfo);
+		nid = $($obj).attr('id').replace('outline-',"");
+		tplHtml = this.popOverHtml(nid,$obj);
+
 		id = "#"+$obj.attr('id');
 		tplTitle = "<div class='clearfix'>Stamp Info: <a href='javascript:void(0);' class='pull-right fa fa-times-circle' onclick='$(\""+id+"\").popover(\"hide\");' title='delete'></a><div>";
 		options = {html:true,placement:"top",trigger:"manual",selector:false,title:tplTitle,content:tplHtml};
 		//console.log($obj);
 		$($obj).popover(options);
 	},
-	popOverHtml: function(stampInfo){
-		CountryData = (typeof(stampInfo) != 'undefined')?stampInfo.CountryData:"";
-		NameData = (typeof(stampInfo) != 'undefined')?stampInfo.CountryData:"";
-		PriceData = (typeof(stampInfo) != 'undefined')?stampInfo.CountryData:"";
-		YearData = (typeof(stampInfo) != 'undefined')?stampInfo.CountryData:"";
-
+	popOverHtml: function(nid,$obj){
+		CountryData = (typeof($($obj).data('country')) != 'undefined')?$($obj).data('country'):"";
+		NameData = (typeof($($obj).data('name')) != 'undefined')?$($obj).data('name'):"";
+		PriceData = (typeof($($obj).data('price')) != 'undefined')?$($obj).data('price'):"";
+		YearData = (typeof($($obj).data('year')) != 'undefined')?$($obj).data('year'):"";
+		BioData = (typeof($($obj).data('bio')) != 'undefined')?$($obj).data('bio'):"";
+		
 		Name = '<div class="form-group">';
-		Name += '<input id="al_country" class="form-control" type="text" title="Name" value="'+NameData+'" name="al_country" placeholder="Name">';
+		Name += '<input class="form-control st_name" type="text" title="Name" value="'+NameData+'" name="al_country" placeholder="Name">';
 		Name += '</div>';
 
 		Price = '<div class="form-group">';
-		Price += '<input id="al_country" class="form-control" type="text" title="Price" value="'+PriceData+'" name="al_country" placeholder="Price">';
+		Price += '<input class="form-control st_price" type="text" title="Price" value="'+PriceData+'" name="al_country" placeholder="Price">';
 		Price += '</div>';
 
 		Year = '<div class="form-group">';
-		Year += '<input id="al_country" class="form-control" type="text" title="Year" value="'+YearData+'" name="al_country" placeholder="Year">';
+		Year += '<input class="form-control st_year" type="text" title="Year" value="'+YearData+'" name="al_country" placeholder="Year">';
 		Year += '</div>';
 
 		Country = '<div class="form-group">';
-		Country += '<input id="al_country" class="form-control" type="text" title="Country" value="'+CountryData+'" name="al_country" placeholder="Country">';
+		Country += '<input class="form-control st_country" type="text" title="Country" value="'+CountryData+'" name="al_country" placeholder="Country">';
 		Country += '</div>';
 
 		Bio = '<div class="form-group">';
-		Bio += '<textbox id="al_country" class="form-control" type="text" title="Bio" name="al_country" placeholder="Bio">'+CountryData+'</textbox>';
+		Bio += '<textbox class="form-control st_bio" type="text" title="Bio" name="al_country" placeholder="Bio">'+BioData+'</textbox>';
 		Bio += '</div>';
 
 		SubmitBtn = "<div class='form-group clearfix'>";
-		SubmitBtn += "<button class='btn btn-primary pull-left' type='submit'><i class=' fa fa-save'></i></button>";
-		SubmitBtn += "<button class='btn btn-primary pull-right'><i class=' fa fa-trash-o'></i></button>";
+		SubmitBtn += "<button class='btn btn-primary pull-left stamp-save' data-nid='"+nid+"'><i class=' fa fa-save'></i></button>";
+		SubmitBtn += "<button class='btn btn-primary pull-right stamp-remove' data-nid='"+nid+"'><i class=' fa fa-trash-o'></i></button>";
 		SubmitBtn += '</div>';
 
 		html = "<div class='col-md-12'>";
@@ -192,6 +222,43 @@
 		html += "</div>";
 
 		return html;
+	},
+	removeStamp: function($this,event)
+	{
+		nid = $(event.target).data('nid');
+		$obj = $this.config.outlines[nid];
+		
+		var t_id = $($obj).data('t_id');
+		if (typeof(t_id) != "undefined" && t_id != "")
+		{
+			$.ajax({
+				type: 'post',
+				url: admin_path()+'stamp/delete',
+				data: 'id='+t_id,
+				success: function (data) {
+					if (data == "success") {
+						$("#flash_msg").html(success_msg_box ('stamp deleted successfully.'));
+					}else{
+						$("#flash_msg").html(error_msg_box ('An error occurred while processing.'));
+					}
+				}
+			});
+
+		}			
+		delete $this.config.outlines[nid];
+		$($obj).popover('hide');
+		$($obj).remove();
+	},
+	saveStamp: function($this,event){
+		nid = $(event.target).data('nid');
+		$obj = $this.config.outlines[nid];
+		popOverForm = $obj.next('div.popover:visible')
+		$obj.data("country",$(popOverForm).find(".st_country").val());
+		$obj.data("name",$(popOverForm).find(".st_name").val());
+		$obj.data("price",$(popOverForm).find(".st_price").val());
+		$obj.data("year",$(popOverForm).find(".st_year").val());
+		$obj.data("bio",$(popOverForm).find(".st_bio").val());
+		$($obj).popover('hide');
 	}
 	 
   }

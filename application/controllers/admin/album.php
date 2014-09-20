@@ -174,7 +174,7 @@ class Album extends CI_Controller {
 		$data['ticket_collection'] = $this->common_model->selectData(TICKET_COLLECTION, '*',array("t_albumid"=>$id),"t_id","ASC");
 		$tmpNewArr = array();
 		foreach($data['ticket_collection'] as $k => $v)
-			$tmpNewArr[] = array("id"=>$v->t_id,"area"=>$v->t_dimension);
+			$tmpNewArr[] = array("id"=>$v->t_id,"area"=>$v->t_dimension,"st_country"=>$v->t_ownercountry,"st_price"=>$v->t_price,"st_year"=>$v->t_year,"st_bio"=>$v->t_bio,"st_name"=>$v->t_name);
 		
 		$data['ticket_collection'] = json_encode($tmpNewArr);
 
