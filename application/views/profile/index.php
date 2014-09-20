@@ -7,7 +7,7 @@
 <?php 
 //pr($userinfo);
 $info = get_object_vars($userinfo[0]);
-if($info['u_birthdate'] != '')
+if($info['u_birthdate'] != '' && $info['u_birthdate'] != '0000-00-00 00:00:00')
 	$bDate = date('jS M,Y',strtotime($info['u_birthdate']));
 else
 	$bDate = '';

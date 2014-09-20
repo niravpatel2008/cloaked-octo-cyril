@@ -4,13 +4,6 @@ $(document).ready(function(){
 	$('#hdnCurrPage').val('1');
 	getStamps('');
 
-	$('.unameStamp').bind('click',function(){
-		var url = base_url()+'welcome/getuinfo';
-		var uid = this.attr('uid');
-		var data = {from:"user",uid:uid};
-		getStamps('');
-	});
-
 	$(window).scroll(function () {
 		var curPage = $('#hdnCurrPage').val();
 		if((curPage * $('#hdnRecLimit').val()) <= $('#hdnTotalRec').val())
@@ -26,6 +19,7 @@ $(document).ready(function(){
 		else
 			return;
     });
+	
 });
 
 function getStamps(curPage)
@@ -41,22 +35,36 @@ function getStamps(curPage)
 	var limit = $('#hdnRecLimit').val();
 	
 	var hdnTag = $('#hdnTag').val();
-	
+	var hdnUid = $('#hdnSearchUid').val();
 	var searchKeyword = $('#searchKeyword').val();
 
-	var data =  {from:"user",getStamps:1,page:page,limit:limit,hdnTag:hdnTag,searchKeyword:searchKeyword};
+	var data =  {from:"user",getStamps:1,page:page,limit:limit,hdnTag:hdnTag,searchKeyword:searchKeyword,hdnUid:hdnUid};
 	isAjaxLoad = true;
 	$.post(url,data,function(e){
 		if(e != ""){
 			isAjaxLoad = false;
 			displayStamps(e);
+			$('.unameStamp').click(function(){
+				var uid = $(this).attr('uid');
+				$('#hdnSearchUid').val(uid)
+				var url = base_url()+'welcome/getuinfo';
+				var data = {from:"user",uid:uid};
+				$.post(url,data,function(e){
+					console.log(e);
+					if(e != 0)
+					{
+						
+					}
+				});
+				$('#mainStampContainer').html('');
+				getStamps('');
+			});
 		}else{
 			$('#mainStampContainer').html('<div class="col-lg-12"><div class="alert alert-danger">Ooops!! No Record Found</div></div>');
 			isAjaxLoad = false;
 			return false;
 		}
 	});
-
 }
 
 function displayStamps(result)
