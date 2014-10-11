@@ -78,7 +78,7 @@
 			})
 			.insertAfter(this.$image);
 
-		if(t_id)
+		if(typeof(t_id) != 'undefined')
 		{	
 			this.$outline.data("t_id",t_id);
 			this.$outline.data("country",st_country);

@@ -15,7 +15,8 @@
 	<link rel="stylesheet" href="<?=public_path()?>css/bootstrap.min.css">
 	<link rel="stylesheet" href="<?=public_path()?>css/btvalidation.css">
 	<link rel="stylesheet" href="<?=public_path()?>css/main_new.css">
-	<?php if (($this->router->fetch_class() == "profile")) { ?>
+	<?php if(in_array($this->router->fetch_class(),array('profile','userstamp'))){?>
+
 		<link rel="stylesheet" href="<?=public_path()?>css/styleProfile.css">
 		<link rel="stylesheet" href="<?=public_path()?>css/BOOTSTRAP_RESET.css">
 	<?php } ?>

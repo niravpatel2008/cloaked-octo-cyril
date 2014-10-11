@@ -13,18 +13,24 @@
 
 </body>
 
-<?php if(in_array($this->router->fetch_class(),array('welcome'))) {?>
+<?php if(in_array($this->router->fetch_class(),array('welcome','profile'))) {?>
 <script type="text/javascript" src="<?=public_path()?>js/index.js" charset="utf-8"></script>
 <?php }?>
 
-<?php if (($this->router->fetch_class() == "profile")) { ?>
+<?php if(in_array($this->router->fetch_class(),array('profile'))) { ?>
 	<link rel="stylesheet" href="<?=public_path()?>css/daterangepicker/datepicker.css">
 	<script src="<?=public_path()?>js/plugins/daterangepicker/bootstrap-datepicker.js" type="text/javascript"></script>
 	<script type="text/javascript" src="<?=public_path()?>js/profile.js" charset="utf-8"></script>
 	
-	<?php } ?>
+	<?php } 
+	if (in_array($this->router->fetch_method(), array("add","edit"))) { ?>
+		<script src="<?=public_path()?>js/userstamp/<?=$this->router->fetch_class()?>/add_edit.js" type="text/javascript"></script>
+		<script src="<?=public_path()?>js/plugins/tagedit/jquery.tagedit.js" type="text/javascript"></script>
+		<script src="<?=public_path()?>js/plugins/tagedit/jquery.autoGrowInput.js" type="text/javascript"></script>
+		<script src="<?=public_path()?>js/plugins/dropzone/dropzone.js" type="text/javascript"></script>
+	<?php }?>
 
 <script src="http://www.laravel-tricks.com/js/vendor/masonry.pkgd.min.js"></script>
-<script>
-$(function(){$container=$(".js-trick-container");$container.masonry({gutter:0,itemSelector:".trick-card",columnWidth:".trick-card"});$(".js-goto-trick a").click(function(e){e.stopPropagation()});$(".js-goto-trick").click(function(e){e.preventDefault();var t="http://www.laravel-tricks.com/tricks";var n=$(this).data("slug");window.location=t+"/"+n})})
+<script type="text/javascript">
+	$(function(){$container=$(".js-trick-container");$container.masonry({gutter:0,itemSelector:".trick-card",columnWidth:".trick-card"});$(".js-goto-trick a").click(function(e){e.stopPropagation()});$(".js-goto-trick").click(function(e){e.preventDefault();var t="http://www.laravel-tricks.com/tricks";var n=$(this).data("slug");window.location=t+"/"+n})})
 </script>

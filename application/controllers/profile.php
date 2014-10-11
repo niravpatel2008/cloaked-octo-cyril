@@ -231,7 +231,9 @@ class Profile extends CI_Controller {
 
 	public function mystamp()
 	{
-		
+		$post = $this->input->post();
+		$data['view'] = "mystamp";
+		$this->load->view('content', $data);
 	}
 }
 

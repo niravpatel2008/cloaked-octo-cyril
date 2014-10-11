@@ -10,7 +10,11 @@ class Welcome extends CI_Controller {
 	public function index($tag= '')
 	{
 		$post = $this->input->post();
+		$where = array();
+		$orwhere = array();
+			
 		//$post['tag'] = $tag;
+		
 		if(isset($post['getStamps']) && $post['getStamps'] == '1')
 		{
 			/*$selectFields = '*';
@@ -24,8 +28,6 @@ class Welcome extends CI_Controller {
 			if (count($stampRes) > 0) {
 				
 			}*/
-			$where = array();
-			$orwhere = array();
 			if(isset($post['hdnTag']) && $post['hdnTag'] != '')
 				$where = array('t_tags like'=> '%'.$post['hdnTag'].'%');
 
@@ -65,8 +67,17 @@ class Welcome extends CI_Controller {
 		$data['view'] = "index";
 		$data['hdnTag'] = $tag;
 		$data['searchKeyword'] = '';
+		$data['hdnUid'] = '';
 		if(isset($_GET['search']) && $_GET['search'] != '')
 			$data['searchKeyword'] = $_GET['search'];
+		if($this->uri->segment(1) == 'index' && $this->uri->segment(2) != '')
+		{
+			$data['hdnUid'] = $this->uri->segment(2);
+			$uinfoArr = $this->getuinfo($this->uri->segment(2));
+			//pr($uinfoArr);
+			$data['uinfoArr'] = $uinfoArr;
+		}
+		
 		$this->load->view('content', $data);
 	}
 
@@ -220,21 +231,19 @@ class Welcome extends CI_Controller {
 		$this->load->view('content',$data);
 	}
 
-	public function getuinfo()
+	public function getuinfo($uid = '')
 	{
-		$post = $this->input->post();
-		if ($post)
+		if($uid != '')
 		{
-			if(isset($post['from']) && $post['from'] == 'user' && isset($post['uid']) && $post['uid'] != '')
-			{
-				$userarr = $this->common_model->selectData(USERS, '*', array('u_id'=>$post['uid']));
-				if(!empty($userarr))
-				{
-					echo json_encode($userarr[0]);exit;	
-				}
-			}else
-				echo '0';
+			$userarr = array();
+			$userarr = $this->common_model->selectData(USERS, '*', array('u_id'=>$uid));
+			if(!empty($userarr))
+				return get_object_vars($userarr[0]);
+			else
+				return $userarr;
 		}
+		else
+			return false;
 	}
 }
 
