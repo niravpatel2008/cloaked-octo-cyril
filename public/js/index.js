@@ -37,28 +37,19 @@ function getStamps(curPage)
 	var hdnTag = $('#hdnTag').val();
 	var hdnUid = $('#hdnSearchUid').val();
 	var searchKeyword = $('#searchKeyword').val();
+	var from = 'user';
+	if($('#pageFrom').length > 0 )
+		from = $('#pageFrom').val();
 
-	var data =  {from:"user",getStamps:1,page:page,limit:limit,hdnTag:hdnTag,searchKeyword:searchKeyword,hdnUid:hdnUid};
+	var data =  {from:from,getStamps:1,page:page,limit:limit,hdnTag:hdnTag,searchKeyword:searchKeyword,hdnUid:hdnUid};
 	isAjaxLoad = true;
 	$.post(url,data,function(e){
 		if(e != ""){
 			isAjaxLoad = false;
-			displayStamps(e);
-			$('.unameStamp').click(function(){
-				var uid = $(this).attr('uid');
-				$('#hdnSearchUid').val(uid)
-				var url = base_url()+'welcome/getuinfo';
-				var data = {from:"user",uid:uid};
-				$.post(url,data,function(e){
-					console.log(e);
-					if(e != 0)
-					{
-						
-					}
-				});
-				$('#mainStampContainer').html('');
-				getStamps('');
-			});
+			if(from == 'userdashboard')
+				displayUserStamps(e);
+			else
+				displayStamps(e);
 		}else{
 			$('#mainStampContainer').html('<div class="col-lg-12"><div class="alert alert-danger">Ooops!! No Record Found</div></div>');
 			isAjaxLoad = false;
@@ -84,14 +75,14 @@ function displayStamps(result)
 		
 		if(index != 'totalRecordsCount')
 		{
-			stampHtml += '<div id="stampBlock" href="#" class="trick-card col-lg-4 col-md-6 col-sm-6 col-xs-12" style="">';
+			stampHtml += '<div id="stampBlock" class="trick-card col-lg-3 col-md-6 col-sm-6 col-xs-12" style="">';
 			stampHtml += '<div class="trick-card-inner js-goto-trick" data-slug="modelmap-jquerymap-style">';
 				stampHtml += '<a class="trick-card-title" href="'+base_url()+'stampDetail/viewDetail/?tid='+element.t_id+'" style="text-align:center;word-wrap:break-word;">';
 					//stampHtml += 'Title Goes Here';
 					stampHtml += element.t_name;
 				stampHtml += '</a>';
 				stampHtml += '<div style="text-align: center; margin-bottom: 15px;"><img src="'+imgPath+element.stamp_photo+'" alt="'+element.t_name+'" title="'+element.t_name+'" height="180" width="200"/></div>';
-				stampHtml += '<div class="trick-card-stats trick-card-by" style="text-align:center;border-top-style:solid;border-top-width:1px;border-top-color:#eee;">Posted by <b><a href="javascript:void(0);" id="" class="unameStamp" uid="'+element.t_uid+'">'+element.uname+'</a></b> From <b><a href="#">'+element.t_ownercountry+'</a></b>';
+				stampHtml += '<div class="trick-card-stats trick-card-by" style="text-align:center;border-top-style:solid;border-top-width:1px;border-top-color:#eee;">Posted by <b><a href="'+base_url()+'index/'+element.t_uid+'" id="" class="unameStamp" uid="'+element.t_uid+'">'+element.uname+'</a></b> From <b><a href="javascript:void(0);">'+element.t_ownercountry+'</a></b>';
 				stampHtml += '</div>';
 				stampHtml += '<div class="trick-card-stats clearfix" style="text-align:center;">';
 					stampHtml += '<div class="trick-card-timeago">Posted On  '+element.t_modified_date;
@@ -114,4 +105,49 @@ function displayStamps(result)
 		}
 	});
 	$('#mainStampContainer').append(stampHtml);
+}
+function displayUserStamps(result)
+{
+	//alert(1);
+	var flag = false;
+	var stampHtml = '';
+	var resultJson = JSON.parse(result);
+	var imgPath = base_url()+"uploads/stamp/";
+	var totalRec = resultJson.total;
+	result = resultJson.data;
+	$('#hdnTotalRec').val(totalRec);
+	$.each(result, function(index,element)
+	{ 
+		if(index != 'totalRecordsCount')
+		{
+			stampHtml += '<div id="stampBlock" class="trick-card col-lg-3 col-md-6 col-sm-6 col-xs-12" style="">';
+			stampHtml += '<div class="trick-card-inner js-goto-trick" data-slug="modelmap-jquerymap-style">';
+			
+			stampHtml += '<a class="trick-card-title" href="'+base_url()+'stampDetail/viewDetail/?tid='+element.t_id+'" style="text-align:center;word-wrap:break-word;">';
+			stampHtml += element.t_name+'</a>';
+			
+			stampHtml += '<div style="text-align: center; margin-bottom: 15px;"><img src="'+imgPath+element.stamp_photo+'" alt="'+element.t_name+'" title="'+element.t_name+'" height="180" width="200"/></div>';
+			
+			stampHtml += '<div class="trick-card-stats trick-card-by" style="text-align:center;border-top-style:solid;border-top-width:1px;border-top-color:#eee;">Country : <b><a href="javascript:void(0);">'+element.t_ownercountry+'</a></b></div>';
+
+			stampHtml += '<div class="trick-card-stats trick-card-by" style="text-align:center;border-top-style:solid;border-top-width:1px;border-top-color:#eee;">Price : <b><a href="javascript:void(0);">'+element.t_price+'</a></b></div>';
+
+			stampHtml += '<div class="trick-card-stats trick-card-by" style="text-align:center;border-top-style:solid;border-top-width:1px;border-top-color:#eee;">Stamp Year : <b><a href="javascript:void(0);">'+element.t_year+'</a></b></div>';
+			
+			stampHtml += '<div class="trick-card-stats clearfix" style="text-align:center;">';
+			stampHtml += '<div class="trick-card-timeago">Posted On  '+element.t_modified_date+'</div></div>';
+
+			stampHtml += '<div class="trick-card-tags clearfix">';
+			$.each(element.t_tags, function(i,j){
+				if(j)
+					stampHtml += '<a href="'+base_url()+'tags/'+j+'" class="tag" title="tags">'+j+'</a>';
+			});
+			stampHtml += '</div>';
+			
+			stampHtml += '<div id="divDelStamp" class="trick-card-tags clearfix"><a href="javascript:void(0);" class="delStamp tag" title="remove" id="delStamp_'+element.t_id+'">Remove Stamp</a></div>';
+			stampHtml += '</div></div>';
+		}
+	});
+	$('#mainStampContainer').append(stampHtml);
+	
 }

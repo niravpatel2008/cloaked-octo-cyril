@@ -1,6 +1,6 @@
 $(document).ready(function(){
-$("#frmAddPhoto").on('submit', function (e) {
-	
+	$("#frmAddPhoto").on('submit', function (e) {
+		
 		if($('#profile_photo').val() == "")
 		{
 			e.preventDefault();
@@ -12,9 +12,19 @@ $("#frmAddPhoto").on('submit', function (e) {
 		$('#frmAddPhoto').submit();
 		
 	});
+	
+	$('#mainStampContainer').delegate('.delStamp','click',function(){
+		var ob = $(this);
+		var del_id = ob.attr('id').split('_')[1];
+		var cnf = confirm('Are You sure want to remove this stamp?');
+		if(cnf == true)
+		{
+			delete_stamp(del_id);
+		}
+	});
 });
 
-$('#btnPost').bind('click',function(){
+$('#btnPost').on('click',function(){
 	if($('#txtBioStatus').val() == "")
 		alert("Please Insert Something to Post");
 	else
@@ -40,3 +50,17 @@ $('#birthdate').datepicker({
     startDate: '-3d',
 	autoClose:true
 })
+
+function delete_stamp (del_id) {
+	var url = base_url()+'userstamp/deletestamp';
+	var data = 'id='+del_id;
+	$.post(url,data,function(e){
+		if(e == "success"){
+			alert('Stamp removed successfully');
+			location.reload();
+		}else{
+			alert('An error occurred while processing.');
+			location.reload();
+		}
+	});	
+}
