@@ -106,7 +106,7 @@
 					<h3 class="box-title">Upload Stamp Images</h3>
 				</div>
 				<div class="box-body">
-					<form id="my-awesome-dropzone" action="<?=base_url()."admin/stamp/fileupload"?>" class="dropzone">
+					<form id="my-awesome-dropzone" action="<?=base_url()."userstamp/fileupload"?>" class="dropzone">
 						<input type='hidden' name='t_id' value='<?=(@$stamp[0]->t_id)?>'>
 					</form>
 				</div>

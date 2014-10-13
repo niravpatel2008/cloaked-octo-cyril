@@ -46,6 +46,7 @@ $route['profile'] = "profile/index";
 $route['admin'] = "admin/index";
 $route['tags/(:any)'] = "welcome/index/$1";
 $route['index/(:any)'] = "welcome/index/";
+$route['profile/addstamp/(:any)'] = "userstamp/add/$1";
 $route['profile/addstamp'] = "userstamp/add";
 
 ##$route['profile/album/(:any)'] = "profile/album/$1";
