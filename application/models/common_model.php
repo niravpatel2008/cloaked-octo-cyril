@@ -342,4 +342,14 @@ class common_model extends CI_Model{
 
 			return $stampIdsArr;
 	}
+
+	function getAutocompleteTag($term) {
+		$this->db->select("tag_id,tag_name");
+		$this->db->from(TICKET_TAG);
+		$this->db->like('tag_name', $term, 'after'); 
+		$query = $this->db->get();
+		$tags = $query->result_array();
+		$query->free_result();
+		return ($tags);
+	}
 }
