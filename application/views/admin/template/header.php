@@ -24,6 +24,7 @@
         <link href="<?=public_path()?>css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" />
 
 		<?php if ($this->router->fetch_class() == "stamp") { ?>
+			<link rel="stylesheet" href="<?=public_path()?>css/jQueryUI/jquery-ui-1.10.3.custom.css">
 			<link href="<?=public_path()?>css/tagedit/jquery.tagedit.css" rel="stylesheet" type="text/css" />
 		<?php } ?>
 
