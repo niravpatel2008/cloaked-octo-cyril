@@ -13,7 +13,11 @@
 
 </body>
 
-<?php if(in_array($this->router->fetch_class(),array('welcome','profile'))) {?>
+<?php if(in_array($this->router->fetch_class(),array('welcome'))) {?>
+<script type="text/javascript" src="<?=public_path()?>js/index.js" charset="utf-8"></script>
+<?php }?>
+
+<?php if(in_array($this->router->fetch_class(),array('profile')) && $this->router->fetch_method()=='mystamp') {?>
 <script type="text/javascript" src="<?=public_path()?>js/index.js" charset="utf-8"></script>
 <?php }?>
 
@@ -24,10 +28,18 @@
 	
 	<?php } 
 	if (in_array($this->router->fetch_method(), array("add","edit"))) { ?>
+		<link href="<?=public_path()?>css/tagedit/jquery.tagedit.css" rel="stylesheet" type="text/css" />
+		<script src="<?=public_path()?>js/jquery-ui-1.10.3.js" type="text/javascript"></script>
+		<script src="<?=public_path()?>js/plugins/validation/btvalidationEngine.js" type="text/javascript"></script>
+		<script src="<?=public_path()?>js/plugins/validation/btvalidationEngine-en.js" type="text/javascript"></script>
 		<script src="<?=public_path()?>js/userstamp/<?=$this->router->fetch_class()?>/add_edit.js" type="text/javascript"></script>
-		<script src="<?=public_path()?>js/plugins/tagedit/jquery.tagedit.js" type="text/javascript"></script>
 		<script src="<?=public_path()?>js/plugins/tagedit/jquery.autoGrowInput.js" type="text/javascript"></script>
+		<script src="<?=public_path()?>js/plugins/tagedit/jquery.tagedit.js" type="text/javascript"></script>
 		<script src="<?=public_path()?>js/plugins/dropzone/dropzone.js" type="text/javascript"></script>
+	<?php }
+	
+	if(in_array($this->router->fetch_class(),array('album'))) { ?>
+		<script src="<?=public_path()?>js/plugins/imageCrop/imagecrop.js" type="text/javascript"></script>
 	<?php }?>
 
 <script src="http://www.laravel-tricks.com/js/vendor/masonry.pkgd.min.js"></script>

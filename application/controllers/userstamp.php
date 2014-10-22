@@ -14,91 +14,65 @@ class Userstamp extends CI_Controller {
 	{
 		#pr($this->session->flashdata('flash_msg'));
 		$data['view'] = "index";
-		$this->load->view('admin/content', $data);
-	}
-
-	public function ajax_list($limit=0)
-	{
-		$post = $this->input->post();
-
-		$columns = array(
-			array( 'db' => 'u_fname', 'dt' => 0 ),
-			array( 'db' => 't_name', 'dt' => 1 ),
-			array( 'db' => 'al_name', 'dt' => 2 ),
-			array( 'db' => 't_price',  'dt' => 3 ),
-			array( 'db' => 't_year',  'dt' => 4 ),
-			array( 'db' => 't_bio',  'dt' => 5 ),
-			array( 'db' => 't_ownercountry',  'dt' => 6 ),
-			array('db'        => 't_modified_date',
-					'dt'        => 7,
-					'formatter' => function( $d, $row ) {
-						return date( 'jS M y', strtotime($d));
-					}
-			),
-			array( 'db' => 't_id',
-					'dt' => 8,
-					'formatter' => function( $d, $row ) {
-						return '<a title="Edit" href="'.site_url('/admin/stamp/edit/'.$d).'" class="fa fa-edit"></a> <a title="Delete" href="javascript:void(0);" onclick="delete_stamp('.$d.')" class="fa fa-trash-o"></a>';
-					}
-			),
-		);
-		$join1 = array(USERS,'u_id = t_uid');
-		$join2 = array(TICKET_ALBUM,'al_id = t_albumid',"LEFT");
-		echo json_encode( SSP::simple( $post, TICKET_COLLECTION, "t_id", $columns,array($join1,$join2)) );exit;
+		$this->load->view('content', $data);
 	}
 
 	public function add()
 	{
 		$post = $this->input->post();
 		if ($post) {
-			#pr($post);
 			$error = array();
 			$e_flag=0;
-
+			pr($post);
 			if(trim($post['t_name']) == ''){
 				$error['t_name'] = 'Please enter stamp name.';
 				$e_flag=1;
 			}
-			
+			$tags = '';
+			if(isset($post['t_tags']))
+				$tags = implode(',',$post['t_tags']);
 			if ($e_flag == 0) {
 				$data = array('t_name' => $post['t_name'],
 								't_price' => $post['t_price'],
 								't_year' => $post['t_year'],
 								't_bio' => $post['t_bio'],
 								't_ownercountry' => $post['t_ownercountry'],
-								't_uid' => (isset($post['t_uid']) && $post['t_uid'] != "")?$post['t_uid']:$this->user_session['u_id'],
+								't_uid' => (isset($post['t_uid']) && $post['t_uid'] != "")?$post['t_uid']:$this->front_session['id'],
 								't_mainphoto'=> $post['t_mainphoto'],
 								't_albumid' => $post['t_albumid'],
 								't_created_date' => date('Y-m-d H:i:s'),
 								't_modified_date' => date('Y-m-d H:i:s'),
-								't_tags' => implode(',',$post['t_tags']),
+								't_tags' => $tags,
 							);
 				
 				$ret_stamp = $this->common_model->insertData(TICKET_COLLECTION, $data);
 
 				if ($ret_stamp > 0) {
 					/*ADd Tags*/
-					$post_tags = $post['t_tags'];
-					foreach ($post_tags as $tag)
+					if($tags != '')
 					{
-						$tag = trim($tag);
-						$tagid = $this->common_model->selectData(TICKET_TAG,"tag_id",array("tag_name"=>$tag));
-						if(!$tagid)
+						$post_tags = $post['t_tags'];
+						foreach ($post_tags as $tag)
 						{
-							$tagdata =  array("tag_name"=>$tag);
-							$tagid = $this->common_model->insertData(TICKET_TAG, $tagdata);
-						}
-						else
-						{
-							$tagid = ($tagid[0]->tag_id);
-						}
+							$tag = trim($tag);
+							$tagid = $this->common_model->selectData(TICKET_TAG,"tag_id",array("tag_name"=>$tag));
+							if(!$tagid)
+							{
+								$tagdata =  array("tag_name"=>$tag);
+								$tagid = $this->common_model->insertData(TICKET_TAG, $tagdata);
+							}
+							else
+							{
+								$tagid = ($tagid[0]->tag_id);
+							}
 
 
-						$tagmap = $this->common_model->selectData(TICKET_TAG_MAPPING,"*",array("tm_object_id"=>$ret_stamp,"tm_tagid"=>$tagid,"tm_type"=>"stamp"));
-						if (!$tagmap)
-						{
-							$tagmapdata =  array("tm_object_id"=>$ret_stamp,"tm_tagid"=>$tagid,"tm_type"=>"stamp");
-							$this->common_model->insertData(TICKET_TAG_MAPPING, $tagmapdata);
+							$tagmap = $this->common_model->selectData(TICKET_TAG_MAPPING,"*",array("tm_object_id"=>$ret_stamp,"tm_tagid"=>$tagid,"tm_type"=>"stamp"));
+							if (!$tagmap)
+							{
+								$tagmapdata =  array("tm_object_id"=>$ret_stamp,"tm_tagid"=>$tagid,"tm_type"=>"stamp");
+								$this->common_model->insertData(TICKET_TAG_MAPPING, $tagmapdata);
+							}
 						}
 					}
 
@@ -121,23 +95,25 @@ class Userstamp extends CI_Controller {
 									);
 				}
 				$this->session->set_flashdata($flash_arr);
-				redirect("stamp");
+				//pr($flash_arr);die;
+				redirect("profile/mystamp");
 			}
 			$data['error_msg'] = $error;
 		}
 
 		$data['users'] = $this->common_model->selectData(USERS, 'u_id,u_fname,u_email');
-		//$data['albums'] = $this->common_model->selectData(TICKET_ALBUM, 'al_id,al_name',array("al_uid"=>$this->user_session['u_id']));
+		//$data['albums'] = $this->common_model->selectData(TICKET_ALBUM, 'al_id,al_name',array("al_uid"=>$this->front_session['id']));
 		$data['albums'] = $this->common_model->selectData(TICKET_ALBUM, 'al_id,al_name',array());
 		$data['ticket_links'] = array();
 		$data['view'] = "add_edit_stamp";
+		//pr($data);die;
 		$this->load->view('content', $data);
 	}
 
 	public function edit($id)
 	{
 		if ($id == "" || $id <= 0) {
-			redirect('admin/stamp');
+			redirect('profile/mystamp');
 		}
 
 		$where = 't_id = '.$id;
@@ -161,7 +137,7 @@ class Userstamp extends CI_Controller {
 								't_price' => $post['t_price'],
 								't_year' => $post['t_year'],
 								't_bio' => $post['t_bio'],
-								't_uid' => (isset($post['t_uid']) && $post['t_uid'] != "")?$post['t_uid']:$this->user_session['u_id'],
+								't_uid' => (isset($post['t_uid']) && $post['t_uid'] != "")?$post['t_uid']:$this->front_session['id'],
 								't_mainphoto'=> $post['t_mainphoto'],
 								't_ownercountry' => $post['t_ownercountry'],
 								't_albumid' => $post['t_albumid'],
@@ -233,21 +209,21 @@ class Userstamp extends CI_Controller {
 									);
 				}
 				$this->session->set_flashdata($flash_arr);
-				//redirect("admin/stamp");
+				redirect("profile/mystamp");
 			}
 			$data['error_msg'] = $error;
 		}
 		$data['stamp'] = $stamp = $this->common_model->selectData(TICKET_COLLECTION, '*', $where);
 		if (empty($stamp)) {
-			redirect('admin/stamp');
+			redirect('profile/mystamp');
 		}
 		
 		$data['users'] = $this->common_model->selectData(USERS, 'u_id,u_fname,u_email');
-		$data['albums'] = $this->common_model->selectData(TICKET_ALBUM, 'al_id,al_name',array("al_uid"=>$this->user_session['u_id']));
+		$data['albums'] = $this->common_model->selectData(TICKET_ALBUM, 'al_id,al_name',array("al_uid"=>$this->front_session['id']));
 		$data['ticket_links'] = $this->common_model->selectData(TICKET_LINKS, 'link_id,link_url',array("link_object_id"=>$id,"link_type"=>"stamp"),"link_order","ASC");
-		$data['view'] = "add_edit";
+		$data['view'] = "add_edit_stamp";
 		$data['t_tags'] = $this->common_model->getTags($id,"stamp");
-		$this->load->view('admin/content', $data);
+		$this->load->view('content', $data);
 	}
 
 	public function fileupload()

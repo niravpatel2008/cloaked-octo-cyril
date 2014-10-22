@@ -35,7 +35,7 @@
 					echo '<ul class="collapse" id="childAlbum" style="padding-left: 50px;">';
 					foreach($this->session_album as $k => $v)
 					{
-						echo "<li><a href=".base_url()."profile/myalbum/".$v->al_name."><i class='fa fa-book'></i> ".$v->al_name." </a></li>"; 
+						echo "<li><a href=".base_url()."album/edit/".$v->al_id."><i class='fa fa-book'></i> ".$v->al_name." </a></li>"; 
 					 }
 					echo "</ul>";
 				}
