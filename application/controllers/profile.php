@@ -226,7 +226,9 @@ class Profile extends CI_Controller {
 
 	public function myalbum()
 	{
-		
+		$post = $this->input->post();
+		$data['view'] = "album";
+		$this->load->view('content', $data);
 	}
 
 	public function mystamp()
