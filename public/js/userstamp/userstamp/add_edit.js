@@ -50,7 +50,7 @@ $(document).ready(function(){
 		e.preventDefault();
 		atag = $(this);
 		link_id = $(atag).attr('link_id');
-		url = admin_path()+'stamp/delete',
+		url = base_url()+'userstamp/deletestamp',
 		data = {id:link_id,from:'addedit'};
 		$.post(url,data,function(e){
 			if (e == "success") {
@@ -59,9 +59,11 @@ $(document).ready(function(){
 					$('#t_mainphoto').val("");
 				}
 				$(atag).closest('li.pull-left').remove();
-				$("#flash_msg").html(success_msg_box ('Image deleted successfully.'));
+				//$("#flash_msg").html(success_msg_box ('Image deleted successfully.'));
+				alert("Image deleted successfully.");
 			}else{
-				$("#flash_msg").html(error_msg_box ('An error occurred while processing.'));
+				//$("#flash_msg").html(error_msg_box ('An error occurred while processing.'));
+				alert('An error occurred while processing.');
 			}
 		});
 	});
