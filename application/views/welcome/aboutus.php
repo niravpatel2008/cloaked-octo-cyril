@@ -1,19 +1,8 @@
 <div class='stripe-regular items-carousel-wrap row'>
 <div class="box box-site-header">
 	<div class="box-header">
-		<center><h1 class='page-title'> Contact us </h1></center>
+		<center><h1 class='page-title'> About us </h1></center>
 	</div>
-</div>
-<div id="flash_msg">
-		<?php
-			if (@$flash_msg['flash_type'] == "success") {
-				echo $flash_msg['flash_msg'];
-			}
-
-			if (@$flash_msg['flash_type'] == "error") {
-				echo $flash_msg['flash_msg'];
-			}
-		?>
 </div>
 <div class="box">
 	<form action="#" method="post">

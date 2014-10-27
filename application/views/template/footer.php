@@ -1,6 +1,6 @@
 <div id="footer">
   <div class="container">
-    <p class="text-muted credit">Website built with <a href="http://laravel.com">Laravel</a> by <a target="_blank" href="http://twitter.com/">Stidges</a> &amp; <a target="_blank" href="http://twitter.com/">Maks Surguy</a> | <a href="#">About Us</a>
+    <p class="text-muted credit"><a target="_blank" href="<?=base_url();?>contactus">CONTACT US</a> | <a href="<?=base_url();?>aboutus">ABOUT US</a>
     <span class="pull-right">
         <a target="_blank" href="http://twitter.com/" title="Follow updates"><i class="fa fa-twitter fa-lg"></i></a>
         |

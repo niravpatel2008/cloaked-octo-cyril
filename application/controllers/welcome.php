@@ -222,12 +222,49 @@ class Welcome extends CI_Controller {
 	public function contact()
 	{
 		$post = $this->input->post();
-		if ($post)
-		{
-		
-		exit;
+		if ($post) {
+			$error = array();
+			$e_flag=0;
+
+			if(trim($post['name']) == ''){
+				$error['name'] = 'Please enter your name.';
+				$e_flag=1;
+			}
+
+			if(!valid_email(trim($post['email'])) && trim($post['email']) == ''){
+				$error['email'] = 'Please enter valid email.';
+				$e_flag=1;
+			}
+
+			if(trim($post['message']) == ''){
+				$error['message'] = 'Please enter message.';
+				$e_flag=1;
+			}
+
+			if ($e_flag == 0) {
+				$emailData = array_merge($post,array('email'=>'contact'));
+				$emailTpl = $this->load->view('email_templates/template',$emailData , true);
+				$ret = sendEmail(FROM_EMAIL, SUBJECT_CONTACT_ADMIN, $emailTpl, FROM_EMAIL, FROM_NAME);
+				if ($ret) {
+					$flash_arr = array('flash_type' => 'success',
+										'flash_msg' => "Your contact us form has been submitted successfully."
+									);
+				}else{
+					$flash_arr = array('flash_type' => 'error',
+										'flash_msg' => 'An error occurred while processing.'
+									);
+				}
+				$data['flash_msg'] = $flash_arr;
+			}
+			$data['error_msg'] = $error;
 		}
 		$data['view'] = 'contactus';
+		$this->load->view('content',$data);
+	}
+
+	public function about()
+	{
+		$data['view'] = 'aboutus';
 		$this->load->view('content',$data);
 	}
 

@@ -85,8 +85,8 @@
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="<?=base_url()?>">Home</a></li>
 					<li><a href="#">Album</a></li>
-					<li><a href="#">Contact Us</a></li>
-					<li><a href="#">About Us</a></li>
+					<li><a href="<?=base_url()?>contactus">Contact Us</a></li>
+					<li><a href="<?=base_url()?>aboutus">About Us</a></li>
 					<?php if($this->front_session['id'] > 0) { ?>
 						<li class="visible-xs"><a href="<?=base_url()?>profile/">Profile</a></li>
 						<li class="visible-xs"><a href="<?=base_url()?>profile/change_password" >Change Password</a></li>
