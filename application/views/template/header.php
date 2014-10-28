@@ -16,7 +16,8 @@
 	<link rel="stylesheet" href="<?=public_path()?>css/btvalidation.css">
 	<link rel="stylesheet" href="<?=public_path()?>css/main_new.css">
 	<?php if(in_array($this->router->fetch_class(),array('profile','userstamp','album'))){?>
-
+		<link rel="stylesheet" href="<?=public_path()?>css/jQueryUI/jquery-ui-1.10.3.custom.css">
+		<link href="<?=public_path()?>css/jquery.imagecrop.css" media="screen" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" href="<?=public_path()?>css/styleProfile.css">
 		<link rel="stylesheet" href="<?=public_path()?>css/BOOTSTRAP_RESET.css">
 	<?php } ?>
