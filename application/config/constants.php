@@ -55,6 +55,7 @@ define('USERS', 'users');
 * Email constants
 */
 define('FROM_EMAIL', 'noreply@stamp.com');
+define('SUBJECT_CONTACT_ADMIN', 'Contact us');
 define('FROM_NAME', 'stamp');
 define('SUBJECT_LOGIN_INFO', 'Login info');
 define('SUBJECT_DEAL_INFO', 'Deal info');

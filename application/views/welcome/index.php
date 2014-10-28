@@ -1,9 +1,14 @@
+<div class='row'>
+	<center>
+	<h2 class="page-title">
+				<a href="javascript:void(0);" <?php if($this->front_session['id'] > 0) {}else{?>onclick="openLoginForm();" <?php }?>>Put your stamps here and brings it to the world</a>
+	</h2>
+	</center>
+</div>
 <div class="row push-down">
+		
 		<div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
 			<h1 class="page-title">Stamps</h1>
-			<h2 class="page-title" style="margin: 0px auto; float: right;" >
-				<a href="javascript:void(0);" <?php if($this->front_session['id'] > 0) {}else{?>onclick="openLoginForm();" <?php }?>>Share Your Stamps With Us</a>
-			</h2>
 		</div>
 		
 

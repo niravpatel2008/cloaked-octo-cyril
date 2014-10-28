@@ -16,7 +16,8 @@
 	<link rel="stylesheet" href="<?=public_path()?>css/btvalidation.css">
 	<link rel="stylesheet" href="<?=public_path()?>css/main_new.css">
 	<?php if(in_array($this->router->fetch_class(),array('profile','userstamp','album'))){?>
-
+		<link rel="stylesheet" href="<?=public_path()?>css/jQueryUI/jquery-ui-1.10.3.custom.css">
+		<link href="<?=public_path()?>css/jquery.imagecrop.css" media="screen" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" href="<?=public_path()?>css/styleProfile.css">
 		<link rel="stylesheet" href="<?=public_path()?>css/BOOTSTRAP_RESET.css">
 	<?php } ?>
@@ -85,8 +86,8 @@
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="<?=base_url()?>">Home</a></li>
 					<li><a href="#">Album</a></li>
-					<li><a href="#">Contact Us</a></li>
-					<li><a href="#">About Us</a></li>
+					<li><a href="<?=base_url()?>contactus">Contact Us</a></li>
+					<li><a href="<?=base_url()?>aboutus">About Us</a></li>
 					<?php if($this->front_session['id'] > 0) { ?>
 						<li class="visible-xs"><a href="<?=base_url()?>profile/">Profile</a></li>
 						<li class="visible-xs"><a href="<?=base_url()?>profile/change_password" >Change Password</a></li>
