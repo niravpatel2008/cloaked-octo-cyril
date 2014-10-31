@@ -30,6 +30,7 @@
 
 		<?php if (in_array($this->router->fetch_method(), array("add","edit"))) { ?>
 			<link href="<?=public_path()?>css/validation/validationEngine.css" rel="stylesheet" type="text/css" />
+			<link href="<?=public_path()?>css/dropzone.css" rel="stylesheet" type="text/css" />
 		<?php }?>
 		
 		<?php if ($this->router->fetch_class() == "album" && in_array($this->router->fetch_method(), array("add","edit"))) { ?>

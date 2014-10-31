@@ -17,6 +17,19 @@ class Userstamp extends CI_Controller {
 		$this->load->view('content', $data);
 	}
 
+	public function autocomplete()
+	{
+		$get = $this->input->get();
+		$term = $get['term'];
+		$tags = $this->common_model->getAutocompleteTag($term);
+		$tagsArr = array();
+		foreach($tags as $tag)
+		{
+			$tagsArr[] = array("id"=>$tag['tag_id'],"value"=>$tag['tag_name'],"label"=>$tag['tag_name']);
+		}
+		echo json_encode($tagsArr);exit;
+	}
+
 	public function add()
 	{
 		$post = $this->input->post();

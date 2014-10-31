@@ -19,17 +19,7 @@
 	<form action="#" method="post">
 	<div class="box-body clearfix" style='margin-top:18px;'>
 		<div class='col-sm-4'>
-			<address>
-				<strong>Dx Group.</strong>
-				<br>
-				795 Abcdefg Xyz, Xyz 600
-				<br>
-				Ahmedabad - 380024
-				<br>
-				Phone: (973) 747-1747
-				<br>
-				Email: nirav.ce.2008@gmail.com
-			</address>
+			<img src="<?=public_path()?>images/contactus.jpg" alt="Contact Us" title="Contact Us" style="height:271px;"/>
 		</div>
 		<div class='col-sm-8'>
 			<div class="form-group <?=(@$error_msg['name'] != '')?'has-error':'' ?>">
@@ -63,7 +53,7 @@
 				<?php
 					}
 				?>
-				<textarea class="textarea" placeholder="Message" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" name='message' id='message'></textarea>
+				<textarea class="textarea form-control" placeholder="Message" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" name='message' id='message'></textarea>
 			</div>
 		</div>
 	</div>

@@ -60,6 +60,8 @@
       function base_url () {
           return '<?=base_url()?>';
       }
+	  function public_path()
+	  {return '<?=public_path()?>';}
     </script>
 </head>
 
