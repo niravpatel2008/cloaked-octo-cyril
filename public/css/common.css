@@ -114,3 +114,10 @@ header .mainnav { float:right;position:absolute;width:100%;z-index:100;}
 .srchMid{
 	margin-top: 10px;
 }
+.divTitleHead{
+font-size:16px;
+font-weight:bold;
+height:34px;
+color:#fff;
+background:none repeat scroll 0 0 #FF766C;
+}

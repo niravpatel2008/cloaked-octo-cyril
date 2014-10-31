@@ -81,7 +81,7 @@ function displayStamps(result)
 					//stampHtml += 'Title Goes Here';
 					stampHtml += element.t_name;
 				stampHtml += '</a>';
-				stampHtml += '<div style="text-align: center; margin-bottom: 15px;"><img src="'+imgPath+element.stamp_photo+'" onerror="this.onerror=null;this.src='+imgPath+'nostamp.jpg" alt="'+element.t_name+'" title="'+element.t_name+'" height="180" width="200"/></div>';
+				stampHtml += '<div style="text-align: center; margin-bottom: 15px;"><img src="'+imgPath+element.stamp_photo+'"  alt="'+element.t_name+'" title="'+element.t_name+'" height="180" width="200"/></div>';
 				stampHtml += '<div class="trick-card-stats trick-card-by" style="text-align:center;border-top-style:solid;border-top-width:1px;border-top-color:#eee;">Posted by <b><a href="'+base_url()+'index/'+element.t_uid+'" id="" class="unameStamp" uid="'+element.t_uid+'">'+element.uname+'</a></b> From <b><a href="javascript:void(0);">'+element.t_ownercountry+'</a></b>';
 				stampHtml += '</div>';
 				stampHtml += '<div class="trick-card-stats clearfix" style="text-align:center;">';
@@ -140,11 +140,11 @@ function displayUserStamps(result)
 			stampHtml += '<div class="trick-card-tags clearfix">';
 			$.each(element.t_tags, function(i,j){
 				if(j)
-					stampHtml += '<a href="'+base_url()+'tags/'+j+'" class="tag" title="tags">'+j+'</a>';
+					stampHtml += '<a href="'+base_url()+'tags/'+j+'" class="tag" title="tags" style="margin-bottom:2px;">'+j+'</a>';
 			});
 			stampHtml += '</div>';
 			
-			stampHtml += '<div id="divDelStamp" class="trick-card-tags clearfix"><a href="javascript:void(0);" class="delStamp" title="Delete Stamp" id="delStamp_'+element.t_id+'"><img style="height:50px;width:50px" src="'+base_url()+'uploads/delete-ico.png" alt="Delete"></a><a href="'+base_url()+'profile/addstamp/'+element.t_id+'" class="" title="Edit Stamp" id="delStamp_'+element.t_id+'"><img style="height:50px;width:50px" src="'+base_url()+'uploads/edit-ico.png" alt="Edit"></a></div>';
+			stampHtml += '<div id="divDelStamp" class="trick-card-tags clearfix"><a href="javascript:void(0);" class="delStamp" title="Delete Stamp" id="delStamp_'+element.t_id+'"><img style="height:50px;width:50px" src="'+public_path()+'images/delete-ico.png" alt="Delete"></a><a href="'+base_url()+'profile/addstamp/'+element.t_id+'" class="" title="Edit Stamp" id="delStamp_'+element.t_id+'"><img style="height:50px;width:50px" src="'+public_path()+'images/edit-ico.png" alt="Edit"></a></div>';
 			stampHtml += '</div></div>';
 		}
 	});
