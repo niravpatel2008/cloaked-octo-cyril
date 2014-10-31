@@ -41,7 +41,7 @@ $(document).ready(function(){
 	$('#img-container img[imgid="'+mainimgid+'"]').addClass('selected');
 
 	$( ".t_tags").tagedit({
-		//autocompleteURL: 'server/autocomplete.php',
+		autocompleteURL: base_url ()+'userstamp/autocomplete',
 	});
 
 	$( "#img-container" ).sortable({stop: function( event, ui ) {doOrderImage();}});

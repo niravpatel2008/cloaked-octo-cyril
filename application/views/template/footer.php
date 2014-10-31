@@ -29,6 +29,7 @@
 	<?php } 
 	if (in_array($this->router->fetch_method(), array("add","edit"))) { ?>
 		<link href="<?=public_path()?>css/tagedit/jquery.tagedit.css" rel="stylesheet" type="text/css" />
+		<link href="<?=public_path()?>css/dropzone.css" rel="stylesheet" type="text/css" />
 		<script src="<?=public_path()?>js/jquery-ui-1.10.3.js" type="text/javascript"></script>
 		<script src="<?=public_path()?>js/plugins/validation/btvalidationEngine.js" type="text/javascript"></script>
 		<script src="<?=public_path()?>js/plugins/validation/btvalidationEngine-en.js" type="text/javascript"></script>
