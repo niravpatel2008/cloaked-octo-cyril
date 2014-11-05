@@ -144,7 +144,7 @@ function displayUserStamps(result)
 			});
 			stampHtml += '</div>';
 			
-			stampHtml += '<div id="divDelStamp" class="trick-card-tags clearfix"><a href="javascript:void(0);" class="delStamp" title="Delete Stamp" id="delStamp_'+element.t_id+'"><img style="height:50px;width:50px" src="'+public_path()+'images/delete-ico.png" alt="Delete"></a><a href="'+base_url()+'profile/addstamp/'+element.t_id+'" class="" title="Edit Stamp" id="delStamp_'+element.t_id+'"><img style="height:50px;width:50px" src="'+public_path()+'images/edit-ico.png" alt="Edit"></a></div>';
+			stampHtml += '<div id="divDelStamp" class="trick-card-tags clearfix"><button class="btn btn-primary pull-right delStamp" id="delStamp_'+element.t_id+'"><i class="fa fa-trash-o"></i></button><button class="btn btn-primary pull-left" onclick="location.href=$(this).attr(\'href\')" href="'+base_url()+'profile/addstamp/'+element.t_id+'"><i class="fa fa-edit"></i></button></div>';
 			stampHtml += '</div></div>';
 		}
 	});
