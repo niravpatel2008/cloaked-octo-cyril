@@ -40,12 +40,12 @@
 	?>
 
 </div>
-<div class="col-lg-12 col-md-6" class="divTitleHead">
-	<div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
+<div class="col-lg-12 col-md-6 recentHeadTitle">
+	<div class="col-lg-8 col-md-6 col-sm-6 col-xs-12 ">
 		<span>Most Recent Collections - Updated Daily</span>
 	</div>
-	<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12" style="float:left;">
-		<?php echo date('l F j S');?>
+	<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12" style="text-align:right;">
+		<?php echo date('l, F jS');?>
 	</div>
 </div>
 
