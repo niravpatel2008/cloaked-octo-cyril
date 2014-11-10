@@ -41,13 +41,13 @@ class Welcome extends CI_Controller {
 				$where = array('t_uid'=>$post['hdnUid']);
 			
 			$sortBy = (isset($post) && isset($post['sortBy']))?$post['sortBy']:"t_modified_date";
-			$sortType = (isset($post) && isset($post['sortType']))?$post['sortType']:"ASC";
+			$sortType = (isset($post) && isset($post['sortType']))?$post['sortType']:"DESC";
 			$page = (isset($post) && isset($post['page']))?$post['page']:1;
 			$limit = (isset($post) && isset($post['limit']))?$post['limit']:21;
 			$selectFields_stamp = (isset($post) && isset($post['selectFields_stamp']))?$post['selectFields_stamp']:"*";
 			$selectFields_users = (isset($post) && isset($post['selectFields_users']))?$post['selectFields_users']:'CONCAT(u_fname," ", `users`.u_lname) as uname';
 			$stampRes = $this->common_model->searchStamp($selectFields_stamp,$selectFields_users,$where,$sortBy,$sortType,$page,$limit,$orwhere);
-
+			
 			$totalCount = $stampRes['totalRecordsCount'];
 			unset($stampRes['totalRecordsCount']);
 

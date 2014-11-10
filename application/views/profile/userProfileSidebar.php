@@ -38,6 +38,11 @@
 						echo "<li><a href=".base_url()."album/edit/".$v->al_id."><i class='fa fa-book'></i> ".$v->al_name." </a></li>"; 
 					 }
 					echo "</ul>";
+				}else
+				{
+					echo '<ul class="collapse" id="childAlbum" style="padding-left: 50px;">';
+					echo "<li><a href=".base_url()."album/add/><i class='fa fa-plus'></i> Add Album </a></li>"; 
+					echo "</ul>";
 				}
 			?>
 		</li>

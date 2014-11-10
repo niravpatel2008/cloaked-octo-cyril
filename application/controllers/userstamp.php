@@ -36,7 +36,7 @@ class Userstamp extends CI_Controller {
 		if ($post) {
 			$error = array();
 			$e_flag=0;
-			pr($post);
+			//pr($post);
 			if(trim($post['t_name']) == ''){
 				$error['t_name'] = 'Please enter stamp name.';
 				$e_flag=1;
@@ -115,8 +115,8 @@ class Userstamp extends CI_Controller {
 		}
 
 		$data['users'] = $this->common_model->selectData(USERS, 'u_id,u_fname,u_email');
-		//$data['albums'] = $this->common_model->selectData(TICKET_ALBUM, 'al_id,al_name',array("al_uid"=>$this->front_session['id']));
-		$data['albums'] = $this->common_model->selectData(TICKET_ALBUM, 'al_id,al_name',array());
+		$data['albums'] = $this->common_model->selectData(TICKET_ALBUM, 'al_id,al_name',array("al_uid"=>$this->front_session['id']));
+		
 		$data['ticket_links'] = array();
 		$data['view'] = "add_edit_stamp";
 		//pr($data);die;
