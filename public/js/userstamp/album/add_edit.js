@@ -53,10 +53,10 @@ $(document).ready(function(){
 							needHtml = "<button class='btn btn-primary btn-flat' style='margin-left:14px;' id='btn_createstamp'>Create Stamp</button></center>";
 						}
 
-						var html = "<li class='pull-left'>";
+						var html = "";
 						html += "<img src='"+file.path+"' id='albumImg' class='newimgFull' imgid = '"+file.id+"'>";
 						html += "<br>";
-						html += "<center><a class='removeimage' link_id='"+file.id+"' href='#'><i class='fa fa-trash-o'></i></a>"+needHtml+"</li>";
+						html += "<center><a class='removeimage' link_id='"+file.id+"' href='#'><i class='fa fa-trash-o'></i></a>"+needHtml;
 						$("#img-container").html(html);
 						$('#newimages').val($('#newimages').val() +"," +file.id);
 						initCrop();
@@ -152,7 +152,7 @@ function initCrop()
 		overlayOpacity : 0.25,
 //		selections : [{"x":"125px","y":"78px","w":50,"h":50},{"x":"114px","y":"169px","w":73,"h":131},{"x":"277px","y":"167px","w":126,"h":65},{"x":"335px","y":"275px","w":50,"h":50},{"x":"416px","y":"7px","w":50,"h":50}]
 		selections : JSON.parse("["+stampJson+"]")
-	});console.log($cropObj);
+	});//console.log($cropObj);
 }
 function doOrderImage(){
 	var order = {};

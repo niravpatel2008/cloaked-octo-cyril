@@ -150,10 +150,32 @@
 		$.each(this.config.outlines,function(e,v){
 			if (typeof(v) != "undefined")
 			{
-				$pos.push({x:$(v).css('left') ,
-						   y:$(v).css('top') ,
-						   w:$(v).width()+4 ,
-					       h:$(v).height()+4, 
+				var tleft = parseInt($(v).css('left'));
+				var ttop = parseInt($(v).css('top'));
+				var twidth = parseInt($(v).width());
+				var theight = parseInt($(v).height());
+
+				h = $('#albumImg').height();
+				w = $('#albumImg').width();
+				iactualHeight = $('#albumImg').data('iheight');
+				iactualWidth = $('#albumImg').data('iwidth');
+				if ((h != iactualHeight) || (w != iactualWidth))
+				{
+					wp = (100*tleft)/w;
+					hp = (100*ttop)/h;
+					tleft =  iactualWidth*wp/100;
+					ttop =  iactualHeight*hp/100;
+
+					wp = (100*twidth)/w;
+					hp = (100*theight)/h;
+					twidth = iactualWidth*wp/100;
+					theight = iactualHeight*hp/100;
+				}
+				console.log("top %s,left %s",tleft,ttop);
+				$pos.push({x:tleft ,
+						   y:ttop ,
+						   w:twidth+4 ,
+					       h:theight+4, 
 						   t_id:$(v).data('t_id') ,
 						   st_country:$(v).data('country') ,
 						   st_name:$(v).data('name') ,
@@ -167,6 +189,17 @@
 	setAllSelection: function() {
 		$this = this;
 		$(this.config.selections[0]).each(function(e,v){
+			var area = JSON.parse(v.area);
+			iactualHeight = $('#albumImg').data('iheight');
+			iactualWidth = $('#albumImg').data('iwidth');
+
+			area.y = ((100*area.y)/iactualHeight) + "%";
+			area.x = ((100*area.x)/iactualWidth) + "%";
+
+			area.w = ((100*area.w)/iactualWidth) + "%";
+			area.h = ((100*area.h)/iactualHeight) + "%";
+			v.area = JSON.stringify(area);
+			console.log(area);
 			$this.addNewSelection(v);
 		});
 	},
@@ -270,6 +303,10 @@
 			var currentObject = this,
 			image = new Image();
 			image.onload = function() {
+				img_real_width = this.width;
+			    img_real_height = this.height;
+			   $(currentObject).data("iwidth",img_real_width);
+			   $(currentObject).data("iheight",img_real_height);
 				currentObject.crop = new imageCrop(currentObject, options).init();
 			};
 			image.src = currentObject.src;
